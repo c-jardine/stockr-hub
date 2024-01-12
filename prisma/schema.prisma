@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+    provider = "postgres"
+    url      = env("DATABASE_URL")
+}
+
+model StockUnit {
+    id                   Int           @id @default(autoincrement())
+    nameSingular         String        @unique
+    namePlural           String        @unique
+    abbreviationSingular String        @unique
+    abbreviationPlural   String        @unique
+    category             String
+    itemDetails          ItemDetails[]
+}
+
+model ItemDetails {
+    id          Int        @id @default(autoincrement())
+    name        String
+    stock       Decimal
+    stockUnit   StockUnit  @relation(fields: [stockUnitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    stockUnitId Int
+    minStock    Decimal?
+    costPerUnit Decimal
+    materials   Material[]
+}
+
+model Category {
+    id                 Int                @id @default(autoincrement())
+    name               String             @unique
+    slug               String             @unique
+    color              String             @default("#E2E8F0")
+    materialCategories MaterialCategory[]
+}
+
+model StockLogData {
+    id               Int                @id @default(autoincrement())
+    prevStock        Decimal
+    stock            Decimal
+    notes            String?
+    createdAt        DateTime           @default(now())
+    materialStockLog MaterialStockLog[]
+}
+
+model Vendor {
+    id        Int        @id @default(autoincrement())
+    name      String     @unique
+    url       String?
+    materials Material[]
+}
+
+model MaterialCategory {
+    id         Int        @id @default(autoincrement())
+    category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    categoryId Int
+    materials  Material[]
+}
+
+model MaterialStockLog {
+    material          Material        @relation(fields: [materialId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    materialId        Int
+    stockLogData      StockLogData    @relation(fields: [stockLogDataId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    stockLogDataId    Int
+    type              MaterialLogType @relation(fields: [materialLogTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    materialLogTypeId Int
+
+    @@id([materialId, stockLogDataId])
+}
+
+model MaterialLogType {
+    id               Int                @id @default(autoincrement())
+    name             String             @unique
+    materialStockLog MaterialStockLog[]
+}
+
+model Material {
+    id            Int                @id @default(autoincrement())
+    itemDetails   ItemDetails        @relation(fields: [itemDetailsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    itemDetailsId Int
+    url           String?
+    categories    MaterialCategory[]
+    vendor        Vendor             @relation(fields: [vendorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    vendorId      Int
+    stockLogs     MaterialStockLog[]
+    createdAt     DateTime           @default(now())
+}
