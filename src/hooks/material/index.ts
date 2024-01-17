@@ -1,1 +1,1 @@
-export { default as useCreateCategory } from './useCreateCategory';
+export { default as useCreateMaterialCategory } from './useCreateMaterialCategory';

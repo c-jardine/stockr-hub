@@ -1,15 +1,15 @@
-import { type MaterialCreate, type MaterialUpdate } from '@/types';
+import { type ProductCreate, type ProductUpdate } from '@/types';
 import { api } from '@/utils/api';
 import { useToast } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
 
-export default function useCreateCategory() {
-  const form = useFormContext<MaterialCreate | MaterialUpdate>();
+export default function useCreateProductCategory() {
+  const form = useFormContext<ProductCreate | ProductUpdate>();
 
   const toast = useToast();
 
   const utils = api.useUtils();
-  const query = api.material.createCategory.useMutation({
+  const query = api.product.createCategory.useMutation({
     onError: (data) => {
       toast({
         title: 'Error',
@@ -23,7 +23,7 @@ export default function useCreateCategory() {
         description: 'Successfully created category',
         status: 'success',
       });
-      await utils.material.getAllCategories.invalidate();
+      await utils.product.getAllCategories.invalidate();
       const prev = form.getValues('categoryIds');
       if (prev) {
         form.setValue('categoryIds', [...prev, data.id]);

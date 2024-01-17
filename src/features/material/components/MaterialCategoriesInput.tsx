@@ -1,5 +1,5 @@
 import { multiSelectComponents } from '@/components/Select/components';
-import { useCreateCategory } from '@/hooks/material';
+import { useCreateMaterialCategory } from '@/hooks/material';
 import { multiSelectStyles } from '@/styles';
 import { type MaterialCreate, type MaterialUpdate } from '@/types';
 import { api } from '@/utils/api';
@@ -19,7 +19,7 @@ export default function MaterialCategoriesInput() {
     formState: { errors },
   } = useFormContext<MaterialCreate | MaterialUpdate>();
 
-  const { query: createCategoryQuery } = useCreateCategory();
+  const { query: createCategoryQuery } = useCreateMaterialCategory();
   function onCreate(input: string) {
     createCategoryQuery.mutate({ name: input });
   }

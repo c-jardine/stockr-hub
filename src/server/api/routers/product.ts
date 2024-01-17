@@ -1,4 +1,8 @@
-import { materialDeleteSchema, productCreateSchema } from '@/schemas';
+import {
+  materialDeleteSchema,
+  productCreateSchema,
+  productUpdateSchema,
+} from '@/schemas';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import slugify from 'slugify';
 import { z } from 'zod';
@@ -51,43 +55,39 @@ export const productRouter = createTRPCRouter({
         },
       });
     }),
-  // update: publicProcedure
-  //   .input(materialUpdateSchema)
-  //   .mutation(async ({ ctx, input }) => {
-  //     const { itemDetails, categoryIds, vendorId } = input;
-  //     return ctx.db.$transaction([
-  //       ctx.db.material.update({
-  //         where: {
-  //           id: input.id,
-  //         },
-  //         data: {
-  //           categories: {
-  //             set: [],
-  //           },
-  //         },
-  //       }),
-  //       ctx.db.material.update({
-  //         where: {
-  //           id: input.id,
-  //         },
-  //         data: {
-  //           itemDetails: {
-  //             update: {
-  //               ...itemDetails,
-  //             },
-  //           },
-  //           categories: {
-  //             connect: categoryIds?.map((categoryId) => ({ id: categoryId })),
-  //           },
-  //           vendor: {
-  //             connect: {
-  //               id: vendorId,
-  //             },
-  //           },
-  //         },
-  //       }),
-  //     ]);
-  //   }),
+  update: publicProcedure
+    .input(productUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { stockLevel, categoryIds, ...rest } = input;
+      return ctx.db.$transaction([
+        ctx.db.product.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            categories: {
+              set: [],
+            },
+          },
+        }),
+        ctx.db.product.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            ...rest,
+            stockLevel: {
+              update: {
+                ...stockLevel,
+              },
+            },
+            categories: {
+              connect: categoryIds?.map((categoryId) => ({ id: categoryId })),
+            },
+          },
+        }),
+      ]);
+    }),
   delete: publicProcedure
     .input(materialDeleteSchema)
     .mutation(({ input, ctx }) => {

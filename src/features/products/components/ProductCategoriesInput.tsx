@@ -1,5 +1,5 @@
 import { multiSelectComponents } from '@/components/Select/components';
-import { useCreateCategory } from '@/hooks/material';
+import { useCreateProductCategory } from '@/hooks/product';
 import { multiSelectStyles } from '@/styles';
 import { type ProductCreate } from '@/types';
 import { api } from '@/utils/api';
@@ -19,7 +19,7 @@ export default function ProductCategoriesInput() {
     formState: { errors },
   } = useFormContext<ProductCreate>();
 
-  const { query: createCategoryQuery } = useCreateCategory();
+  const { query: createCategoryQuery } = useCreateProductCategory();
   function onCreate(input: string) {
     createCategoryQuery.mutate({ name: input });
   }
