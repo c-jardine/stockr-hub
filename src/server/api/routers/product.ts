@@ -8,6 +8,11 @@ export const productRouter = createTRPCRouter({
     return ctx.db.product.findMany({
       include: {
         materials: true,
+        stockLevel: {
+          include: {
+            stockUnit: true,
+          },
+        },
         categories: {
           orderBy: {
             category: {

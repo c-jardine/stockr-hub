@@ -24,7 +24,7 @@ export default function useNewProduct() {
         description: 'Successfully created product',
         status: 'success',
       });
-      await utils.material.getAll.invalidate();
+      await utils.product.getAll.invalidate();
       disclosure.onClose();
     },
   });

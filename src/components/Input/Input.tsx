@@ -28,7 +28,7 @@ export default function Input<TFormValues extends FieldValues>(
   return (
     <FormControl isInvalid={!!error} {...styles}>
       <FormLabel>{label}</FormLabel>
-      <ChakraInput {...register(name, rules)} />
+      <ChakraInput {...register(name, rules)} py={5} />
       {error && <FormErrorMessage>{error.message}</FormErrorMessage>}
     </FormControl>
   );

@@ -18,7 +18,7 @@ export default function Materials() {
     );
   }
 
-  if (!query.data) {
+  if (!query.data || query.data.length === 0) {
     return (
       <RootLayout title='Materials'>
         <Stack alignItems='center' h='full' p={4}>

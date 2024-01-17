@@ -1,6 +1,6 @@
 import {
-  type MaterialGetAllOutput,
-  type MaterialGetAllOutputSingle,
+  type ProductGetAllOutput,
+  type ProductGetAllOutputSingle,
 } from '@/types';
 import {
   Box,
@@ -36,14 +36,14 @@ import {
   ChevronRight,
   ChevronUp,
 } from 'tabler-icons-react';
-import { MaterialViewerDrawer } from '.';
+// import { MaterialViewerDrawer } from '.';
 
-type MaterialsTableProps = {
-  materials: MaterialGetAllOutput;
+type ProductsTableProps = {
+  products: ProductGetAllOutput;
 };
 
-export default function MaterialsTable(props: MaterialsTableProps) {
-  const { materials } = props;
+export default function ProductsTable(props: ProductsTableProps) {
+  const { products } = props;
 
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
   const [sorting, setSorting] = React.useState<SortingState>([
@@ -53,7 +53,7 @@ export default function MaterialsTable(props: MaterialsTableProps) {
     },
   ]);
 
-  const columns = React.useMemo<ColumnDef<MaterialGetAllOutputSingle>[]>(
+  const columns = React.useMemo<ColumnDef<ProductGetAllOutputSingle>[]>(
     () => [
       {
         id: 'select',
@@ -85,7 +85,7 @@ export default function MaterialsTable(props: MaterialsTableProps) {
         id: 'name',
         header: 'Name',
         sortingFn: 'alphanumeric',
-        cell: (info) => <MaterialViewerDrawer {...info.cell.row.original} />,
+        // cell: (info) => <MaterialViewerDrawer {...info.cell.row.original} />,
         footer: (props) => props.column.id,
       },
       {
@@ -119,9 +119,9 @@ export default function MaterialsTable(props: MaterialsTableProps) {
         footer: (props) => props.column.id,
       },
       {
-        accessorFn: (row) => row.costPerUnit,
-        id: 'costPerUnit',
-        header: 'Cost per unit',
+        accessorFn: (row) => row.batchSize,
+        id: 'batchSize',
+        header: 'Batch size',
         sortingFn: 'alphanumeric',
         cell: (info) => (
           <Text>
@@ -129,14 +129,6 @@ export default function MaterialsTable(props: MaterialsTableProps) {
             {info.cell.row.original.stockLevel.stockUnit.abbreviationSingular}
           </Text>
         ),
-        footer: (props) => props.column.id,
-      },
-      {
-        accessorFn: (row) => row.vendor.name,
-        id: 'vendor',
-        header: 'Vendor',
-        sortingFn: 'alphanumeric',
-        cell: (info) => info.getValue(),
         footer: (props) => props.column.id,
       },
       {
@@ -160,7 +152,7 @@ export default function MaterialsTable(props: MaterialsTableProps) {
   );
 
   const table = useReactTable({
-    data: materials,
+    data: products,
     columns,
     columnResizeMode: 'onChange',
     getCoreRowModel: getCoreRowModel(),
