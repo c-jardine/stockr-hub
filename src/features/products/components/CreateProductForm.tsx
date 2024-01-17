@@ -2,11 +2,23 @@ import { Input } from '@/components/Input';
 import { NumberInput } from '@/components/NumberInput';
 import { StockUnitInput } from '@/components/StockUnitInput';
 import { type MaterialCreate } from '@/types';
-import { SimpleGrid, Stack } from '@chakra-ui/react';
+import {
+  NumberInput as ChakraNumberInput,
+  FormControl,
+  FormLabel,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInputField,
+  NumberInputStepper,
+  SimpleGrid,
+  Stack,
+  Text
+} from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
-import { MaterialCategoriesInput, VendorsInput } from '.';
+// import { MaterialCategoriesInput, VendorsInput } from '.';
+// import StockUnitInput from './StockUnitInput';
 
-export default function CreateMaterialForm() {
+export default function CreateProductForm() {
   const {
     register,
     formState: { errors },
@@ -20,7 +32,6 @@ export default function CreateMaterialForm() {
         register={register}
         error={errors.itemDetails?.name}
       />
-      <Input label='URL' name='url' register={register} error={errors.url} />
       <SimpleGrid columns={5} gap={4}>
         <NumberInput
           gridColumn='1 / span 3'
@@ -39,15 +50,21 @@ export default function CreateMaterialForm() {
         rules={{ valueAsNumber: true }}
         error={errors.itemDetails?.minStock}
       />
-      <NumberInput
-        label='Cost Per Unit'
-        name='itemDetails.costPerUnit'
-        register={register}
-        rules={{ valueAsNumber: true }}
-        error={errors.itemDetails?.costPerUnit}
-      />
-      <VendorsInput />
-      <MaterialCategoriesInput />
+      <Text fontSize='2xl' fontWeight='bold'>
+        Production
+      </Text>
+      <FormControl>
+        <FormLabel>Batch size</FormLabel>
+        <ChakraNumberInput>
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </ChakraNumberInput>
+      </FormControl>
+      {/* <VendorsInput /> */}
+      {/* <MaterialCategoriesInput /> */}
     </Stack>
   );
 }

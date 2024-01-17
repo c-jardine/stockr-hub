@@ -1,4 +1,5 @@
 import { CreateMaterialDrawer, MaterialsTable } from '@/features/material';
+import { CreateProductDrawer } from '@/features/products';
 
 import { RootLayout } from '@/layouts/RootLayout';
 import { api } from '@/utils/api';
@@ -10,7 +11,7 @@ export default function Products() {
 
   if (query.isLoading) {
     return (
-      <RootLayout title='Materials'>
+      <RootLayout title='Products'>
         <Flex justifyContent='center' my={8}>
           <Spinner color='emerald.600' />
         </Flex>
@@ -20,9 +21,9 @@ export default function Products() {
 
   if (!query.data) {
     return (
-      <RootLayout title='Materials'>
+      <RootLayout title='Products'>
         <Stack alignItems='center' h='full' p={4}>
-          <Text>You aren't tracking any materials.</Text>
+          <Text>You haven't added any products..</Text>
           <CreateMaterialDrawer />
         </Stack>
       </RootLayout>
@@ -32,14 +33,14 @@ export default function Products() {
   return (
     <>
       <Head>
-        <title>Add new material</title>
+        <title>Add new product</title>
         <meta name='description' content='Add a new material to track.' />
       </Head>
       <main>
         <RootLayout
-          title='Materials'
-          subtitle='Manage your raw materials.'
-          actionBar={<CreateMaterialDrawer />}
+          title='Products'
+          subtitle='Manage your products.'
+          actionBar={<CreateProductDrawer />}
         >
           <MaterialsTable materials={query.data} />
         </RootLayout>

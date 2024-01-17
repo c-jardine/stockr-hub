@@ -4,7 +4,6 @@ export { default as DeleteMaterial } from './DeleteMaterial';
 export { default as MaterialCategoriesInput } from './MaterialCategoriesInput';
 export { default as MaterialViewerDrawer } from './MaterialViewerDrawer';
 export { default as MaterialsTable } from './MaterialsTable';
-export { default as StockUnitInput } from './StockUnitInput';
 export { default as UpdateMaterialDrawer } from './UpdateMaterialDrawer';
 export { default as UpdateMaterialForm } from './UpdateMaterialForm';
 export { default as VendorsInput } from './VendorsInput';
