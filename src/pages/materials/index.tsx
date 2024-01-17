@@ -1,37 +1,55 @@
 import { CreateMaterialDrawer, MaterialsTable } from '@/features/material';
-
 import { RootLayout } from '@/layouts/RootLayout';
 import { api } from '@/utils/api';
-import { AbsoluteCenter, Flex, Image, Spinner } from '@chakra-ui/react';
+import { AbsoluteCenter, Image, Spinner } from '@chakra-ui/react';
 import Head from 'next/head';
+import React from 'react';
+
+function PageLayout({
+  children,
+  showActionBar = false,
+}: {
+  children: React.ReactNode;
+  showActionBar?: boolean;
+}) {
+  return (
+    <RootLayout
+      title='Materials'
+      subtitle='Manage your raw materials.'
+      actionBar={showActionBar ? <CreateMaterialDrawer /> : undefined}
+    >
+      {children}
+    </RootLayout>
+  );
+}
 
 export default function Materials() {
   const query = api.material.getAll.useQuery();
 
   if (query.isLoading) {
     return (
-      <RootLayout title='Materials'>
-        <Flex justifyContent='center' my={8}>
-          <Spinner color='emerald.600' />
-        </Flex>
-      </RootLayout>
+      <PageLayout>
+        <AbsoluteCenter>
+          <Spinner size='xl' thickness='4px' color='emerald.600' />
+        </AbsoluteCenter>
+      </PageLayout>
     );
   }
 
-  if (!query.data || query.data.length === 0) {
+  if (!query.data || query.data?.length === 0) {
     return (
-      <RootLayout title='Materials'>
+      <PageLayout>
         <AbsoluteCenter>
           <CreateMaterialDrawer />
         </AbsoluteCenter>
-        <AbsoluteCenter mt={20}>
+        <AbsoluteCenter mt='84px'>
           <Image
             src='/images/arrow-illustration.png'
             mt={2}
             transform='rotate(180deg)'
           />
         </AbsoluteCenter>
-      </RootLayout>
+      </PageLayout>
     );
   }
 
@@ -42,13 +60,9 @@ export default function Materials() {
         <meta name='description' content='Add a new material to track.' />
       </Head>
       <main>
-        <RootLayout
-          title='Materials'
-          subtitle='Manage your raw materials.'
-          actionBar={<CreateMaterialDrawer />}
-        >
+        <PageLayout showActionBar>
           <MaterialsTable materials={query.data} />
-        </RootLayout>
+        </PageLayout>
       </main>
     </>
   );

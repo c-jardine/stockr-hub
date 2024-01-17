@@ -26,7 +26,7 @@ export default function CreateMaterialDrawer() {
       <Button
         rounded='full'
         w='fit-content'
-        leftIcon={<Icon as={Plus} />}
+        leftIcon={<Icon as={Plus} strokeWidth={4} />}
         onClick={onOpen}
       >
         New Material

@@ -1,37 +1,54 @@
 import { CreateProductDrawer, ProductsTable } from '@/features/products';
-
 import { RootLayout } from '@/layouts/RootLayout';
 import { api } from '@/utils/api';
 import { AbsoluteCenter, Flex, Image, Spinner } from '@chakra-ui/react';
 import Head from 'next/head';
 
+function PageLayout({
+  children,
+  showActionBar = false,
+}: {
+  children: React.ReactNode;
+  showActionBar?: boolean;
+}) {
+  return (
+    <RootLayout
+      title='Products'
+      subtitle='Manage your products.'
+      actionBar={showActionBar ? <CreateProductDrawer /> : undefined}
+    >
+      {children}
+    </RootLayout>
+  );
+}
+
 export default function Products() {
   const query = api.product.getAll.useQuery();
 
-  if (query.isLoading) {
+  if (query.isLoading || !query.data) {
     return (
-      <RootLayout title='Products'>
+      <PageLayout>
         <Flex justifyContent='center' my={8}>
           <Spinner color='emerald.600' />
         </Flex>
-      </RootLayout>
+      </PageLayout>
     );
   }
 
-  if (!query.data || query.data.length == 0) {
+  if (query.data.length == 0) {
     return (
-      <RootLayout title='Products'>
+      <PageLayout>
         <AbsoluteCenter>
           <CreateProductDrawer />
         </AbsoluteCenter>
-        <AbsoluteCenter mt={20}>
+        <AbsoluteCenter mt='84px'>
           <Image
             src='/images/arrow-illustration.png'
             mt={2}
             transform='rotate(180deg)'
           />
         </AbsoluteCenter>
-      </RootLayout>
+      </PageLayout>
     );
   }
 
@@ -42,13 +59,9 @@ export default function Products() {
         <meta name='description' content='Add a new material to track.' />
       </Head>
       <main>
-        <RootLayout
-          title='Products'
-          subtitle='Manage your products.'
-          actionBar={<CreateProductDrawer />}
-        >
+        <PageLayout showActionBar>
           <ProductsTable products={query.data} />
-        </RootLayout>
+        </PageLayout>
       </main>
     </>
   );
