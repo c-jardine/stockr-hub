@@ -2,7 +2,7 @@ import { CreateProductDrawer, ProductsTable } from '@/features/products';
 
 import { RootLayout } from '@/layouts/RootLayout';
 import { api } from '@/utils/api';
-import { Flex, Spinner, Stack, Text } from '@chakra-ui/react';
+import { AbsoluteCenter, Flex, Image, Spinner } from '@chakra-ui/react';
 import Head from 'next/head';
 
 export default function Products() {
@@ -21,10 +21,16 @@ export default function Products() {
   if (!query.data || query.data.length == 0) {
     return (
       <RootLayout title='Products'>
-        <Stack alignItems='center' h='full' p={4}>
-          <Text>You haven't added any products..</Text>
+        <AbsoluteCenter>
           <CreateProductDrawer />
-        </Stack>
+        </AbsoluteCenter>
+        <AbsoluteCenter mt={20}>
+          <Image
+            src='/images/arrow-illustration.png'
+            mt={2}
+            transform='rotate(180deg)'
+          />
+        </AbsoluteCenter>
       </RootLayout>
     );
   }

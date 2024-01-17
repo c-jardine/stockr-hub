@@ -2,7 +2,7 @@ import { CreateMaterialDrawer, MaterialsTable } from '@/features/material';
 
 import { RootLayout } from '@/layouts/RootLayout';
 import { api } from '@/utils/api';
-import { Flex, Spinner, Stack, Text } from '@chakra-ui/react';
+import { AbsoluteCenter, Flex, Image, Spinner } from '@chakra-ui/react';
 import Head from 'next/head';
 
 export default function Materials() {
@@ -21,10 +21,16 @@ export default function Materials() {
   if (!query.data || query.data.length === 0) {
     return (
       <RootLayout title='Materials'>
-        <Stack alignItems='center' h='full' p={4}>
-          <Text>You aren't tracking any materials.</Text>
+        <AbsoluteCenter>
           <CreateMaterialDrawer />
-        </Stack>
+        </AbsoluteCenter>
+        <AbsoluteCenter mt={20}>
+          <Image
+            src='/images/arrow-illustration.png'
+            mt={2}
+            transform='rotate(180deg)'
+          />
+        </AbsoluteCenter>
       </RootLayout>
     );
   }
