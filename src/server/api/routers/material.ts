@@ -154,7 +154,10 @@ export const materialRouter = createTRPCRouter({
       return ctx.db.materialCategory.create({
         data: {
           category: {
-            create: { name: input.name, slug: slugify(input.name) },
+            create: {
+              name: input.name,
+              slug: slugify(input.name, { lower: true }),
+            },
           },
         },
       });
