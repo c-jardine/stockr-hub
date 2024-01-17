@@ -8,7 +8,7 @@ import { NavLinkChild } from '../NavLinkChild';
 export default function ProductsNav() {
   const router = useRouter();
 
-  const { data: productCategories } = api.product.getAllCategories.useQuery();
+  const { data: categories } = api.product.getAllCategories.useQuery();
 
   if (router.asPath !== '/products') {
     return <NavLink label='Products' href='/products' icon={Box} />;
@@ -19,10 +19,10 @@ export default function ProductsNav() {
       <NavLink label='Products' href='/products' icon={Box} />
       <Stack
         bg='slate.100'
-        py={productCategories && productCategories.length > 0 ? 2 : 'unset'}
+        py={categories && categories.length > 0 ? 2 : 'unset'}
       >
         {router.asPath.startsWith('/products') &&
-          productCategories?.map((product) => (
+          categories?.map((product) => (
             <NavLinkChild
               key={product.id}
               label={product.category.name}
