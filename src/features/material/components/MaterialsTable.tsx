@@ -36,7 +36,7 @@ import {
   ChevronRight,
   ChevronUp,
 } from 'tabler-icons-react';
-import { UpdateMaterialDrawer } from '.';
+import { MaterialViewerDrawer } from '.';
 
 type MaterialsTableProps = {
   materials: MaterialGetAllOutput;
@@ -85,7 +85,8 @@ export default function MaterialsTable(props: MaterialsTableProps) {
         id: 'name',
         header: 'Name',
         sortingFn: 'alphanumeric',
-        cell: (info) => <UpdateMaterialDrawer {...info.cell.row.original} />,
+        // cell: (info) => <UpdateMaterialDrawer {...info.cell.row.original} />,
+        cell: (info) => <MaterialViewerDrawer {...info.cell.row.original} />,
         footer: (props) => props.column.id,
       },
       {

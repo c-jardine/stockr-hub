@@ -9,19 +9,17 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
   Link,
 } from '@chakra-ui/react';
 import { FormProvider } from 'react-hook-form';
 import { useUpdateMaterial } from '../hooks';
 
 export default function UpdateMaterialDrawer(
-  props: MaterialGetAllOutputSingle
+  props: MaterialGetAllOutputSingle & { buttonLabel?: string }
 ) {
   const {
     form,
     onSubmit,
-    onDelete,
     disclosure: { isOpen, onOpen, onClose },
   } = useUpdateMaterial(props);
 
@@ -32,15 +30,25 @@ export default function UpdateMaterialDrawer(
 
   return (
     <>
-      <Link
-        onClick={onOpen}
-        color={isLowStock ? 'red.500' : 'unset'}
-        fontWeight='semibold'
-      >
-        {props.itemDetails.name}
-      </Link>
+      {props.buttonLabel ? (
+        <Button
+          variant='outline'
+          colorScheme='black'
+          width='fit-content'
+          onClick={onOpen}
+        >
+          {props.buttonLabel}
+        </Button>
+      ) : (
+        <Link
+          onClick={onOpen}
+          color={isLowStock ? 'red.500' : 'unset'}
+          fontWeight='semibold'
+        >
+          {props.itemDetails.name}
+        </Link>
+      )}
       <Drawer isOpen={isOpen} onClose={onClose} size='md'>
-        <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader>
             Update Material
@@ -56,10 +64,7 @@ export default function UpdateMaterialDrawer(
               </form>
             </FormProvider>
           </DrawerBody>
-          <DrawerFooter gap={4}>
-            <Button colorScheme='red' variant='outline' onClick={onDelete}>
-              Delete
-            </Button>
+          <DrawerFooter>
             <Button type='submit' form='update-material-form'>
               Save
             </Button>

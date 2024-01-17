@@ -43,25 +43,9 @@ export default function useUpdateMaterial(
     },
   });
 
-  const deleteQuery = api.material.delete.useMutation({
-    onSuccess: async () => {
-      toast({
-        title: 'Material deleted',
-        description: 'Successfully deleted material',
-        status: 'success',
-      });
-      await utils.material.getAll.invalidate();
-      disclosure.onClose();
-    },
-  });
-
   function onSubmit(data: MaterialUpdate) {
     updateQuery.mutate(data);
   }
 
-  function onDelete() {
-    deleteQuery.mutate({ id: material.id });
-  }
-
-  return { form, onSubmit, onDelete, disclosure };
+  return { form, onSubmit, disclosure };
 }
