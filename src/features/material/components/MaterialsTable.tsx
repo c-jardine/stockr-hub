@@ -1,4 +1,7 @@
-import { type RouterOutputs } from '@/utils/api';
+import {
+  type MaterialGetAllOutput,
+  type MaterialGetAllOutputSingle,
+} from '@/types';
 import {
   Box,
   Checkbox,
@@ -33,10 +36,10 @@ import {
   ChevronRight,
   ChevronUp,
 } from 'tabler-icons-react';
-import { UpdateMaterial } from '.';
+import { UpdateMaterialDrawer } from '.';
 
 type MaterialsTableProps = {
-  materials: RouterOutputs['material']['getAll'];
+  materials: MaterialGetAllOutput;
 };
 
 export default function MaterialsTable(props: MaterialsTableProps) {
@@ -50,9 +53,7 @@ export default function MaterialsTable(props: MaterialsTableProps) {
     },
   ]);
 
-  const columns = React.useMemo<
-    ColumnDef<RouterOutputs['material']['getAll'][0]>[]
-  >(
+  const columns = React.useMemo<ColumnDef<MaterialGetAllOutputSingle>[]>(
     () => [
       {
         id: 'select',
@@ -84,7 +85,7 @@ export default function MaterialsTable(props: MaterialsTableProps) {
         id: 'name',
         header: 'Name',
         sortingFn: 'alphanumeric',
-        cell: (info) => <UpdateMaterial {...info.cell.row.original} />,
+        cell: (info) => <UpdateMaterialDrawer {...info.cell.row.original} />,
         footer: (props) => props.column.id,
       },
       {
@@ -146,7 +147,7 @@ export default function MaterialsTable(props: MaterialsTableProps) {
         header: 'Categories',
         enableSorting: false,
         cell: (info) => (
-          <Flex>
+          <Flex gap={2}>
             {info.cell.row.original.categories.map(({ category }) => (
               <Tag key={category.id} size='sm'>
                 {category.name}
@@ -324,22 +325,24 @@ export default function MaterialsTable(props: MaterialsTableProps) {
       </TableContainer>
 
       {/* Pagination buttons */}
-      <Flex mt={4} gap={2} justifyContent='center'>
-        <IconButton
-          icon={<Icon as={ChevronLeft} />}
-          aria-label='Previous page'
-          size='sm'
-          onClick={() => table.previousPage()}
-          isDisabled={!table.getCanPreviousPage()}
-        />
-        <IconButton
-          icon={<Icon as={ChevronRight} />}
-          aria-label='Next page'
-          size='sm'
-          onClick={() => table.nextPage()}
-          isDisabled={!table.getCanNextPage()}
-        />
-      </Flex>
+      {table.getPageCount() > 1 && (
+        <Flex mt={4} gap={2} justifyContent='center'>
+          <IconButton
+            icon={<Icon as={ChevronLeft} />}
+            aria-label='Previous page'
+            size='sm'
+            onClick={() => table.previousPage()}
+            isDisabled={!table.getCanPreviousPage()}
+          />
+          <IconButton
+            icon={<Icon as={ChevronRight} />}
+            aria-label='Next page'
+            size='sm'
+            onClick={() => table.nextPage()}
+            isDisabled={!table.getCanNextPage()}
+          />
+        </Flex>
+      )}
     </>
   );
 }

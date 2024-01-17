@@ -1,1 +1,1 @@
-export * from './stockUnit';
+export * from './stock';

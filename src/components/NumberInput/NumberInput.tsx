@@ -19,12 +19,24 @@ import {
 } from 'react-hook-form';
 import { ChevronDown, ChevronUp } from 'tabler-icons-react';
 
-type InputProps<TFormValues extends FieldValues> = {
+// Define a type for the form props
+type FormProps<TFormValues extends FieldValues> = {
   name: FieldPath<TFormValues>;
   register: UseFormRegister<TFormValues>;
   rules?: RegisterOptions;
   error?: FieldError;
-} & { label: string } & Omit<ChakraInputProps, 'name'>;
+};
+
+// Define a type for additional props
+type AdditionalProps = {
+  label: string;
+  isUpdating?: boolean;
+};
+
+// Define the InputProps type using intersection types
+type InputProps<TFormValues extends FieldValues> = FormProps<TFormValues> &
+  AdditionalProps &
+  Omit<ChakraInputProps, 'name'>;
 
 export default function NumberInput<TFormValues extends FieldValues>(
   props: InputProps<TFormValues>
@@ -35,7 +47,11 @@ export default function NumberInput<TFormValues extends FieldValues>(
     <FormControl isInvalid={!!error} {...styles}>
       <FormLabel>{label}</FormLabel>
       <ChakraNumberInput>
-        <NumberInputField {...register(name, rules)} />
+        {styles.isDisabled ? (
+          <NumberInputField name={name} value={props.value} />
+        ) : (
+          <NumberInputField {...register(name, rules)} />
+        )}
         <NumberInputStepper>
           <NumberIncrementStepper>
             <Icon as={ChevronUp} />

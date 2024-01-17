@@ -1,4 +1,4 @@
-import { MaterialsTable, NewMaterial } from '@/features/material';
+import { CreateMaterialDrawer, MaterialsTable } from '@/features/material';
 
 import { RootLayout } from '@/layouts/RootLayout';
 import { api } from '@/utils/api';
@@ -23,7 +23,7 @@ export default function Materials() {
       <RootLayout title='Materials'>
         <Stack alignItems='center' h='full' p={4}>
           <Text>You aren't tracking any materials.</Text>
-          <NewMaterial />
+          <CreateMaterialDrawer />
         </Stack>
       </RootLayout>
     );
@@ -39,7 +39,7 @@ export default function Materials() {
         <RootLayout
           title='Materials'
           subtitle='Manage your raw materials.'
-          actionBar={<NewMaterial />}
+          actionBar={<CreateMaterialDrawer />}
         >
           <MaterialsTable materials={query.data} />
         </RootLayout>

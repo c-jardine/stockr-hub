@@ -1,5 +1,10 @@
-import { materialDeleteSchema, materialInputSchema } from '@/schemas';
+import {
+  materialCreateSchema,
+  materialDeleteSchema,
+  materialUpdateSchema,
+} from '@/schemas';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
+import slugify from 'slugify';
 import { z } from 'zod';
 
 export const materialRouter = createTRPCRouter({
@@ -59,16 +64,9 @@ export const materialRouter = createTRPCRouter({
         }),
       ]);
     }),
-  getAllCategories: publicProcedure.query(({ ctx }) => {
-    return ctx.db.materialCategory.findMany({
-      include: {
-        category: true,
-      },
-    });
-  }),
   create: publicProcedure
-    .input(materialInputSchema)
-    .mutation(async ({ ctx, input }) => {
+    .input(materialCreateSchema)
+    .mutation(async ({ input, ctx }) => {
       const { itemDetails, stockUnitId, categoryIds, vendorId } = input;
       return ctx.db.material.create({
         data: {
@@ -94,11 +92,10 @@ export const materialRouter = createTRPCRouter({
         },
       });
     }),
-
   update: publicProcedure
-    .input(materialInputSchema)
+    .input(materialUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const { itemDetails, stockUnitId, categoryIds, vendorId } = input;
+      const { itemDetails, categoryIds, vendorId } = input;
       return ctx.db.$transaction([
         ctx.db.material.update({
           where: {
@@ -112,17 +109,12 @@ export const materialRouter = createTRPCRouter({
         }),
         ctx.db.material.update({
           where: {
-            id: input.id!,
+            id: input.id,
           },
           data: {
             itemDetails: {
               update: {
                 ...itemDetails,
-                stockUnit: {
-                  connect: {
-                    id: stockUnitId,
-                  },
-                },
               },
             },
             categories: {
@@ -137,13 +129,33 @@ export const materialRouter = createTRPCRouter({
         }),
       ]);
     }),
-
   delete: publicProcedure
     .input(materialDeleteSchema)
     .mutation(({ input, ctx }) => {
       return ctx.db.material.delete({
         where: {
           id: input.id,
+        },
+      });
+    }),
+
+  getAllCategories: publicProcedure.query(({ ctx }) => {
+    return ctx.db.materialCategory.findMany({
+      include: {
+        category: true,
+      },
+    });
+  }),
+  createCategory: publicProcedure
+    .input(
+      z.object({ name: z.string().min(2, 'Must be at least 2 characters') })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return ctx.db.materialCategory.create({
+        data: {
+          category: {
+            create: { name: input.name, slug: slugify(input.name) },
+          },
         },
       });
     }),

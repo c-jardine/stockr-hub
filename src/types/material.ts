@@ -1,3 +1,6 @@
-import { type RouterInputs } from '@/utils/api';
+import { type RouterInputs, type RouterOutputs } from '@/utils/api';
 
-export type MaterialInput = RouterInputs['material']['create'];
+export type MaterialGetAllOutput = RouterOutputs['material']['getAll'];
+export type MaterialGetAllOutputSingle = RouterOutputs['material']['getAll'][0];
+export type MaterialCreate = RouterInputs['material']['create'];
+export type MaterialUpdate = RouterInputs['material']['update'];

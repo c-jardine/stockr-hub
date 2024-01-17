@@ -12,7 +12,7 @@ datasource db {
 }
 
 model StockUnit {
-    id                   Int           @id @default(autoincrement())
+    id                   String        @id @default(uuid())
     nameSingular         String        @unique
     namePlural           String        @unique
     abbreviationSingular String        @unique
@@ -22,18 +22,18 @@ model StockUnit {
 }
 
 model ItemDetails {
-    id          Int        @id @default(autoincrement())
+    id          String     @id @default(uuid())
     name        String
     stock       Decimal
     stockUnit   StockUnit  @relation(fields: [stockUnitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    stockUnitId Int
+    stockUnitId String
     minStock    Decimal?
     costPerUnit Decimal
     materials   Material[]
 }
 
 model Category {
-    id                 Int                @id @default(autoincrement())
+    id                 String             @id @default(uuid())
     name               String             @unique
     slug               String             @unique
     color              String             @default("#E2E8F0")
@@ -41,7 +41,7 @@ model Category {
 }
 
 model StockLogData {
-    id               Int                @id @default(autoincrement())
+    id               String             @id @default(uuid())
     prevStock        Decimal
     stock            Decimal
     notes            String?
@@ -50,44 +50,44 @@ model StockLogData {
 }
 
 model Vendor {
-    id        Int        @id @default(autoincrement())
+    id        String     @id @default(uuid())
     name      String     @unique
     url       String?
     materials Material[]
 }
 
 model MaterialCategory {
-    id         Int        @id @default(autoincrement())
+    id         String     @id @default(uuid())
     category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    categoryId Int
+    categoryId String
     materials  Material[]
 }
 
 model MaterialStockLog {
     material          Material        @relation(fields: [materialId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    materialId        Int
+    materialId        String
     stockLogData      StockLogData    @relation(fields: [stockLogDataId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    stockLogDataId    Int
+    stockLogDataId    String
     type              MaterialLogType @relation(fields: [materialLogTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    materialLogTypeId Int
+    materialLogTypeId String
 
     @@id([materialId, stockLogDataId])
 }
 
 model MaterialLogType {
-    id               Int                @id @default(autoincrement())
+    id               String             @id @default(uuid())
     name             String             @unique
     materialStockLog MaterialStockLog[]
 }
 
 model Material {
-    id            Int                @id @default(autoincrement())
+    id            String             @id @default(uuid())
     itemDetails   ItemDetails        @relation(fields: [itemDetailsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    itemDetailsId Int
+    itemDetailsId String
     url           String?
     categories    MaterialCategory[]
     vendor        Vendor             @relation(fields: [vendorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    vendorId      Int
+    vendorId      String
     stockLogs     MaterialStockLog[]
     createdAt     DateTime           @default(now())
 }

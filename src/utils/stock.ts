@@ -14,3 +14,7 @@ export function getStockUnitTextAbbrev(
     ? stockUnit.abbreviationSingular
     : stockUnit.abbreviationPlural;
 }
+
+export function getIsLowStock(stock: number, minStock: number) {
+  return stock < minStock;
+}

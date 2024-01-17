@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-export const materialInputSchema = z.object({
-  id: z.number().optional(),
+export const materialCreateSchema = z.object({
   itemDetails: z.object({
     name: z.string().trim().min(3, 'Must be at least 3 characters'),
     stock: z.number({ invalid_type_error: 'Must be a number' }).min(0),
@@ -11,11 +10,24 @@ export const materialInputSchema = z.object({
     costPerUnit: z.number(),
   }),
   url: z.string().url().or(z.literal('')),
-  stockUnitId: z.number(),
-  categoryIds: z.number().array().optional(),
-  vendorId: z.number(),
+  stockUnitId: z.string(),
+  categoryIds: z.string().array().optional(),
+  vendorId: z.string(),
+});
+
+export const materialUpdateSchema = z.object({
+  id: z.string(),
+  itemDetails: z.object({
+    name: z.string().trim().min(3, 'Must be at least 3 characters'),
+    minStock: z
+      .number({ invalid_type_error: 'Must be a number' })
+      .or(z.literal('')),
+  }),
+  url: z.string().url().or(z.literal('')),
+  categoryIds: z.string().array().optional(),
+  vendorId: z.string(),
 });
 
 export const materialDeleteSchema = z.object({
-  id: z.number(),
+  id: z.string(),
 });

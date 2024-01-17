@@ -14,7 +14,7 @@ export const selectComponents: SelectComponentsConfig<
 > = {
   DropdownIndicator: ({ children, ...props }) => (
     <components.DropdownIndicator {...props}>
-      <Icon as={ChevronDown} boxSize={3} color='gray.900' />
+      <Icon as={ChevronDown} boxSize={3} color='slate.900' />
       {children}
     </components.DropdownIndicator>
   ),
@@ -27,7 +27,7 @@ export const multiSelectComponents: SelectComponentsConfig<
 > = {
   DropdownIndicator: ({ children, ...props }) => (
     <components.DropdownIndicator {...props}>
-      <Icon as={ChevronDown} boxSize={3} color='gray.900' />
+      <Icon as={ChevronDown} boxSize={3} color='slate.900' />
       {children}
     </components.DropdownIndicator>
   ),
