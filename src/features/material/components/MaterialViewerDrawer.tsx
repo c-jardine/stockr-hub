@@ -28,8 +28,8 @@ export default function MaterialViewerDrawer(
   } = useViewMaterial();
 
   const isLowStock = getIsLowStock(
-    Number(props.itemDetails.stock),
-    Number(props.itemDetails.minStock)
+    Number(props.stockLevel.stock),
+    Number(props.stockLevel.minStock)
   );
 
   return (
@@ -39,7 +39,7 @@ export default function MaterialViewerDrawer(
         color={isLowStock ? 'red.500' : 'unset'}
         fontWeight='semibold'
       >
-        {props.itemDetails.name}
+        {props.name}
       </Link>
       <Drawer isOpen={isOpen} onClose={onClose} size='md'>
         <DrawerOverlay />
@@ -55,7 +55,7 @@ export default function MaterialViewerDrawer(
             </DrawerCloseButton>
             <Stack mt={2}>
               <Text as='h2' fontSize='xl' fontWeight='bold'>
-                {props.itemDetails.name}
+                {props.name}
               </Text>
               <Flex gap={1}>
                 {props.categories.map(({ category }) => (
@@ -72,8 +72,8 @@ export default function MaterialViewerDrawer(
                     Stock Level
                   </Text>
                   <Text fontSize='sm'>
-                    {Number(props.itemDetails.stock)}{' '}
-                    {props.itemDetails.stockUnit.abbreviationPlural}
+                    {Number(props.stockLevel.stock)}{' '}
+                    {props.stockLevel.stockUnit.abbreviationPlural}
                   </Text>
                 </Stack>
                 <Stack spacing={0}>
@@ -81,8 +81,8 @@ export default function MaterialViewerDrawer(
                     Unit Cost
                   </Text>
                   <Text fontSize='sm'>
-                    ${Number(props.itemDetails.costPerUnit)} /
-                    {props.itemDetails.stockUnit.abbreviationSingular}
+                    ${Number(props.costPerUnit)} /
+                    {props.stockLevel.stockUnit.abbreviationSingular}
                   </Text>
                 </Stack>
                 <Stack spacing={0}>
@@ -90,8 +90,8 @@ export default function MaterialViewerDrawer(
                     Min. Level
                   </Text>
                   <Text fontSize='sm'>
-                    {Number(props.itemDetails.minStock)}{' '}
-                    {props.itemDetails.stockUnit.abbreviationPlural}
+                    {Number(props.stockLevel.minStock)}{' '}
+                    {props.stockLevel.stockUnit.abbreviationPlural}
                   </Text>
                 </Stack>
               </SimpleGrid>

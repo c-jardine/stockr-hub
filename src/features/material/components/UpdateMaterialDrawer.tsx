@@ -24,8 +24,8 @@ export default function UpdateMaterialDrawer(
   } = useUpdateMaterial(props);
 
   const isLowStock = getIsLowStock(
-    Number(props.itemDetails.stock),
-    Number(props.itemDetails.minStock)
+    Number(props.stockLevel.stock),
+    Number(props.stockLevel.minStock)
   );
 
   return (
@@ -45,7 +45,7 @@ export default function UpdateMaterialDrawer(
           color={isLowStock ? 'red.500' : 'unset'}
           fontWeight='semibold'
         >
-          {props.itemDetails.name}
+          {props.name}
         </Link>
       )}
       <Drawer isOpen={isOpen} onClose={onClose} size='md'>

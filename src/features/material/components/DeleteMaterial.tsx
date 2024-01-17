@@ -54,7 +54,7 @@ export default function DeleteMaterial(props: MaterialGetAllOutputSingle) {
           <ModalBody>
             Are you sure you want to delete{' '}
             <Text as='span' fontWeight='semibold'>
-              {props.itemDetails.name}
+              {props.name}
             </Text>
           </ModalBody>
           <ModalFooter gap={4}>

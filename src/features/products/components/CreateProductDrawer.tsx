@@ -42,7 +42,7 @@ export default function CreateProductDrawer() {
             <FormProvider {...form}>
               <form
                 id='new-product-form'
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(onSubmit, (e) => console.log(e))}
               >
                 <CreateProductForm />
               </form>

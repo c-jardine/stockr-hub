@@ -11,7 +11,7 @@ export const materialRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.material.findMany({
       include: {
-        itemDetails: {
+        stockLevel: {
           include: {
             stockUnit: true,
           },
@@ -37,14 +37,12 @@ export const materialRouter = createTRPCRouter({
         ctx.db.material.count(),
         ctx.db.material.findMany({
           orderBy: {
-            itemDetails: {
-              name: 'asc',
-            },
+            name: 'asc',
           },
           skip: (input.skip - 1) * input.take,
           take: input.take,
           include: {
-            itemDetails: {
+            stockLevel: {
               include: {
                 stockUnit: true,
               },
@@ -67,19 +65,23 @@ export const materialRouter = createTRPCRouter({
   create: publicProcedure
     .input(materialCreateSchema)
     .mutation(async ({ input, ctx }) => {
-      const { itemDetails, stockUnitId, categoryIds, vendorId } = input;
+      const { stockLevel, categoryIds, vendorId } = input;
       return ctx.db.material.create({
         data: {
-          itemDetails: {
+          name: input.name,
+          url: input.url,
+          stockLevel: {
             create: {
-              ...itemDetails,
+              stock: stockLevel.stock,
+              minStock: stockLevel.minStock,
               stockUnit: {
                 connect: {
-                  id: stockUnitId,
+                  id: stockLevel.stockUnitId,
                 },
               },
             },
           },
+          costPerUnit: input.costPerUnit,
           categories: {
             // TODO: Change to create or connect
             connect: categoryIds?.map((categoryId) => ({ id: categoryId })),
@@ -95,7 +97,7 @@ export const materialRouter = createTRPCRouter({
   update: publicProcedure
     .input(materialUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const { itemDetails, categoryIds, vendorId } = input;
+      const { stockLevel, categoryIds, vendorId } = input;
       return ctx.db.$transaction([
         ctx.db.material.update({
           where: {
@@ -112,9 +114,11 @@ export const materialRouter = createTRPCRouter({
             id: input.id,
           },
           data: {
-            itemDetails: {
+            name: input.name,
+            url: input.url,
+            stockLevel: {
               update: {
-                ...itemDetails,
+                ...stockLevel,
               },
             },
             categories: {

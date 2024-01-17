@@ -81,7 +81,7 @@ export default function MaterialsTable(props: MaterialsTableProps) {
         ),
       },
       {
-        accessorFn: (row) => row.itemDetails.name,
+        accessorFn: (row) => row.name,
         id: 'name',
         header: 'Name',
         sortingFn: 'alphanumeric',
@@ -90,7 +90,7 @@ export default function MaterialsTable(props: MaterialsTableProps) {
         footer: (props) => props.column.id,
       },
       {
-        accessorFn: (row) => row.itemDetails.stock,
+        accessorFn: (row) => row.stockLevel.stock,
         id: 'stock',
         header: 'Stock',
         sortingFn: 'alphanumeric',
@@ -98,15 +98,14 @@ export default function MaterialsTable(props: MaterialsTableProps) {
           <Text>
             {Number(info.getValue())}{' '}
             {Number(info.getValue()) === 1
-              ? info.cell.row.original.itemDetails.stockUnit
-                  .abbreviationSingular
-              : info.cell.row.original.itemDetails.stockUnit.abbreviationPlural}
+              ? info.cell.row.original.stockLevel.stockUnit.abbreviationSingular
+              : info.cell.row.original.stockLevel.stockUnit.abbreviationPlural}
           </Text>
         ),
         footer: (props) => props.column.id,
       },
       {
-        accessorFn: (row) => row.itemDetails.minStock,
+        accessorFn: (row) => row.stockLevel.minStock,
         id: 'minStock',
         header: 'Min. Stock',
         sortingFn: 'alphanumeric',
@@ -114,22 +113,21 @@ export default function MaterialsTable(props: MaterialsTableProps) {
           <Text>
             {Number(info.getValue())}{' '}
             {Number(info.getValue()) === 1
-              ? info.cell.row.original.itemDetails.stockUnit
-                  .abbreviationSingular
-              : info.cell.row.original.itemDetails.stockUnit.abbreviationPlural}
+              ? info.cell.row.original.stockLevel.stockUnit.abbreviationSingular
+              : info.cell.row.original.stockLevel.stockUnit.abbreviationPlural}
           </Text>
         ),
         footer: (props) => props.column.id,
       },
       {
-        accessorFn: (row) => row.itemDetails.costPerUnit,
+        accessorFn: (row) => row.costPerUnit,
         id: 'costPerUnit',
         header: 'Cost per unit',
         sortingFn: 'alphanumeric',
         cell: (info) => (
           <Text>
             ${Number(info.getValue())} /
-            {info.cell.row.original.itemDetails.stockUnit.abbreviationSingular}
+            {info.cell.row.original.stockLevel.stockUnit.abbreviationSingular}
           </Text>
         ),
         footer: (props) => props.column.id,
@@ -180,7 +178,7 @@ export default function MaterialsTable(props: MaterialsTableProps) {
     initialState: {
       sorting: [
         {
-          id: 'itemDetails.name',
+          id: 'name',
           desc: false,
         },
       ],

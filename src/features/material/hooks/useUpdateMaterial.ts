@@ -10,9 +10,9 @@ export default function useUpdateMaterial(
 ) {
   const input: MaterialUpdate | undefined = {
     id: material.id,
-    itemDetails: {
-      name: material.itemDetails.name,
-      minStock: Number(material.itemDetails.minStock),
+    name: material.name,
+    stockLevel: {
+      minStock: Number(material.stockLevel.minStock),
     },
     url: material.url ?? '',
     vendorId: material.vendor.id,

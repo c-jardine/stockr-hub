@@ -1,7 +1,7 @@
 import { selectComponents } from '@/components/Select/components';
 import { useGetAllStockUnits } from '@/hooks/stockUnit';
 import { selectStyles } from '@/styles';
-import { type MaterialCreate } from '@/types';
+import { type MaterialCreate, type ProductCreate } from '@/types';
 import { FormControl, FormLabel } from '@chakra-ui/react';
 import { Select } from 'chakra-react-select';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -11,16 +11,19 @@ export default function StockUnitInput() {
     control,
     setValue,
     formState: { errors },
-  } = useFormContext<MaterialCreate>();
+  } = useFormContext<MaterialCreate | ProductCreate>();
 
   const { selectOptions } = useGetAllStockUnits();
 
   return (
-    <FormControl isInvalid={!!errors.stockUnitId} gridColumn='4 / span 2'>
+    <FormControl
+      isInvalid={!!errors.stockLevel?.stockUnitId}
+      gridColumn='4 / span 2'
+    >
       <FormLabel>Stock unit</FormLabel>
       <Controller
         control={control}
-        name='stockUnitId'
+        name='stockLevel.stockUnitId'
         render={({ field }) => (
           <Select
             {...field}
@@ -32,7 +35,7 @@ export default function StockUnitInput() {
             onChange={(data) => {
               if (data) {
                 field.onChange(data.value);
-                setValue('stockUnitId', data.value);
+                setValue('stockLevel.stockUnitId', data.value);
               }
             }}
             styles={selectStyles}

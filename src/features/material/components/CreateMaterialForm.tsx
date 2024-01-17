@@ -16,35 +16,35 @@ export default function CreateMaterialForm() {
     <Stack spacing={4}>
       <Input
         label='Name'
-        name='itemDetails.name'
+        name='name'
         register={register}
-        error={errors.itemDetails?.name}
+        error={errors.name}
       />
       <Input label='URL' name='url' register={register} error={errors.url} />
       <SimpleGrid columns={5} gap={4}>
         <NumberInput
           gridColumn='1 / span 3'
           label='Stock Level'
-          name='itemDetails.stock'
+          name='stockLevel.stock'
           register={register}
           rules={{ valueAsNumber: true }}
-          error={errors.itemDetails?.stock}
+          error={errors.stockLevel?.stock}
         />
         <StockUnitInput />
       </SimpleGrid>
       <NumberInput
         label='Min. Stock'
-        name='itemDetails.minStock'
+        name='stockLevel.minStock'
         register={register}
         rules={{ valueAsNumber: true }}
-        error={errors.itemDetails?.minStock}
+        error={errors.stockLevel?.minStock}
       />
       <NumberInput
         label='Cost Per Unit'
-        name='itemDetails.costPerUnit'
+        name='costPerUnit'
         register={register}
         rules={{ valueAsNumber: true }}
-        error={errors.itemDetails?.costPerUnit}
+        error={errors.costPerUnit}
       />
       <VendorsInput />
       <MaterialCategoriesInput />

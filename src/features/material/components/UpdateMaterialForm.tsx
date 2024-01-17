@@ -15,12 +15,7 @@ export default function UpdateMaterialForm(props: MaterialGetAllOutputSingle) {
   return (
     <Stack spacing={4}>
       {/* Name input */}
-      <Input
-        label='Name'
-        name='itemDetails.name'
-        register={register}
-        error={errors.itemDetails?.name}
-      />
+      <Input label='Name' name='name' register={register} error={errors.name} />
       {/* Url input */}
       <Input label='URL' name='url' register={register} error={errors.url} />
 
@@ -29,7 +24,7 @@ export default function UpdateMaterialForm(props: MaterialGetAllOutputSingle) {
         <DisplayOnlyInput
           isDisabled
           label='Stock'
-          value={Number(props.itemDetails.stock)}
+          value={Number(props.stockLevel.stock)}
           styles={{
             gridColumn: '1 / span 3',
           }}
@@ -39,7 +34,7 @@ export default function UpdateMaterialForm(props: MaterialGetAllOutputSingle) {
         <DisplayOnlyInput
           isDisabled
           label='Stock unit'
-          value={props.itemDetails.stockUnit.namePlural}
+          value={props.stockLevel.stockUnit.namePlural}
           styles={{
             gridColumn: '4 / span 2',
           }}
@@ -49,17 +44,17 @@ export default function UpdateMaterialForm(props: MaterialGetAllOutputSingle) {
       {/* Min stock input */}
       <NumberInput
         label='Min. Stock'
-        name='itemDetails.minStock'
+        name='stockLevel.minStock'
         register={register}
         rules={{ valueAsNumber: true }}
-        error={errors.itemDetails?.minStock}
+        error={errors.stockLevel?.minStock}
       />
 
       {/* Cost per unit input */}
       <DisplayOnlyInput
         isDisabled
         label='Cost per unit'
-        value={Number(props.itemDetails.costPerUnit)}
+        value={Number(props.costPerUnit)}
       />
 
       {/* Vendor input */}

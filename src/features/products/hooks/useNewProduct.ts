@@ -1,13 +1,13 @@
-import { materialCreateSchema } from '@/schemas';
-import { type MaterialCreate } from '@/types';
+import { productCreateSchema } from '@/schemas';
+import { type ProductCreate } from '@/types';
 import { api } from '@/utils/api';
 import { useDisclosure, useToast } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 export default function useNewProduct() {
-  const form = useForm<MaterialCreate>({
-    resolver: zodResolver(materialCreateSchema),
+  const form = useForm<ProductCreate>({
+    resolver: zodResolver(productCreateSchema),
   });
 
   const disclosure = useDisclosure({
@@ -17,7 +17,7 @@ export default function useNewProduct() {
   const toast = useToast();
 
   const utils = api.useUtils();
-  const query = api.material.create.useMutation({
+  const query = api.product.create.useMutation({
     onSuccess: async () => {
       toast({
         title: 'Product created',
@@ -29,7 +29,7 @@ export default function useNewProduct() {
     },
   });
 
-  function onSubmit(data: MaterialCreate) {
+  function onSubmit(data: ProductCreate) {
     query.mutate(data);
   }
 

@@ -1,5 +1,6 @@
 import {
   materialRouter,
+  productRouter,
   stockUnitRouter,
   vendorRouter,
 } from '@/server/api/routers';
@@ -12,6 +13,7 @@ import { createTRPCRouter } from '@/server/api/trpc';
  */
 export const appRouter = createTRPCRouter({
   material: materialRouter,
+  product: productRouter,
   stockUnit: stockUnitRouter,
   vendor: vendorRouter,
 });
