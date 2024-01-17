@@ -1,4 +1,4 @@
-import { Navbar } from '@/components/Navbar';
+import { DesktopNav, MobileNav } from '@/components/Navbar';
 import {
   Box,
   Flex,
@@ -9,6 +9,7 @@ import {
   InputGroup,
   InputLeftElement,
   Text,
+  chakra,
 } from '@chakra-ui/react';
 import { Poppins } from 'next/font/google';
 import React from 'react';
@@ -30,20 +31,21 @@ export interface RootLayoutProps {
 export default function RootLayout(props: RootLayoutProps) {
   return (
     <Flex fontFamily={sora.style.fontFamily} h='100vh'>
-      <Navbar />
+      <DesktopNav />
       <Box position='relative' w='full' h='full' overflowY='scroll'>
         <Box position='sticky' top={0} mb={4} zIndex={100}>
           <Flex
-            flexDirection={{ base: 'column', md: 'row' }}
             justifyContent='space-between'
             alignItems='center'
             p={4}
-            shadow='0 2px 4px var(--chakra-colors-slate-200)'
+            borderBottom='1px solid'
+            borderColor='slate.200'
             bg='white'
             h={20}
             backdropFilter='blur(24px)'
           >
-            <hgroup>
+            <MobileNav />
+            <chakra.hgroup display={{ base: 'none', lg: 'block' }}>
               <Heading as='h1' fontSize='xl'>
                 {props.title}
               </Heading>
@@ -52,10 +54,10 @@ export default function RootLayout(props: RootLayoutProps) {
                   {props.subtitle}
                 </Text>
               )}
-            </hgroup>
+            </chakra.hgroup>
             <Flex gap={4}>
               {props.actionBar && props.actionBar}
-              <HStack>
+              <HStack display={{ base: 'none', lg: 'flex' }}>
                 <InputGroup>
                   <InputLeftElement pointerEvents='none'>
                     <Icon as={Search} />

@@ -34,7 +34,7 @@ export default function DesktopNav() {
         </Text>
       </VStack>
       <Stack w='full' h='full' justifyContent='space-between'>
-        <Stack py={8}>
+        <Stack>
           <MaterialsNav />
           <ProductsNav />
           <AuditNav />
