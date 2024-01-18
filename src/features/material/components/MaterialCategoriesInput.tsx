@@ -41,7 +41,7 @@ export default function MaterialCategoriesInput() {
               field.onChange(e.map((c) => c.value));
             }}
             onCreateOption={onCreate}
-            styles={multiSelectStyles}
+            chakraStyles={multiSelectStyles}
             components={multiSelectComponents}
           />
         )}
