@@ -5,9 +5,10 @@ export const materialCreateSchema = z.object({
   url: z.string().url().or(z.literal('')),
   stockLevel: z.object({
     stock: z.number({ invalid_type_error: 'Must be a number' }).min(0),
-    minStock: z
-      .number({ invalid_type_error: 'Must be a number' })
-      .or(z.literal('')),
+    minStock: z.union([
+      z.number({ invalid_type_error: 'Must be a number' }),
+      z.nan(),
+    ]),
     stockUnitId: z.string(),
   }),
   costPerUnit: z.number(),
@@ -20,9 +21,10 @@ export const materialUpdateSchema = z.object({
   name: z.string().trim().min(3, 'Must be at least 3 characters'),
   url: z.string().url().or(z.literal('')),
   stockLevel: z.object({
-    minStock: z
-      .number({ invalid_type_error: 'Must be a number' })
-      .or(z.literal('')),
+    minStock: z.union([
+      z.number({ invalid_type_error: 'Must be a number' }),
+      z.nan(),
+    ]),
   }),
   categoryIds: z.string().array().optional(),
   vendorId: z.string(),

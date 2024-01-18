@@ -113,11 +113,12 @@ export default function ProductsTable(props: ProductsTableProps) {
         sortingFn: 'alphanumeric',
         cell: (info) => (
           <Text>
-            {Number(info.getValue())}{' '}
-            {getStockUnitTextAbbrev(
-              Number(info.getValue()),
-              info.cell.row.original.stockLevel.stockUnit
-            )}
+            {info.getValue()
+              ? `${Number(info.getValue())} ${getStockUnitTextAbbrev(
+                  Number(info.getValue()),
+                  info.cell.row.original.stockLevel.stockUnit
+                )}`
+              : '-'}
           </Text>
         ),
         footer: (props) => props.column.id,
