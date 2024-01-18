@@ -1,1 +1,1 @@
-export { default as useCategoryInput } from './useCategoryInput';
+export { default as useCategoryOptions } from './useCategoryOptions';

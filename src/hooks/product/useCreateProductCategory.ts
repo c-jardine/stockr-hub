@@ -33,5 +33,9 @@ export default function useCreateProductCategory() {
     },
   });
 
-  return { query };
+  function onCreate(input: string) {
+    query.mutate({ name: input });
+  }
+
+  return { onCreate };
 }
