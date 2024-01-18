@@ -71,7 +71,11 @@ export default function MaterialViewerDrawer(
                   <Text color='slate.500' fontSize='sm'>
                     Stock Level
                   </Text>
-                  <Text fontSize='sm'>
+                  <Text
+                    fontSize='sm'
+                    fontWeight={isLowStock ? 'semibold' : '500'}
+                    color={isLowStock ? 'red.500' : 'unset'}
+                  >
                     {Number(props.stockLevel.stock)}{' '}
                     {getStockUnitTextAbbrev(
                       Number(props.stockLevel.stock),
@@ -83,27 +87,35 @@ export default function MaterialViewerDrawer(
                   <Text color='slate.500' fontSize='sm'>
                     Unit Cost
                   </Text>
-                  <Text fontSize='sm'>
+                  <Text fontSize='sm' fontWeight='500'>
                     ${Number(props.costPerUnit)} /
                     {props.stockLevel.stockUnit.abbreviationSingular}
                   </Text>
                 </Stack>
                 <Stack spacing={0}>
                   <Text color='slate.500' fontSize='sm'>
-                    Min. Level
+                    Vendor
                   </Text>
-                  <Text fontSize='sm'>
-                    {Number(props.stockLevel.minStock)}{' '}
-                    {props.stockLevel.stockUnit.abbreviationPlural}
+                  <Text fontSize='sm' fontWeight='500'>
+                    {props.vendor.name}
+                  </Text>
+                </Stack>
+                <Stack spacing={0}>
+                  <Text color='slate.500' fontSize='sm'>
+                    Min. Stock
+                  </Text>
+                  <Text fontSize='sm' fontWeight='500'>
+                    {props.stockLevel.minStock
+                      ? `${Number(
+                          props.stockLevel.minStock
+                        )} ${getStockUnitTextAbbrev(
+                          Number(props.stockLevel.minStock),
+                          props.stockLevel.stockUnit
+                        )}`
+                      : '-'}
                   </Text>
                 </Stack>
               </SimpleGrid>
-              <Stack spacing={0}>
-                <Text color='slate.500' fontSize='sm'>
-                  Vendor
-                </Text>
-                <Text fontSize='sm'>{props.vendor.name}</Text>
-              </Stack>
               <Flex gap={4}>
                 <UpdateMaterialDrawer {...props} buttonLabel='Edit details' />
                 <DeleteMaterial {...props} />
