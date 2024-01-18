@@ -4,3 +4,5 @@ export type MaterialGetAllOutput = RouterOutputs['material']['getAll'];
 export type MaterialGetAllOutputSingle = RouterOutputs['material']['getAll'][0];
 export type MaterialCreate = RouterInputs['material']['create'];
 export type MaterialUpdate = RouterInputs['material']['update'];
+export type MaterialGetAllCategoriesOutput =
+  RouterOutputs['material']['getAllCategories'];

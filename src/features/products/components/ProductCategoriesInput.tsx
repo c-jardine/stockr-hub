@@ -1,54 +1,20 @@
-import { multiSelectComponents } from '@/components/Select/components';
-import { useCreateProductCategory } from '@/hooks/product';
-import { multiSelectStyles } from '@/styles';
-import { type ProductCreate } from '@/types';
+import { CategoriesInput } from '@/components/CategoriesInput';
+import { useCategoryInput } from '@/components/CategoriesInput/hooks';
+import { UseCategoryInputOwner } from '@/components/CategoriesInput/hooks/useCategoryInput';
 import { api } from '@/utils/api';
-import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
-import { CreatableSelect } from 'chakra-react-select';
-import { Controller, useFormContext } from 'react-hook-form';
 
 export default function ProductCategoriesInput() {
   const categoriesQuery = api.product.getAllCategories.useQuery();
-  const options = categoriesQuery.data?.map((category) => ({
-    label: category.category.name,
-    value: category.id,
-  }));
-
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext<ProductCreate>();
-
-  const { query: createCategoryQuery } = useCreateProductCategory();
-  function onCreate(input: string) {
-    createCategoryQuery.mutate({ name: input });
-  }
+  const { options, onCreate } = useCategoryInput(
+    categoriesQuery,
+    UseCategoryInputOwner.PRODUCT
+  );
 
   return (
-    <FormControl isInvalid={!!errors.categoryIds}>
-      <FormLabel>Categories</FormLabel>
-      <Controller
-        control={control}
-        name='categoryIds'
-        render={({ field }) => (
-          <CreatableSelect
-            {...field}
-            isMulti
-            menuPlacement='top'
-            options={options}
-            value={options?.filter((o) => field.value?.includes(o.value))}
-            onChange={(e) => {
-              field.onChange(e.map((c) => c.value));
-            }}
-            onCreateOption={onCreate}
-            chakraStyles={multiSelectStyles}
-            components={multiSelectComponents}
-          />
-        )}
-      />
-      {errors.categoryIds && (
-        <FormErrorMessage>{errors.categoryIds.message}</FormErrorMessage>
-      )}
-    </FormControl>
+    <CategoriesInput
+      name='categoryIds'
+      categoryOptions={options}
+      onCreateCategory={onCreate}
+    />
   );
 }
