@@ -2,6 +2,7 @@ import {
   type MaterialGetAllOutput,
   type MaterialGetAllOutputSingle,
 } from '@/types';
+import { getStockUnitTextAbbrev } from '@/utils';
 import {
   Box,
   Checkbox,
@@ -96,9 +97,10 @@ export default function MaterialsTable(props: MaterialsTableProps) {
         cell: (info) => (
           <Text>
             {Number(info.getValue())}{' '}
-            {Number(info.getValue()) === 1
-              ? info.cell.row.original.stockLevel.stockUnit.abbreviationSingular
-              : info.cell.row.original.stockLevel.stockUnit.abbreviationPlural}
+            {getStockUnitTextAbbrev(
+              Number(info.getValue()),
+              info.cell.row.original.stockLevel.stockUnit
+            )}
           </Text>
         ),
         footer: (props) => props.column.id,
@@ -111,9 +113,10 @@ export default function MaterialsTable(props: MaterialsTableProps) {
         cell: (info) => (
           <Text>
             {Number(info.getValue())}{' '}
-            {Number(info.getValue()) === 1
-              ? info.cell.row.original.stockLevel.stockUnit.abbreviationSingular
-              : info.cell.row.original.stockLevel.stockUnit.abbreviationPlural}
+            {getStockUnitTextAbbrev(
+              Number(info.getValue()),
+              info.cell.row.original.stockLevel.stockUnit
+            )}
           </Text>
         ),
         footer: (props) => props.column.id,

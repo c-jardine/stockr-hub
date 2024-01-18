@@ -2,6 +2,7 @@ import {
   type ProductGetAllOutput,
   type ProductGetAllOutputSingle,
 } from '@/types';
+import { getStockUnitTextAbbrev } from '@/utils';
 import {
   Box,
   Checkbox,
@@ -36,6 +37,7 @@ import {
   ChevronRight,
   ChevronUp,
 } from 'tabler-icons-react';
+import { ProductViewerDrawer } from '.';
 // import { MaterialViewerDrawer } from '.';
 
 type ProductsTableProps = {
@@ -85,7 +87,7 @@ export default function ProductsTable(props: ProductsTableProps) {
         id: 'name',
         header: 'Name',
         sortingFn: 'alphanumeric',
-        // cell: (info) => <MaterialViewerDrawer {...info.cell.row.original} />,
+        cell: (info) => <ProductViewerDrawer {...info.cell.row.original} />,
         footer: (props) => props.column.id,
       },
       {
@@ -96,9 +98,10 @@ export default function ProductsTable(props: ProductsTableProps) {
         cell: (info) => (
           <Text>
             {Number(info.getValue())}{' '}
-            {Number(info.getValue()) === 1
-              ? info.cell.row.original.stockLevel.stockUnit.abbreviationSingular
-              : info.cell.row.original.stockLevel.stockUnit.abbreviationPlural}
+            {getStockUnitTextAbbrev(
+              Number(info.getValue()),
+              info.cell.row.original.stockLevel.stockUnit
+            )}
           </Text>
         ),
         footer: (props) => props.column.id,
@@ -111,9 +114,10 @@ export default function ProductsTable(props: ProductsTableProps) {
         cell: (info) => (
           <Text>
             {Number(info.getValue())}{' '}
-            {Number(info.getValue()) === 1
-              ? info.cell.row.original.stockLevel.stockUnit.abbreviationSingular
-              : info.cell.row.original.stockLevel.stockUnit.abbreviationPlural}
+            {getStockUnitTextAbbrev(
+              Number(info.getValue()),
+              info.cell.row.original.stockLevel.stockUnit
+            )}
           </Text>
         ),
         footer: (props) => props.column.id,
@@ -123,12 +127,7 @@ export default function ProductsTable(props: ProductsTableProps) {
         id: 'batchSize',
         header: 'Batch size',
         sortingFn: 'alphanumeric',
-        cell: (info) => (
-          <Text>
-            ${Number(info.getValue())} /
-            {info.cell.row.original.stockLevel.stockUnit.abbreviationSingular}
-          </Text>
-        ),
+        cell: (info) => <Text>{Number(info.getValue())}</Text>,
         footer: (props) => props.column.id,
       },
       {

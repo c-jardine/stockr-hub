@@ -1,5 +1,5 @@
-import { type MaterialGetAllOutputSingle } from '@/types';
-import { getIsLowStock, getStockUnitTextAbbrev } from '@/utils';
+import { type ProductGetAllOutputSingle } from '@/types';
+import { getIsLowStock, getStockUnitTextAbbrev, round } from '@/utils';
 import {
   Drawer,
   DrawerBody,
@@ -17,15 +17,13 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { ChevronLeft } from 'tabler-icons-react';
-import { DeleteMaterial, UpdateMaterialDrawer } from '.';
-import { useViewMaterial } from '../hooks';
+import { MaterialsUsed } from '.';
+import { useViewProduct } from '../hooks';
 
-export default function MaterialViewerDrawer(
-  props: MaterialGetAllOutputSingle
-) {
+export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
   const {
     disclosure: { isOpen, onOpen, onClose },
-  } = useViewMaterial();
+  } = useViewProduct();
 
   const isLowStock = getIsLowStock(
     Number(props.stockLevel.stock),
@@ -71,7 +69,11 @@ export default function MaterialViewerDrawer(
                   <Text color='slate.500' fontSize='sm'>
                     Stock Level
                   </Text>
-                  <Text fontSize='sm'>
+                  <Text
+                    fontSize='sm'
+                    fontWeight={isLowStock ? 'semibold' : '500'}
+                    color={isLowStock ? 'red.500' : 'unset'}
+                  >
                     {Number(props.stockLevel.stock)}{' '}
                     {getStockUnitTextAbbrev(
                       Number(props.stockLevel.stock),
@@ -81,33 +83,60 @@ export default function MaterialViewerDrawer(
                 </Stack>
                 <Stack spacing={0}>
                   <Text color='slate.500' fontSize='sm'>
-                    Unit Cost
+                    Batch Size
                   </Text>
-                  <Text fontSize='sm'>
-                    ${Number(props.costPerUnit)} /
-                    {props.stockLevel.stockUnit.abbreviationSingular}
+                  <Text fontSize='sm' fontWeight='500'>
+                    {props.batchSize}{' '}
+                    {getStockUnitTextAbbrev(
+                      Number(props.batchSize),
+                      props.stockLevel.stockUnit
+                    )}
                   </Text>
                 </Stack>
                 <Stack spacing={0}>
                   <Text color='slate.500' fontSize='sm'>
-                    Min. Level
+                    Unit Cost
                   </Text>
-                  <Text fontSize='sm'>
-                    {Number(props.stockLevel.minStock)}{' '}
-                    {props.stockLevel.stockUnit.abbreviationPlural}
+                  <Text fontSize='sm' fontWeight='500'>
+                    $
+                    {round(
+                      props.materials.reduce((total, { material, ...rest }) => {
+                        return (
+                          total +
+                          (Number(material.costPerUnit) *
+                            Number(rest.quantity)) /
+                            props.batchSize
+                        );
+                      }, 0)
+                    )}
+                  </Text>
+                </Stack>
+                <Stack spacing={0}>
+                  <Text color='slate.500' fontSize='sm'>
+                    Min. Stock
+                  </Text>
+                  <Text fontSize='sm' fontWeight='500'>
+                    {props.stockLevel.minStock
+                      ? `${Number(
+                          props.stockLevel.minStock
+                        )} ${getStockUnitTextAbbrev(
+                          Number(props.stockLevel.minStock),
+                          props.stockLevel.stockUnit
+                        )}`
+                      : '-'}
                   </Text>
                 </Stack>
               </SimpleGrid>
-              <Stack spacing={0}>
-                <Text color='slate.500' fontSize='sm'>
-                  Vendor
-                </Text>
-                <Text fontSize='sm'>{props.vendor.name}</Text>
-              </Stack>
               <Flex gap={4}>
-                <UpdateMaterialDrawer {...props} buttonLabel='Edit details' />
-                <DeleteMaterial {...props} />
+                {/* <UpdateMaterialDrawer {...props} buttonLabel='Edit details' /> */}
+                {/* <DeleteMaterial {...props} /> */}
               </Flex>
+              <Stack spacing={4}>
+                <Text fontSize='lg' fontWeight='bold'>
+                  Materials Used
+                </Text>
+                <MaterialsUsed {...props} />
+              </Stack>
             </Stack>
           </DrawerBody>
           <DrawerFooter></DrawerFooter>

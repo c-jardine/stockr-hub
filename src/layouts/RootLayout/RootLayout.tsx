@@ -11,15 +11,8 @@ import {
   Text,
   chakra,
 } from '@chakra-ui/react';
-import { Poppins } from 'next/font/google';
 import React from 'react';
 import { Bell, Moon, Search, Settings } from 'tabler-icons-react';
-
-const sora = Poppins({
-  weight: ['300', '400', '500', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-});
 
 export interface RootLayoutProps {
   title: string;
@@ -30,7 +23,7 @@ export interface RootLayoutProps {
 
 export default function RootLayout(props: RootLayoutProps) {
   return (
-    <Flex fontFamily={sora.style.fontFamily} h='100vh'>
+    <Flex h='100vh'>
       <DesktopNav />
       <Box position='relative' w='full' h='full' overflowY='scroll'>
         <Box position='sticky' top={0} mb={4} zIndex={100}>

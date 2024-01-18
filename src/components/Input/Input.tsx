@@ -18,7 +18,7 @@ type InputProps<TFormValues extends FieldValues> = {
   register: UseFormRegister<TFormValues>;
   rules?: RegisterOptions;
   error?: FieldError;
-} & { label: string } & Omit<ChakraInputProps, 'name'>;
+} & { label?: string } & Omit<ChakraInputProps, 'name'>;
 
 export default function Input<TFormValues extends FieldValues>(
   props: InputProps<TFormValues>
@@ -27,8 +27,8 @@ export default function Input<TFormValues extends FieldValues>(
 
   return (
     <FormControl isInvalid={!!error} {...styles}>
-      <FormLabel>{label}</FormLabel>
-      <ChakraInput {...register(name, rules)} py={5} />
+      {label && <FormLabel>{label}</FormLabel>}
+      <ChakraInput {...register(name, rules)} py={5} fontSize='sm' />
       {error && <FormErrorMessage>{error.message}</FormErrorMessage>}
     </FormControl>
   );

@@ -38,7 +38,7 @@ export default function StockUnitInput() {
                 setValue('stockLevel.stockUnitId', data.value);
               }
             }}
-            styles={selectStyles}
+            chakraStyles={selectStyles}
             components={selectComponents}
           />
         )}

@@ -29,7 +29,7 @@ type FormProps<TFormValues extends FieldValues> = {
 
 // Define a type for additional props
 type AdditionalProps = {
-  label: string;
+  label?: string;
   isUpdating?: boolean;
 };
 
@@ -45,12 +45,12 @@ export default function NumberInput<TFormValues extends FieldValues>(
 
   return (
     <FormControl isInvalid={!!error} {...styles}>
-      <FormLabel>{label}</FormLabel>
+      {label && <FormLabel>{label}</FormLabel>}
       <ChakraNumberInput>
         {styles.isDisabled ? (
-          <NumberInputField name={name} value={props.value} />
+          <NumberInputField name={name} value={props.value} fontSize='sm' />
         ) : (
-          <NumberInputField {...register(name, rules)} />
+          <NumberInputField {...register(name, rules)} fontSize='sm' />
         )}
         <NumberInputStepper>
           <NumberIncrementStepper>

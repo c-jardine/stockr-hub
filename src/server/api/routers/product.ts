@@ -11,7 +11,19 @@ export const productRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.product.findMany({
       include: {
-        materials: true,
+        materials: {
+          include: {
+            material: {
+              include: {
+                stockLevel: {
+                  include: {
+                    stockUnit: true
+                  }
+                },
+              },
+            },
+          },
+        },
         stockLevel: {
           include: {
             stockUnit: true,
@@ -33,7 +45,7 @@ export const productRouter = createTRPCRouter({
   create: publicProcedure
     .input(productCreateSchema)
     .mutation(async ({ input, ctx }) => {
-      const { categoryIds, stockLevel, ...rest } = input;
+      const { categoryIds, stockLevel, materials, ...rest } = input;
       return ctx.db.product.create({
         data: {
           ...rest,
@@ -46,6 +58,11 @@ export const productRouter = createTRPCRouter({
                   id: stockLevel.stockUnitId,
                 },
               },
+            },
+          },
+          materials: {
+            createMany: {
+              data: materials,
             },
           },
           categories: {

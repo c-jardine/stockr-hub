@@ -2,11 +2,9 @@ import { Input } from '@/components/Input';
 import { NumberInput } from '@/components/NumberInput';
 import { StockUnitInput } from '@/components/StockUnitInput';
 import { type ProductCreate } from '@/types';
-import { SimpleGrid, Stack, Text } from '@chakra-ui/react';
+import { FormLabel, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
-import { ProductCategoriesInput } from '.';
-// import { MaterialCategoriesInput, VendorsInput } from '.';
-// import StockUnitInput from './StockUnitInput';
+import { ProductCategoriesInput, ProductMaterialsFieldArray } from '.';
 
 export default function CreateProductForm() {
   const {
@@ -35,16 +33,26 @@ export default function CreateProductForm() {
         rules={{ valueAsNumber: true }}
         error={errors.stockLevel?.minStock}
       />
-      <Text fontSize='2xl' fontWeight='bold'>
-        Production
-      </Text>
-      <NumberInput
-        label='Batch size'
-        name='batchSize'
-        register={register}
-        rules={{ valueAsNumber: true }}
-        error={errors.batchSize}
-      />
+      <Stack>
+        <Text fontSize='2xl' fontWeight='bold'>
+          Production
+        </Text>
+        <Text mt={-2} color='slate.500' fontSize='sm'>
+          Choose the batch size and materials included in a production run. The
+          amount of material in each item will be calculated automatically.
+        </Text>
+        <NumberInput
+          label='Batch size'
+          name='batchSize'
+          register={register}
+          rules={{ valueAsNumber: true }}
+          error={errors.batchSize}
+        />
+        <Stack>
+          <FormLabel mb={0}>Materials</FormLabel>
+          <ProductMaterialsFieldArray />
+        </Stack>
+      </Stack>
       <NumberInput
         label='MSRP'
         name='retailPrice'
