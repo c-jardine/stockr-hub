@@ -1,6 +1,6 @@
 import { UpdateMaterialDrawer } from '@/features/material';
 import { type ProductGetAllOutputSingle } from '@/types';
-import { getStockUnitTextAbbrev, round } from '@/utils';
+import { getStockUnitTextAbbrev, roundTwoDecimals } from '@/utils';
 import {
   Box,
   HStack,
@@ -26,7 +26,7 @@ export default function MaterialsUsed({
     quantity,
   }: ProductGetAllOutputSingle['materials'][0]) {
     // Data for the amount of stock used.
-    const stockUsed = round(Number(quantity) / batchSize);
+    const stockUsed = roundTwoDecimals(Number(quantity) / batchSize);
     const stockUsedUnit = getStockUnitTextAbbrev(
       stockUsed,
       material.stockLevel.stockUnit
@@ -47,7 +47,7 @@ export default function MaterialsUsed({
     );
 
     // Data for the material's cost per individual unit.
-    const costPerUnit = round(
+    const costPerUnit = roundTwoDecimals(
       (Number(material.costPerUnit) * Number(quantity)) / batchSize
     );
 

@@ -1,5 +1,5 @@
 import { type ProductGetAllOutputSingle } from '@/types';
-import { getIsLowStock, getStockUnitTextAbbrev, round } from '@/utils';
+import { getIsLowStock, getStockUnitTextAbbrev, roundTwoDecimals } from '@/utils';
 import {
   Drawer,
   DrawerBody,
@@ -110,7 +110,7 @@ export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
   )}`;
 
   // Data for the unit cost text.
-  const unitCostText = `$${round(
+  const unitCostText = `$${roundTwoDecimals(
     props.materials.reduce((total, { material, ...rest }) => {
       return (
         total +
