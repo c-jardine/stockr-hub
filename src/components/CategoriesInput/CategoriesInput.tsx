@@ -12,6 +12,9 @@ interface CategoriesInputProps {
   onCreateCategory: (input: string) => void;
 }
 
+/**
+ * A reusable component for creating and selecting categories.
+ */
 export function CategoriesInput({
   name,
   categoryOptions,

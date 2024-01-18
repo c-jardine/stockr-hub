@@ -1,19 +1,16 @@
 import { useCreateMaterialCategory } from '@/hooks/material';
 import { useCreateProductCategory } from '@/hooks/product';
 import { type AppRouter } from '@/server/api/root';
-import {
-  type MaterialGetAllCategoriesOutput,
-  type ProductGetAllCategoriesOutput,
-} from '@/types';
 import { type TRPCClientErrorLike } from '@trpc/client';
 import { type UseTRPCQueryResult } from '@trpc/react-query/shared';
 
-type MaterialCategories = UseTRPCQueryResult<
-  MaterialGetAllCategoriesOutput,
-  TRPCClientErrorLike<AppRouter>
->;
-type ProductCategories = UseTRPCQueryResult<
-  ProductGetAllCategoriesOutput,
+export interface CategoryOutput {
+  id: string;
+  category: { name: string };
+}
+
+type CategoryTRPCResult<T extends CategoryOutput[]> = UseTRPCQueryResult<
+  T,
   TRPCClientErrorLike<AppRouter>
 >;
 
@@ -22,8 +19,8 @@ export enum UseCategoryInputOwner {
   PRODUCT,
 }
 
-export default function useCategoryInput(
-  queryFn: MaterialCategories | ProductCategories,
+export default function useCategoryInput<T extends CategoryOutput[]>(
+  queryFn: CategoryTRPCResult<T>,
   owner: UseCategoryInputOwner
 ) {
   const categoriesQuery = queryFn;
