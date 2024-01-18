@@ -1,9 +1,16 @@
 import { NumberInput } from '@/components/NumberInput';
+import { type Option } from '@/components/Select';
 import { selectComponents } from '@/components/Select/components';
 import { selectStyles } from '@/styles';
+import { type ProductCreate } from '@/types';
 import { Button, Icon, IconButton, SimpleGrid, Text } from '@chakra-ui/react';
 import { Select } from 'chakra-react-select';
-import { Controller } from 'react-hook-form';
+import React from 'react';
+import {
+  Controller,
+  type Control,
+  type UseFormSetValue,
+} from 'react-hook-form';
 import { Plus, X } from 'tabler-icons-react';
 import { useProductMaterialsFieldArray } from '../hooks';
 
@@ -21,37 +28,14 @@ export default function ProductMaterialsFieldArray() {
 
   return (
     <>
-      {fields.length === 0 && (
-        <Text
-          color='slate.500'
-          fontSize='sm'
-          fontStyle='italic'
-          textAlign='center'
-        >
-          No materials added
-        </Text>
-      )}
+      {fields.length === 0 && <NoMaterialsText />}
       {fields.map((field, index) => (
         <SimpleGrid key={field.id} gridTemplateColumns={'2fr 1fr auto'} gap={4}>
-          <Controller
+          <MaterialSelect
+            index={index}
             control={control}
-            name={`materials.${index}.materialId`}
-            render={({ field }) => (
-              <Select
-                {...field}
-                placeholder='Select material'
-                options={options}
-                value={options?.find((c) => c.value === field.value)}
-                onChange={(data) => {
-                  if (data) {
-                    field.onChange(data.value);
-                    setValue(`materials.${index}.materialId`, data.value);
-                  }
-                }}
-                chakraStyles={selectStyles}
-                components={selectComponents}
-              />
-            )}
+            options={options ?? []}
+            setValue={setValue}
           />
           <NumberInput
             name={`materials.${index}.quantity`}
@@ -67,15 +51,67 @@ export default function ProductMaterialsFieldArray() {
           />
         </SimpleGrid>
       ))}
-      <Button
-        gap={2}
-        variant='outline'
-        colorScheme='black'
+      <AddMaterialButton
         onClick={() => append({ materialId: '', quantity: '' })}
-      >
-        <Icon as={Plus} strokeWidth={3} />
-        Add material
-      </Button>
+      />
     </>
+  );
+}
+
+function NoMaterialsText() {
+  return (
+    <Text color='slate.500' fontSize='sm' fontStyle='italic' textAlign='center'>
+      No materials added
+    </Text>
+  );
+}
+
+interface MaterialSelectProps {
+  index: number;
+  control: Control<ProductCreate>;
+  options: Option[];
+  setValue: UseFormSetValue<ProductCreate>;
+}
+
+function MaterialSelect({
+  index,
+  control,
+  options,
+  setValue,
+}: MaterialSelectProps) {
+  return (
+    <Controller
+      control={control}
+      name={`materials.${index}.materialId`}
+      render={({ field }) => (
+        <Select
+          {...field}
+          placeholder='Select material'
+          options={options}
+          value={options?.find((c) => c.value === field.value)}
+          onChange={(data) => {
+            if (data) {
+              field.onChange(data.value);
+              setValue(`materials.${index}.materialId`, data.value);
+            }
+          }}
+          chakraStyles={selectStyles}
+          components={selectComponents}
+        />
+      )}
+    />
+  );
+}
+
+function AddMaterialButton({
+  onClick,
+}: {
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+}) {
+  return (
+    <Button gap={2} variant='outline' colorScheme='black' onClick={onClick}>
+      <Icon as={Plus} strokeWidth={3} />
+      Add material
+    </Button>
   );
 }
