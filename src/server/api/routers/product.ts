@@ -17,8 +17,14 @@ export const productRouter = createTRPCRouter({
               include: {
                 stockLevel: {
                   include: {
-                    stockUnit: true
-                  }
+                    stockUnit: true,
+                  },
+                },
+                vendor: true,
+                categories: {
+                  include: {
+                    category: true,
+                  },
                 },
               },
             },

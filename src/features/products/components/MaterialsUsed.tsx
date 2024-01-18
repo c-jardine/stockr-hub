@@ -1,3 +1,4 @@
+import { UpdateMaterialDrawer } from '@/features/material';
 import { type ProductGetAllOutputSingle } from '@/types';
 import { getStockUnitTextAbbrev, round } from '@/utils';
 import {
@@ -15,7 +16,7 @@ export default function MaterialsUsed(props: ProductGetAllOutputSingle) {
     <>
       {props.materials.map(({ material, ...rest }) => (
         <Box key={material.id} fontSize='sm'>
-          <Text fontWeight='semibold'>{material.name}</Text>
+          <UpdateMaterialDrawer {...material} />
           <HStack
             divider={<StackDivider border='none'>&bull;</StackDivider>}
             alignItems='flex-start'
