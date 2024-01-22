@@ -48,6 +48,57 @@ export const productRouter = createTRPCRouter({
       },
     });
   }),
+  getByCategorySlug: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.product.findMany({
+        where: {
+          categories: {
+            some: {
+              category: {
+                slug: input.slug,
+              },
+            },
+          },
+        },
+        include: {
+          materials: {
+            include: {
+              material: {
+                include: {
+                  stockLevel: {
+                    include: {
+                      stockUnit: true,
+                    },
+                  },
+                  vendor: true,
+                  categories: {
+                    include: {
+                      category: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          stockLevel: {
+            include: {
+              stockUnit: true,
+            },
+          },
+          categories: {
+            orderBy: {
+              category: {
+                name: 'asc',
+              },
+            },
+            include: {
+              category: true,
+            },
+          },
+        },
+      });
+    }),
   create: publicProcedure
     .input(productCreateSchema)
     .mutation(async ({ input, ctx }) => {
