@@ -30,6 +30,39 @@ export const materialRouter = createTRPCRouter({
       },
     });
   }),
+  getByCategorySlug: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.material.findMany({
+        where: {
+          categories: {
+            some: {
+              category: {
+                slug: input.slug,
+              },
+            },
+          },
+        },
+        include: {
+          stockLevel: {
+            include: {
+              stockUnit: true,
+            },
+          },
+          vendor: true,
+          categories: {
+            orderBy: {
+              category: {
+                name: 'asc',
+              },
+            },
+            include: {
+              category: true,
+            },
+          },
+        },
+      });
+    }),
   getAllPaginated: publicProcedure
     .input(z.object({ skip: z.number(), take: z.number() }))
     .query(({ input, ctx }) => {

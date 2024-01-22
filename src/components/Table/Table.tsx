@@ -63,6 +63,7 @@ export default function Table<T>(table: TableProps<T>) {
       </Flex>
     );
   }
+
   return (
     <>
       <TableContainer>
@@ -71,24 +72,26 @@ export default function Table<T>(table: TableProps<T>) {
             color='slate.400'
             borderBottom='1px solid var(--chakra-colors-slate-200)'
           >
-            {table.getHeaderGroups().map((headerGroup) =>
-              headerGroup.headers.map((header) => (
-                <Th
-                  key={header.id}
-                  position='relative'
-                  w={header.getSize()}
-                  colSpan={header.colSpan}
-                  py={0}
-                >
-                  {renderHeaderContent(header)}
+            <Tr>
+              {table.getHeaderGroups().map((headerGroup) =>
+                headerGroup.headers.map((header) => (
+                  <Th
+                    key={header.id}
+                    position='relative'
+                    w={header.getSize()}
+                    colSpan={header.colSpan}
+                    py={0}
+                  >
+                    {renderHeaderContent(header)}
 
-                  {/* Column resizer */}
-                  {header.column.getCanResize() && (
-                    <ColumnResizer {...header} />
-                  )}
-                </Th>
-              ))
-            )}
+                    {/* Column resizer */}
+                    {header.column.getCanResize() && (
+                      <ColumnResizer {...header} />
+                    )}
+                  </Th>
+                ))
+              )}
+            </Tr>
           </Thead>
 
           <Tbody fontSize='sm'>{renderTableRow(table)}</Tbody>
