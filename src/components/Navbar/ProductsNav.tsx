@@ -10,7 +10,9 @@ export default function ProductsNav() {
 
   const { data: categories } = api.product.getAllCategories.useQuery();
 
-  if (router.asPath !== '/products') {
+  const isCurrentPath = router.asPath.startsWith('/products');
+
+  if (!isCurrentPath) {
     return <NavLink label='Products' href='/products' icon={Box} />;
   }
 
@@ -21,7 +23,7 @@ export default function ProductsNav() {
         bg='slate.100'
         py={categories && categories.length > 0 ? 2 : 'unset'}
       >
-        {router.asPath.startsWith('/products') &&
+        {isCurrentPath &&
           categories?.map((product) => (
             <NavLinkChild
               key={product.id}

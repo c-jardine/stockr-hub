@@ -10,7 +10,9 @@ export default function MaterialsNav() {
 
   const { data: categories } = api.material.getAllCategories.useQuery();
 
-  if (router.asPath !== '/materials') {
+  const isCurrentPath = router.asPath.startsWith('/materials');
+
+  if (!isCurrentPath) {
     return <NavLink label='Materials' href='/materials' icon={Pencil} />;
   }
 
@@ -21,7 +23,7 @@ export default function MaterialsNav() {
         bg='slate.100'
         py={categories && categories.length > 0 ? 2 : 'unset'}
       >
-        {router.asPath.startsWith('/materials') &&
+        {isCurrentPath &&
           categories?.map((category) => (
             <NavLinkChild
               key={category.id}

@@ -11,6 +11,8 @@ export interface LinkProps {
 export default function NavLink(props: LinkProps) {
   const router = useRouter();
 
+  const isCurrentPage = router.asPath.startsWith(props.href);
+
   return (
     <Flex
       key={props.label}
@@ -22,20 +24,20 @@ export default function NavLink(props: LinkProps) {
       gap={4}
       borderLeft='4px solid'
       borderLeftColor={
-        router.asPath === props.href ? 'emerald.600' : 'transparent'
+        router.asPath.startsWith(props.href) ? 'emerald.600' : 'transparent'
       }
-      fontWeight={router.asPath === props.href ? 'semibold' : 'unset'}
-      color={router.asPath === props.href ? 'emerald.600' : 'slate.500'}
-      bg={router.asPath === props.href ? 'slate.100' : 'transparent'}
+      fontWeight={isCurrentPage ? 'semibold' : 'unset'}
+      color={isCurrentPage ? 'emerald.600' : 'slate.500'}
+      bg={isCurrentPage ? 'slate.100' : 'transparent'}
       transition='200ms ease-in-out'
       _hover={{
-        color: router.asPath === props.href ? 'emerald.600' : 'black',
+        color: isCurrentPage ? 'emerald.600' : 'black',
       }}
     >
       <Icon
         as={props.icon}
         boxSize={5}
-        color={router.asPath === props.href ? 'emerald.600' : 'unset'}
+        color={isCurrentPage ? 'emerald.600' : 'unset'}
       />{' '}
       <Text>{props.label}</Text>
     </Flex>
