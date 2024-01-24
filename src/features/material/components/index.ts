@@ -1,9 +1,9 @@
-export { default as CreateMaterialDrawer } from './CreateMaterialDrawer';
-export { default as CreateMaterialForm } from './CreateMaterialForm';
-export { default as DeleteMaterial } from './DeleteMaterial';
-export { default as MaterialCategoriesInput } from './MaterialCategoriesInput';
-export { default as MaterialViewerDrawer } from './MaterialViewerDrawer';
-export { default as MaterialsTable } from './MaterialsTable';
-export { default as UpdateMaterialDrawer } from './UpdateMaterialDrawer';
-export { default as UpdateMaterialForm } from './UpdateMaterialForm';
-export { default as VendorsInput } from './VendorsInput';
+export * from './CreateMaterialDrawer';
+export * from './CreateMaterialForm';
+export * from './DeleteMaterial';
+export * from './MaterialCategoriesInput';
+export * from './MaterialViewerDrawer';
+export * from './MaterialsTable';
+export * from './UpdateMaterialDrawer';
+export * from './UpdateMaterialForm';
+export * from './VendorsInput';
