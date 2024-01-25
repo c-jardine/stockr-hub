@@ -62,6 +62,10 @@ export const multiSelectStyles: ChakraStylesConfig<Option, true> = {
     ...base,
     p: 2,
   }),
+  multiValueLabel: (base) => ({
+    ...base,
+    fontSize: 'xs',
+  }),
   option: (base) => ({
     ...base,
     fontSize: 'sm',

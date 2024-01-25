@@ -1,3 +1,7 @@
 label {
   font-size: var(--chakra-fontSizes-sm) !important;
 }
+
+.chakra-form__error-message {
+  font-size: var(--chakra-fontSizes-xs) !important;
+}
