@@ -1,12 +1,11 @@
+import { DrawerHeader } from '@/components/DrawerHeader';
 import { CreateMaterialForm } from '@/features/material';
 import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   Icon,
 } from '@chakra-ui/react';
@@ -34,10 +33,9 @@ export default function CreateMaterialDrawer() {
       <Drawer isOpen={isOpen} onClose={onClose} size='md'>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader>
-            New Material
-            <DrawerCloseButton />
-          </DrawerHeader>
+          <DrawerHeader.Base>
+            <DrawerHeader.Title>New Material</DrawerHeader.Title>
+          </DrawerHeader.Base>
           <DrawerBody>
             <FormProvider {...form}>
               <form

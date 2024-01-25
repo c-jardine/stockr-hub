@@ -1,20 +1,15 @@
+import { DrawerHeader } from '@/components/DrawerHeader';
 import { type ProductGetAllOutputSingle } from '@/types';
 import { getIsLowStock } from '@/utils';
 import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
-  DrawerHeader,
-  Icon,
   Link,
-  Stack,
-  Text,
 } from '@chakra-ui/react';
 import { FormProvider } from 'react-hook-form';
-import { X } from 'tabler-icons-react';
 import { UpdateProductForm } from '../UpdateProductForm';
 import { useUpdateProduct } from './hooks';
 
@@ -54,16 +49,9 @@ export default function UpdateProductDrawer(
       )}
       <Drawer isOpen={isOpen} onClose={onClose} size='md'>
         <DrawerContent>
-          <DrawerHeader display='flex' alignItems='flex-start'>
-            <DrawerCloseButton position='relative'>
-              <Icon as={X} boxSize={8} color='slate.400' strokeWidth={1.5} />
-            </DrawerCloseButton>
-            <Stack mt={2}>
-              <Text as='h2' fontSize='xl' fontWeight='bold'>
-                Edit {props.name}
-              </Text>
-            </Stack>
-          </DrawerHeader>
+          <DrawerHeader.Base>
+            <DrawerHeader.Title>Edit {props.name}</DrawerHeader.Title>
+          </DrawerHeader.Base>
           <DrawerBody>
             <FormProvider {...form}>
               <form

@@ -1,15 +1,13 @@
+import { DrawerHeader } from '@/components/DrawerHeader';
 import { type ProductGetAllOutputSingle } from '@/types';
 import { getCostPerUnit, getIsLowStock, getStockUnitTextAbbrev } from '@/utils';
 import {
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   Flex,
-  Icon,
   Link,
   SimpleGrid,
   Stack,
@@ -19,8 +17,8 @@ import {
 import { ChevronLeft } from 'tabler-icons-react';
 import { MaterialsUsed } from '..';
 import { DeleteProduct } from '../DeleteProduct';
+import { ProfitTable } from '../ProfitTable';
 import { UpdateProductDrawer } from '../UpdateProductDrawer';
-import { ProfitTable } from './ProfitTable';
 import { useViewProduct } from './hooks';
 
 /**
@@ -75,26 +73,16 @@ export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
   // Render the drawer header.
   function renderDrawerHeader() {
     return (
-      <DrawerHeader display='flex' alignItems='flex-start'>
-        <DrawerCloseButton position='relative'>
-          <Icon
-            as={ChevronLeft}
-            boxSize={8}
-            color='slate.400'
-            strokeWidth={1.5}
-          />
-        </DrawerCloseButton>
-        <Stack mt={2}>
-          <Text as='h2' fontSize='xl' fontWeight='bold'>
-            {props.name}
-          </Text>
+      <DrawerHeader.Base icon={ChevronLeft}>
+        <DrawerHeader.Title>{props.name}</DrawerHeader.Title>
+        <DrawerHeader.Details>
           <Flex gap={1}>
             {props.categories.map(({ category }) => (
               <Tag key={category.id}>{category.name}</Tag>
             ))}
           </Flex>
-        </Stack>
-      </DrawerHeader>
+        </DrawerHeader.Details>
+      </DrawerHeader.Base>
     );
   }
 

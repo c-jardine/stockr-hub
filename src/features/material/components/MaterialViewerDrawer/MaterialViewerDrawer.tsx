@@ -1,15 +1,13 @@
+import { DrawerHeader } from '@/components/DrawerHeader';
 import { type MaterialGetAllOutputSingle } from '@/types';
 import { getIsLowStock, getStockUnitTextAbbrev } from '@/utils';
 import {
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   Flex,
-  Icon,
   Link,
   SimpleGrid,
   Stack,
@@ -44,26 +42,16 @@ export default function MaterialViewerDrawer(
       <Drawer isOpen={isOpen} onClose={onClose} size='md'>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader display='flex' alignItems='flex-start'>
-            <DrawerCloseButton position='relative'>
-              <Icon
-                as={ChevronLeft}
-                boxSize={8}
-                color='slate.400'
-                strokeWidth={1.5}
-              />
-            </DrawerCloseButton>
-            <Stack mt={2}>
-              <Text as='h2' fontSize='xl' fontWeight='bold'>
-                {props.name}
-              </Text>
+          <DrawerHeader.Base icon={ChevronLeft}>
+            <DrawerHeader.Title>{props.name}</DrawerHeader.Title>
+            <DrawerHeader.Details>
               <Flex gap={1}>
                 {props.categories.map(({ category }) => (
                   <Tag key={category.id}>{category.name}</Tag>
                 ))}
               </Flex>
-            </Stack>
-          </DrawerHeader>
+            </DrawerHeader.Details>
+          </DrawerHeader.Base>
           <DrawerBody>
             <Stack spacing={4}>
               <SimpleGrid columns={3} gap={4}>
