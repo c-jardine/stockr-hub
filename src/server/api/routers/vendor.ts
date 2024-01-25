@@ -3,7 +3,11 @@ import { z } from 'zod';
 
 export const vendorRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.db.vendor.findMany();
+    return ctx.db.vendor.findMany({
+      orderBy: {
+        name: 'asc',
+      },
+    });
   }),
   create: publicProcedure
     .input(z.object({ name: z.string() }))
