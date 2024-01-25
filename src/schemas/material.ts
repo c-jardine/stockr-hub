@@ -1,5 +1,12 @@
 import { z } from 'zod';
 
+export const materialGetByCategorySlugSchema = z.object({ slug: z.string() });
+
+export const materialGetPaginatedSchema = z.object({
+  skip: z.number(),
+  take: z.number(),
+});
+
 export const materialCreateSchema = z.object({
   name: z.string().trim().min(3, 'Must be at least 3 characters'),
   url: z.string().url().or(z.literal('')),
@@ -32,4 +39,8 @@ export const materialUpdateSchema = z.object({
 
 export const materialDeleteSchema = z.object({
   id: z.string(),
+});
+
+export const materialCreateCategorySchema = z.object({
+  name: z.string().min(2, 'Must be at least 2 characters'),
 });
