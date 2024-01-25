@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export const productGetByCategorySlugSchema = z.object({ slug: z.string() });
+
 export const productCreateSchema = z.object({
   name: z.string().trim().min(3, 'Must be at least 3 characters'),
   stockLevel: z.object({
@@ -44,6 +46,10 @@ export const productUpdateSchema = z.object({
   categoryIds: z.string().array().optional(),
 });
 
-// export const materialDeleteSchema = z.object({
-//   id: z.string(),
-// });
+export const productDeleteSchema = z.object({
+  id: z.string(),
+});
+
+export const productCreateCategorySchema = z.object({
+  name: z.string().min(2, 'Must be at least 2 characters'),
+});

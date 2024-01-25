@@ -1,11 +1,12 @@
 import {
-  materialDeleteSchema,
+  productCreateCategorySchema,
   productCreateSchema,
+  productDeleteSchema,
+  productGetByCategorySlugSchema,
   productUpdateSchema,
 } from '@/schemas';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import slugify from 'slugify';
-import { z } from 'zod';
 
 export const productRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -49,7 +50,7 @@ export const productRouter = createTRPCRouter({
     });
   }),
   getByCategorySlug: publicProcedure
-    .input(z.object({ slug: z.string() }))
+    .input(productGetByCategorySlugSchema)
     .query(({ input, ctx }) => {
       return ctx.db.product.findMany({
         where: {
@@ -163,7 +164,7 @@ export const productRouter = createTRPCRouter({
       ]);
     }),
   delete: publicProcedure
-    .input(materialDeleteSchema)
+    .input(productDeleteSchema)
     .mutation(({ input, ctx }) => {
       return ctx.db.material.delete({
         where: {
@@ -180,9 +181,7 @@ export const productRouter = createTRPCRouter({
     });
   }),
   createCategory: publicProcedure
-    .input(
-      z.object({ name: z.string().min(2, 'Must be at least 2 characters') })
-    )
+    .input(productCreateCategorySchema)
     .mutation(async ({ input, ctx }) => {
       return ctx.db.productCategory.create({
         data: {
