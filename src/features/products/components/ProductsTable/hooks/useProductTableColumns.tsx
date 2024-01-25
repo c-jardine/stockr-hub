@@ -1,6 +1,6 @@
 import { IndeterminateCheckbox } from '@/components/IndeterminateCheckbox';
 import { type ProductGetAllOutputSingle } from '@/types';
-import { getStockUnitTextAbbrev } from '@/utils';
+import { getCostPerUnit, getStockUnitTextAbbrev } from '@/utils';
 import { Flex, Tag, Text } from '@chakra-ui/react';
 import { type ColumnDef } from '@tanstack/react-table';
 import React from 'react';
@@ -81,6 +81,19 @@ export default function useProductTableColumns() {
         header: 'Batch size',
         sortingFn: 'alphanumeric',
         cell: (info) => <Text>{Number(info.getValue())}</Text>,
+        footer: (props) => props.column.id,
+      },
+      {
+        accessorFn: (row) => row.batchSize,
+        id: 'costPerUnit',
+        header: 'Cost per unit',
+        sortingFn: 'alphanumeric',
+        cell: (info) => (
+          <Text>{`$${getCostPerUnit(
+            info.cell.row.original.materials,
+            info.cell.row.original.batchSize
+          )}`}</Text>
+        ),
         footer: (props) => props.column.id,
       },
       {

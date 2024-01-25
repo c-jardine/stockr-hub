@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export const productGetByCategorySlugSchema = z.object({ slug: z.string() });
+
 export const productCreateSchema = z.object({
   name: z.string().trim().min(3, 'Must be at least 3 characters'),
   stockLevel: z.object({
@@ -42,8 +44,25 @@ export const productUpdateSchema = z.object({
   retailPrice: z.number().min(0, 'Must be positive'),
   wholesalePrice: z.number().min(0, 'Must be positive'),
   categoryIds: z.string().array().optional(),
+  materials: z
+    .object({
+      materialId: z.string().min(1, 'Required'),
+      quantity: z
+        .union([
+          z.string().transform((val) => (val === '' ? NaN : Number(val))),
+          z.number(),
+        ])
+        .refine((val) => !isNaN(val) && val > 0, {
+          message: 'Must be at least 1',
+        }),
+    })
+    .array(),
 });
 
-// export const materialDeleteSchema = z.object({
-//   id: z.string(),
-// });
+export const productDeleteSchema = z.object({
+  id: z.string(),
+});
+
+export const productCreateCategorySchema = z.object({
+  name: z.string().min(2, 'Must be at least 2 characters'),
+});

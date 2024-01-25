@@ -1,11 +1,13 @@
 import {
+  materialCreateCategorySchema,
   materialCreateSchema,
   materialDeleteSchema,
-  materialUpdateSchema,
+  materialGetByCategorySlugSchema,
+  materialGetPaginatedSchema,
+  materialUpdateSchema
 } from '@/schemas';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import slugify from 'slugify';
-import { z } from 'zod';
 
 export const materialRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -31,7 +33,7 @@ export const materialRouter = createTRPCRouter({
     });
   }),
   getByCategorySlug: publicProcedure
-    .input(z.object({ slug: z.string() }))
+    .input(materialGetByCategorySlugSchema)
     .query(({ input, ctx }) => {
       return ctx.db.material.findMany({
         where: {
@@ -64,7 +66,7 @@ export const materialRouter = createTRPCRouter({
       });
     }),
   getAllPaginated: publicProcedure
-    .input(z.object({ skip: z.number(), take: z.number() }))
+    .input(materialGetPaginatedSchema)
     .query(({ input, ctx }) => {
       return ctx.db.$transaction([
         ctx.db.material.count(),
@@ -184,9 +186,7 @@ export const materialRouter = createTRPCRouter({
     });
   }),
   createCategory: publicProcedure
-    .input(
-      z.object({ name: z.string().min(2, 'Must be at least 2 characters') })
-    )
+    .input(materialCreateCategorySchema)
     .mutation(async ({ input, ctx }) => {
       return ctx.db.materialCategory.create({
         data: {

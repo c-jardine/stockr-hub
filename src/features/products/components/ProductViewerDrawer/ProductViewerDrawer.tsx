@@ -1,9 +1,5 @@
 import { type ProductGetAllOutputSingle } from '@/types';
-import {
-  getIsLowStock,
-  getStockUnitTextAbbrev,
-  roundTwoDecimals,
-} from '@/utils';
+import { getCostPerUnit, getIsLowStock, getStockUnitTextAbbrev } from '@/utils';
 import {
   Drawer,
   DrawerBody,
@@ -22,6 +18,8 @@ import {
 } from '@chakra-ui/react';
 import { ChevronLeft } from 'tabler-icons-react';
 import { MaterialsUsed } from '..';
+import { DeleteProduct } from '../DeleteProduct';
+import { UpdateProductDrawer } from '../UpdateProductDrawer';
 import { useViewProduct } from './hooks';
 
 /**
@@ -114,14 +112,7 @@ export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
   )}`;
 
   // Data for the unit cost text.
-  const unitCostText = `$${roundTwoDecimals(
-    props.materials.reduce((total, { material, ...rest }) => {
-      return (
-        total +
-        (Number(material.costPerUnit) * Number(rest.quantity)) / props.batchSize
-      );
-    }, 0)
-  )}`;
+  const unitCostText = `$${getCostPerUnit(props.materials, props.batchSize)}`;
 
   // Data for the min stock text.
   const minStockText = `${
@@ -145,13 +136,18 @@ export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
             {renderProductInfo('Min. Stock', minStockText)}
           </SimpleGrid>
           <Flex gap={4}>
-            {/* <UpdateMaterialDrawer {...props} buttonLabel='Edit details' /> */}
-            {/* <DeleteMaterial {...props} /> */}
+            <UpdateProductDrawer {...props} buttonLabel='Edit details' />
+            <DeleteProduct {...props} />
           </Flex>
           <Stack spacing={4}>
             <Text fontSize='lg' fontWeight='bold'>
-              Materials Used
+              Materials Used (per Unit)
             </Text>
+            {props.materials.length === 0 && (
+              <Text mt={-2} fontSize='sm' fontStyle='italic'>
+                This product doesn't use any materials.
+              </Text>
+            )}
             <MaterialsUsed {...props} />
           </Stack>
         </Stack>
