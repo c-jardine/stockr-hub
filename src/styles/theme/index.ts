@@ -1,7 +1,7 @@
 import { extendTheme } from '@chakra-ui/react';
+import { Poppins } from 'next/font/google';
 import { colors } from './colors';
 import { buttonTheme, checkboxTheme } from './components';
-import { Poppins } from 'next/font/google';
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '700'],
@@ -12,10 +12,10 @@ const poppins = Poppins({
 export const theme = extendTheme({
   styles: {
     global: {
-      'html, body': {
-        fontFamily: poppins.style.fontFamily
-      }
-    }
+      'html, body, h1, h2, h3, h4, h5, h6, th': {
+        fontFamily: `${poppins.style.fontFamily} !important`,
+      },
+    },
   },
   colors,
   components: {
