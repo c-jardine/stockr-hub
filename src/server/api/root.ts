@@ -1,10 +1,10 @@
 import {
-  materialRouter,
   productRouter,
   stockUnitRouter,
   vendorRouter,
-} from '@/server/api/routers';
+} from './routers';
 import { createTRPCRouter } from '@/server/api/trpc';
+import { materialRouter } from './routers/material';
 
 /**
  * This is the primary router for your server.

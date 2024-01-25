@@ -14,12 +14,7 @@ export default function CreateMaterialForm() {
 
   return (
     <Stack spacing={4}>
-      <Input
-        label='Name'
-        name='name'
-        register={register}
-        error={errors.name}
-      />
+      <Input label='Name' name='name' register={register} error={errors.name} />
       <Input label='URL' name='url' register={register} error={errors.url} />
       <SimpleGrid columns={5} gap={4}>
         <NumberInput

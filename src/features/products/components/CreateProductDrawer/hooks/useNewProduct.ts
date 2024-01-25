@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 export default function useNewProduct() {
   const form = useForm<ProductCreate>({
     defaultValues: {
-      materials: [{materialId: ''}]
+      materials: [{ materialId: '' }],
     },
     resolver: zodResolver(productCreateSchema),
   });

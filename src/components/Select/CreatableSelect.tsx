@@ -77,7 +77,7 @@ export default function CreatableSelect<TFormValues extends FieldValues>(
             options={options}
             value={options.find((c) => c.value === field.value)}
             onChange={(selected) => field.onChange(selected?.value)}
-            styles={selectStyles}
+            chakraStyles={selectStyles}
             components={selectComponents}
             onCreateOption={onCreate}
           />
