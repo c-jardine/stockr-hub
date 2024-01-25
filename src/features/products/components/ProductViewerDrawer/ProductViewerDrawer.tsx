@@ -1,9 +1,5 @@
 import { type ProductGetAllOutputSingle } from '@/types';
-import {
-  getIsLowStock,
-  getStockUnitTextAbbrev,
-  roundTwoDecimals,
-} from '@/utils';
+import { getCostPerUnit, getIsLowStock, getStockUnitTextAbbrev } from '@/utils';
 import {
   Drawer,
   DrawerBody,
@@ -116,14 +112,7 @@ export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
   )}`;
 
   // Data for the unit cost text.
-  const unitCostText = `$${roundTwoDecimals(
-    props.materials.reduce((total, { material, ...rest }) => {
-      return (
-        total +
-        (Number(material.costPerUnit) * Number(rest.quantity)) / props.batchSize
-      );
-    }, 0)
-  )}`;
+  const unitCostText = `$${getCostPerUnit(props.materials, props.batchSize)}`;
 
   // Data for the min stock text.
   const minStockText = `${

@@ -1,6 +1,6 @@
 import { IndeterminateCheckbox } from '@/components/IndeterminateCheckbox';
 import { type ProductGetAllOutputSingle } from '@/types';
-import { getStockUnitTextAbbrev, roundTwoDecimals } from '@/utils';
+import { getCostPerUnit, getStockUnitTextAbbrev } from '@/utils';
 import { Flex, Tag, Text } from '@chakra-ui/react';
 import { type ColumnDef } from '@tanstack/react-table';
 import React from 'react';
@@ -89,17 +89,9 @@ export default function useProductTableColumns() {
         header: 'Cost per unit',
         sortingFn: 'alphanumeric',
         cell: (info) => (
-          <Text>{`$${roundTwoDecimals(
-            info.cell.row.original.materials.reduce(
-              (total, { material, ...rest }) => {
-                return (
-                  total +
-                  (Number(material.costPerUnit) * Number(rest.quantity)) /
-                    info.cell.row.original.batchSize
-                );
-              },
-              0
-            )
+          <Text>{`$${getCostPerUnit(
+            info.cell.row.original.materials,
+            info.cell.row.original.batchSize
           )}`}</Text>
         ),
         footer: (props) => props.column.id,
