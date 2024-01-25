@@ -2,7 +2,7 @@ import { selectComponents } from '@/components/Select/components';
 import { useGetAllStockUnits } from '@/hooks/stockUnit';
 import { selectStyles } from '@/styles';
 import { type MaterialCreate, type ProductCreate } from '@/types';
-import { FormControl, FormLabel } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
 import { Select } from 'chakra-react-select';
 import { Controller, useFormContext } from 'react-hook-form';
 
@@ -43,6 +43,11 @@ export default function StockUnitInput() {
           />
         )}
       />
+      {errors.stockLevel?.stockUnitId && (
+        <FormErrorMessage>
+          {errors.stockLevel.stockUnitId.message}
+        </FormErrorMessage>
+      )}
     </FormControl>
   );
 }
