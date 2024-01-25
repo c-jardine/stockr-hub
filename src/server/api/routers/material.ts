@@ -4,7 +4,7 @@ import {
   materialDeleteSchema,
   materialGetByCategorySlugSchema,
   materialGetPaginatedSchema,
-  materialUpdateSchema
+  materialUpdateSchema,
 } from '@/schemas';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import slugify from 'slugify';
@@ -180,6 +180,11 @@ export const materialRouter = createTRPCRouter({
 
   getAllCategories: publicProcedure.query(({ ctx }) => {
     return ctx.db.materialCategory.findMany({
+      orderBy: {
+        category: {
+          name: 'asc',
+        },
+      },
       include: {
         category: true,
       },

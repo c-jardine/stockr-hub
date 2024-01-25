@@ -225,6 +225,11 @@ export const productRouter = createTRPCRouter({
 
   getAllCategories: publicProcedure.query(({ ctx }) => {
     return ctx.db.productCategory.findMany({
+      orderBy: {
+        category: {
+          name: 'asc',
+        },
+      },
       include: {
         category: true,
       },
