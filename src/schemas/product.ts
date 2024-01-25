@@ -46,14 +46,14 @@ export const productUpdateSchema = z.object({
   categoryIds: z.string().array().optional(),
   materials: z
     .object({
-      materialId: z.string(),
+      materialId: z.string().min(1, 'Required'),
       quantity: z
         .union([
           z.string().transform((val) => (val === '' ? NaN : Number(val))),
           z.number(),
         ])
         .refine((val) => !isNaN(val) && val > 0, {
-          message: 'Quantity must be greater than 0',
+          message: 'Must be at least 1',
         }),
     })
     .array(),

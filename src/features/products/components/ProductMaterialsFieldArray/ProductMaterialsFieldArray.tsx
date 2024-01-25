@@ -3,7 +3,16 @@ import { type Option } from '@/components/Select';
 import { selectComponents } from '@/components/Select/components';
 import { selectStyles } from '@/styles';
 import { type ProductCreate } from '@/types';
-import { Button, Icon, IconButton, SimpleGrid, Text } from '@chakra-ui/react';
+import {
+  Button,
+  FormControl,
+  FormErrorMessage,
+  Icon,
+  IconButton,
+  SimpleGrid,
+  Text,
+  type ButtonProps,
+} from '@chakra-ui/react';
 import { Select } from 'chakra-react-select';
 import React from 'react';
 import {
@@ -31,12 +40,19 @@ export default function ProductMaterialsFieldArray() {
       {fields.length === 0 && <NoMaterialsText />}
       {fields.map((field, index) => (
         <SimpleGrid key={field.id} gridTemplateColumns={'2fr 1fr auto'} gap={4}>
-          <MaterialSelect
-            index={index}
-            control={control}
-            options={options ?? []}
-            setValue={setValue}
-          />
+          <FormControl isInvalid={!!errors.materials?.[index]?.materialId}>
+            <MaterialSelect
+              index={index}
+              control={control}
+              options={options ?? []}
+              setValue={setValue}
+            />
+            {errors.materials?.[index]?.materialId && (
+              <FormErrorMessage>
+                {errors.materials?.[index]?.materialId?.message}
+              </FormErrorMessage>
+            )}
+          </FormControl>
           <NumberInput
             name={`materials.${index}.quantity`}
             register={register}
@@ -105,11 +121,18 @@ function MaterialSelect({
 
 function AddMaterialButton({
   onClick,
+  ...rest
 }: {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
-}) {
+} & ButtonProps) {
   return (
-    <Button gap={2} variant='outline' colorScheme='black' onClick={onClick}>
+    <Button
+      gap={2}
+      variant='outline'
+      colorScheme='black'
+      onClick={onClick}
+      {...rest}
+    >
       <Icon as={Plus} strokeWidth={3} />
       Add material
     </Button>
