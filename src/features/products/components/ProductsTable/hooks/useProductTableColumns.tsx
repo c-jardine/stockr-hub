@@ -89,10 +89,7 @@ export default function useProductTableColumns() {
         header: 'Cost per unit',
         sortingFn: 'alphanumeric',
         cell: (info) => (
-          <Text>{`$${getCostPerUnit(
-            info.cell.row.original.materials,
-            info.cell.row.original.batchSize
-          )}`}</Text>
+          <Text>{`$${getCostPerUnit(info.cell.row.original)}`}</Text>
         ),
         footer: (props) => props.column.id,
       },

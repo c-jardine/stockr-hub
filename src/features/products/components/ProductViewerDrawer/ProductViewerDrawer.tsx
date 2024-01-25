@@ -112,7 +112,7 @@ export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
   )}`;
 
   // Data for the unit cost text.
-  const unitCostText = `$${getCostPerUnit(props.materials, props.batchSize)}`;
+  const unitCostText = `$${getCostPerUnit(props)}`;
 
   // Data for the min stock text.
   const minStockText = `${

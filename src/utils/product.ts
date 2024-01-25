@@ -1,15 +1,13 @@
 import { type ProductGetAllOutputSingle } from '@/types';
 import { roundTwoDecimals } from '.';
 
-export function getCostPerUnit(
-  materials: ProductGetAllOutputSingle['materials'],
-  batchSize: number
-) {
+export function getCostPerUnit(product: ProductGetAllOutputSingle) {
   return roundTwoDecimals(
-    materials.reduce((total, { material, ...rest }) => {
+    product.materials.reduce((total, { material, ...rest }) => {
       return (
         total +
-        (Number(material.costPerUnit) * Number(rest.quantity)) / batchSize
+        (Number(material.costPerUnit) * Number(rest.quantity)) /
+          product.batchSize
       );
     }, 0)
   );
