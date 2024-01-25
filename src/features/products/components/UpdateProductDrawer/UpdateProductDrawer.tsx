@@ -8,9 +8,13 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
+  Icon,
   Link,
+  Stack,
+  Text,
 } from '@chakra-ui/react';
 import { FormProvider } from 'react-hook-form';
+import { X } from 'tabler-icons-react';
 import { UpdateProductForm } from '../UpdateProductForm';
 import { useUpdateProduct } from './hooks';
 
@@ -50,9 +54,15 @@ export default function UpdateProductDrawer(
       )}
       <Drawer isOpen={isOpen} onClose={onClose} size='md'>
         <DrawerContent>
-          <DrawerHeader>
-            Update Product
-            <DrawerCloseButton />
+          <DrawerHeader display='flex' alignItems='flex-start'>
+            <DrawerCloseButton position='relative'>
+              <Icon as={X} boxSize={8} color='slate.400' strokeWidth={1.5} />
+            </DrawerCloseButton>
+            <Stack mt={2}>
+              <Text as='h2' fontSize='xl' fontWeight='bold'>
+                Edit {props.name}
+              </Text>
+            </Stack>
           </DrawerHeader>
           <DrawerBody>
             <FormProvider {...form}>
