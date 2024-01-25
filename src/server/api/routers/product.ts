@@ -124,7 +124,7 @@ export const productRouter = createTRPCRouter({
             },
           },
           categories: {
-            // TODO: Change to create or connect
+            // TODO: Change to create or connect?
             connect: categoryIds?.map((categoryId) => ({ id: categoryId })),
           },
         },
@@ -133,35 +133,85 @@ export const productRouter = createTRPCRouter({
   update: publicProcedure
     .input(productUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const { stockLevel, categoryIds, ...rest } = input;
-      return ctx.db.$transaction([
-        ctx.db.product.update({
+      const {
+        id,
+        stockLevel,
+        materials: inputMaterials,
+        categoryIds,
+        ...data
+      } = input;
+
+      // Get the materials that exist in the database.
+      const existingMaterials = await ctx.db.productMaterial.findMany({
+        where: {
+          productId: id,
+        },
+        select: {
+          materialId: true,
+        },
+      });
+
+      // Get an array of the ids for the existing materials.
+      const existingMaterialIds = existingMaterials.map(
+        (existingMaterial) => existingMaterial.materialId
+      );
+
+      // Get an array of the ids for the input materials.
+      const inputMaterialIds = inputMaterials.map(
+        (material) => material.materialId
+      );
+
+      // Get materials that already exist in the database but aren't included
+      // in the input. These should be deleted.
+      const materialsToDelete = existingMaterialIds
+        .filter((material) => !inputMaterialIds.includes(material))
+        // Transform into format required by delete.
+        .map((material) => ({
+          materialId: material,
+        }));
+
+      // Get the materials that don't exist in the database and are included in
+      // the input. These should be added.
+      const materialsToAdd = inputMaterials.filter(
+        (inputMaterial) =>
+          !existingMaterialIds.includes(inputMaterial.materialId)
+      );
+
+      // Get the materials that already exist in the database and are included
+      // in the input. These should be updated.
+      const materialsToUpdate = inputMaterials
+        .filter((inputMaterial) =>
+          existingMaterialIds.includes(inputMaterial.materialId)
+        )
+        // Transform into format required by update.
+        .map((material) => ({
           where: {
-            id: input.id,
-          },
-          data: {
-            categories: {
-              set: [],
+            productId_materialId: {
+              productId: id,
+              materialId: material.materialId,
             },
           },
-        }),
-        ctx.db.product.update({
-          where: {
-            id: input.id,
+          data: material,
+        }));
+
+      return ctx.db.product.update({
+        where: { id },
+        data: {
+          ...data,
+          stockLevel: {
+            update: stockLevel,
           },
-          data: {
-            ...rest,
-            stockLevel: {
-              update: {
-                ...stockLevel,
-              },
-            },
-            categories: {
-              connect: categoryIds?.map((categoryId) => ({ id: categoryId })),
-            },
+          materials: {
+            deleteMany: materialsToDelete,
+            create: materialsToAdd,
+            update: materialsToUpdate,
           },
-        }),
-      ]);
+          categories: {
+            set: [], // Reset categories.
+            connect: categoryIds?.map((categoryId) => ({ id: categoryId })),
+          },
+        },
+      });
     }),
   delete: publicProcedure
     .input(productDeleteSchema)

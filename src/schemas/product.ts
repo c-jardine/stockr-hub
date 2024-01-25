@@ -44,6 +44,19 @@ export const productUpdateSchema = z.object({
   retailPrice: z.number().min(0, 'Must be positive'),
   wholesalePrice: z.number().min(0, 'Must be positive'),
   categoryIds: z.string().array().optional(),
+  materials: z
+    .object({
+      materialId: z.string(),
+      quantity: z
+        .union([
+          z.string().transform((val) => (val === '' ? NaN : Number(val))),
+          z.number(),
+        ])
+        .refine((val) => !isNaN(val) && val > 0, {
+          message: 'Quantity must be greater than 0',
+        }),
+    })
+    .array(),
 });
 
 export const productDeleteSchema = z.object({
