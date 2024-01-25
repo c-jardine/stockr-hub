@@ -58,7 +58,7 @@ export default function UpdateProductDrawer(
             <FormProvider {...form}>
               <form
                 id='update-product-form'
-                onSubmit={form.handleSubmit(onSubmit, (error) => console.log(error))}
+                onSubmit={form.handleSubmit(onSubmit)}
               >
                 <UpdateProductForm {...props} />
               </form>
