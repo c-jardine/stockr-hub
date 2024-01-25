@@ -20,6 +20,7 @@ import { ChevronLeft } from 'tabler-icons-react';
 import { MaterialsUsed } from '..';
 import { DeleteProduct } from '../DeleteProduct';
 import { UpdateProductDrawer } from '../UpdateProductDrawer';
+import { ProfitTable } from './ProfitTable';
 import { useViewProduct } from './hooks';
 
 /**
@@ -128,18 +129,20 @@ export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
   function renderDrawerBody() {
     return (
       <DrawerBody>
-        <Stack spacing={4}>
-          <SimpleGrid columns={3} gap={4}>
-            {renderProductInfo('Stock Level', stockLevelText, isLowStock)}
-            {renderProductInfo('Batch Size', batchSizeText)}
-            {renderProductInfo('Unit Cost', unitCostText)}
-            {renderProductInfo('Min. Stock', minStockText)}
-          </SimpleGrid>
-          <Flex gap={4}>
-            <UpdateProductDrawer {...props} buttonLabel='Edit details' />
-            <DeleteProduct {...props} />
-          </Flex>
-          <Stack spacing={4}>
+        <Stack spacing={8}>
+          <Stack>
+            <Text fontSize='lg' fontWeight='bold'>
+              Details
+            </Text>
+            <SimpleGrid columns={4} gap={4}>
+              {renderProductInfo('Stock', stockLevelText, isLowStock)}
+              {renderProductInfo('Batch Size', batchSizeText)}
+              {renderProductInfo('Unit Cost', unitCostText)}
+              {renderProductInfo('Min. Stock', minStockText)}
+            </SimpleGrid>
+          </Stack>
+          <ProfitTable {...props} />
+          <Stack>
             <Text fontSize='lg' fontWeight='bold'>
               Materials Used (per Unit)
             </Text>
@@ -157,7 +160,12 @@ export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
 
   // Render the drawer footer.
   function renderDrawerFooter() {
-    return <DrawerFooter></DrawerFooter>;
+    return (
+      <DrawerFooter gap={4}>
+        <DeleteProduct {...props} />
+        <UpdateProductDrawer {...props} buttonLabel='Edit details' />
+      </DrawerFooter>
+    );
   }
 
   // Render the component.

@@ -12,3 +12,24 @@ export function getCostPerUnit(product: ProductGetAllOutputSingle) {
     }, 0)
   );
 }
+
+export function getNetProfit(product: ProductGetAllOutputSingle) {
+  const retailProfit = roundTwoDecimals(Number(product.retailPrice) - getCostPerUnit(product));
+  const wholesaleProfit = roundTwoDecimals(Number(product.wholesalePrice) - getCostPerUnit(product));
+
+  return { retailProfit, wholesaleProfit };
+}
+
+export function getProfitMargin(product: ProductGetAllOutputSingle) {
+  const { retailPrice, wholesalePrice } = product;
+  const { retailProfit, wholesaleProfit } = getNetProfit(product);
+
+  const retailMargin = roundTwoDecimals(
+    (retailProfit / Number(retailPrice)) * 100
+  );
+  const wholesaleMargin = roundTwoDecimals(
+    (wholesaleProfit / Number(wholesalePrice)) * 100
+  );
+
+  return { retailMargin, wholesaleMargin };
+}
