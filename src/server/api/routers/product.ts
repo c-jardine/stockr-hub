@@ -216,7 +216,7 @@ export const productRouter = createTRPCRouter({
   delete: publicProcedure
     .input(productDeleteSchema)
     .mutation(({ input, ctx }) => {
-      return ctx.db.material.delete({
+      return ctx.db.product.delete({
         where: {
           id: input.id,
         },

@@ -22,6 +22,7 @@ import {
 } from '@chakra-ui/react';
 import { ChevronLeft } from 'tabler-icons-react';
 import { MaterialsUsed } from '..';
+import { DeleteProduct } from '../DeleteProduct';
 import { UpdateProductDrawer } from '../UpdateProductDrawer';
 import { useViewProduct } from './hooks';
 
@@ -147,12 +148,17 @@ export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
           </SimpleGrid>
           <Flex gap={4}>
             <UpdateProductDrawer {...props} buttonLabel='Edit details' />
-            {/* <DeleteMaterial {...props} /> */}
+            <DeleteProduct {...props} />
           </Flex>
           <Stack spacing={4}>
             <Text fontSize='lg' fontWeight='bold'>
               Materials Used (per Unit)
             </Text>
+            {props.materials.length === 0 && (
+              <Text mt={-2} fontSize='sm' fontStyle='italic'>
+                This product doesn't use any materials.
+              </Text>
+            )}
             <MaterialsUsed {...props} />
           </Stack>
         </Stack>
