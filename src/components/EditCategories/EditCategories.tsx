@@ -97,12 +97,6 @@ export default function EditCategories<T extends { category: Category }[]>({
                   <Flex gap={2}>
                     <Input
                       fontSize='sm'
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          append({ id: '', name: '' });
-                        }
-                      }}
                       {...form.register(`categories.${index}.name`)}
                     />
                     <IconButton
