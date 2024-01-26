@@ -8,11 +8,13 @@ import {
   AlertDialogOverlay,
   Box,
   Button,
+  Icon,
   ScaleFade,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
+import { Trash } from 'tabler-icons-react';
 
 interface DeleteRowsProps {
   count: number;
@@ -21,7 +23,7 @@ interface DeleteRowsProps {
 }
 
 /**
- * A reusable component for creating and selecting categories.
+ * A reusable component for deleting multiple table rows.
  */
 export function DeleteRows({
   count,
@@ -34,7 +36,13 @@ export function DeleteRows({
   return (
     <Box position='fixed' bottom={4} right={4}>
       <ScaleFade initialScale={0.8} in={isVisible}>
-        <Button onClick={onOpen}>Delete</Button>
+        <Button
+          colorScheme='red'
+          leftIcon={<Icon as={Trash} boxSize={4} />}
+          onClick={onOpen}
+        >
+          Delete ({count})
+        </Button>
         <AlertDialog
           isOpen={isOpen}
           onClose={onClose}
@@ -51,15 +59,10 @@ export function DeleteRows({
                 {count === 1 ? 'row' : 'rows'}?
               </AlertDialogBody>
               <AlertDialogFooter gap={2}>
-                <Button
-                  variant='outline'
-                  colorScheme='red'
-                  onClick={onDeleteRows}
-                  ml={3}
-                >
+                <Button colorScheme='red' onClick={onDeleteRows} ml={3}>
                   Delete
                 </Button>
-                <Button ref={cancelRef} colorScheme='black' onClick={onClose}>
+                <Button ref={cancelRef} variant='outline' onClick={onClose}>
                   Cancel
                 </Button>
               </AlertDialogFooter>
