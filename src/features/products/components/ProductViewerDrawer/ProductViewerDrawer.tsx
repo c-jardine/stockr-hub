@@ -1,3 +1,4 @@
+import { DataDisplay } from '@/components/DataDisplay';
 import { DrawerHeader } from '@/components/DrawerHeader';
 import { type ProductGetAllOutputSingle } from '@/types';
 import { getCostPerUnit, getIsLowStock, getStockUnitTextAbbrev } from '@/utils';
@@ -34,28 +35,6 @@ export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
     Number(props.stockLevel.stock),
     Number(props.stockLevel.minStock)
   );
-
-  // Helper function for rendering sections of the product info grid.
-  function renderProductInfo(
-    label: string,
-    value: string,
-    isHighlighted = false
-  ) {
-    return (
-      <Stack spacing={0}>
-        <Text color='slate.500' fontSize='sm'>
-          {label}
-        </Text>
-        <Text
-          fontSize='sm'
-          fontWeight={isHighlighted ? 'semibold' : '500'}
-          color={isHighlighted ? 'red.500' : 'unset'}
-        >
-          {value}
-        </Text>
-      </Stack>
-    );
-  }
 
   // Render the drawer trigger.
   function renderDrawerTrigger() {
@@ -123,10 +102,14 @@ export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
               Details
             </Text>
             <SimpleGrid columns={4} gap={4}>
-              {renderProductInfo('Stock', stockLevelText, isLowStock)}
-              {renderProductInfo('Batch Size', batchSizeText)}
-              {renderProductInfo('Unit Cost', unitCostText)}
-              {renderProductInfo('Min. Stock', minStockText)}
+              <DataDisplay
+                label='Stock'
+                value={stockLevelText}
+                isHighlighted={isLowStock}
+              />
+              <DataDisplay label='Batch Size' value={batchSizeText} />
+              <DataDisplay label='Unit Cost' value={unitCostText} />
+              <DataDisplay label='Min. Stock' value={minStockText} />
             </SimpleGrid>
           </Stack>
           <ProfitTable {...props} />

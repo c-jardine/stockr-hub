@@ -1,3 +1,4 @@
+import { DataDisplay } from '@/components/DataDisplay';
 import { DrawerHeader } from '@/components/DrawerHeader';
 import { type MaterialGetAllOutputSingle } from '@/types';
 import { getIsLowStock, getStockUnitTextAbbrev } from '@/utils';
@@ -30,6 +31,82 @@ export default function MaterialViewerDrawer(
     Number(props.stockLevel.minStock)
   );
 
+  function renderDrawerTrigger() {
+    return (
+      <Link
+        onClick={onOpen}
+        color={isLowStock ? 'red.500' : 'unset'}
+        fontWeight='semibold'
+      >
+        {props.name}
+      </Link>
+    );
+  }
+
+  function renderDrawerHeader() {
+    return (
+      <DrawerHeader.Base icon={ChevronLeft}>
+        <DrawerHeader.Title>{props.name}</DrawerHeader.Title>
+        <DrawerHeader.Details>
+          <Flex gap={1}>
+            {props.categories.map(({ category }) => (
+              <Tag key={category.id}>{category.name}</Tag>
+            ))}
+          </Flex>
+        </DrawerHeader.Details>
+      </DrawerHeader.Base>
+    );
+  }
+
+  // Data for the stock level text.
+  const stockLevelText = `${Number(
+    props.stockLevel.stock
+  )} ${getStockUnitTextAbbrev(
+    Number(props.stockLevel.stock),
+    props.stockLevel.stockUnit
+  )}`;
+
+  // Data for the unit cost text.
+  const unitCostText = `$${Number(props.costPerUnit)} /
+  ${props.stockLevel.stockUnit.abbreviationSingular}`;
+
+  // Data for the vendor text.
+  const vendorText = props.vendor.name;
+
+  // Data for the min stock text.
+  const minStockText = `${
+    props.stockLevel.minStock
+      ? `${Number(props.stockLevel.minStock)} ${getStockUnitTextAbbrev(
+          Number(props.stockLevel.minStock),
+          props.stockLevel.stockUnit
+        )}`
+      : '-'
+  }`;
+
+  function renderDrawerBody() {
+    return (
+      <DrawerBody>
+        <Stack spacing={8}>
+          <Stack>
+            <Text fontSize='lg' fontWeight='bold'>
+              Details
+            </Text>
+            <SimpleGrid columns={3} gap={4}>
+              <DataDisplay
+                label='Stock Level'
+                value={stockLevelText}
+                isHighlighted={isLowStock}
+              />
+              <DataDisplay label='Unit Cost' value={unitCostText} />
+              <DataDisplay label='Vendor' value={vendorText} />
+              <DataDisplay label='Min. Stock' value={minStockText} />
+            </SimpleGrid>
+          </Stack>
+        </Stack>
+      </DrawerBody>
+    );
+  }
+
   function renderDrawerFooter() {
     return (
       <DrawerFooter gap={4}>
@@ -41,80 +118,12 @@ export default function MaterialViewerDrawer(
 
   return (
     <>
-      <Link
-        onClick={onOpen}
-        color={isLowStock ? 'red.500' : 'unset'}
-        fontWeight='semibold'
-      >
-        {props.name}
-      </Link>
+      {renderDrawerTrigger()}
       <Drawer isOpen={isOpen} onClose={onClose} size='md'>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader.Base icon={ChevronLeft}>
-            <DrawerHeader.Title>{props.name}</DrawerHeader.Title>
-            <DrawerHeader.Details>
-              <Flex gap={1}>
-                {props.categories.map(({ category }) => (
-                  <Tag key={category.id}>{category.name}</Tag>
-                ))}
-              </Flex>
-            </DrawerHeader.Details>
-          </DrawerHeader.Base>
-          <DrawerBody>
-            <Stack spacing={4}>
-              <SimpleGrid columns={3} gap={4}>
-                <Stack spacing={0}>
-                  <Text color='slate.500' fontSize='sm'>
-                    Stock Level
-                  </Text>
-                  <Text
-                    fontSize='sm'
-                    fontWeight={isLowStock ? 'semibold' : '500'}
-                    color={isLowStock ? 'red.500' : 'unset'}
-                  >
-                    {Number(props.stockLevel.stock)}{' '}
-                    {getStockUnitTextAbbrev(
-                      Number(props.stockLevel.stock),
-                      props.stockLevel.stockUnit
-                    )}
-                  </Text>
-                </Stack>
-                <Stack spacing={0}>
-                  <Text color='slate.500' fontSize='sm'>
-                    Unit Cost
-                  </Text>
-                  <Text fontSize='sm' fontWeight='500'>
-                    ${Number(props.costPerUnit)} /
-                    {props.stockLevel.stockUnit.abbreviationSingular}
-                  </Text>
-                </Stack>
-                <Stack spacing={0}>
-                  <Text color='slate.500' fontSize='sm'>
-                    Vendor
-                  </Text>
-                  <Text fontSize='sm' fontWeight='500'>
-                    {props.vendor.name}
-                  </Text>
-                </Stack>
-                <Stack spacing={0}>
-                  <Text color='slate.500' fontSize='sm'>
-                    Min. Stock
-                  </Text>
-                  <Text fontSize='sm' fontWeight='500'>
-                    {props.stockLevel.minStock
-                      ? `${Number(
-                          props.stockLevel.minStock
-                        )} ${getStockUnitTextAbbrev(
-                          Number(props.stockLevel.minStock),
-                          props.stockLevel.stockUnit
-                        )}`
-                      : '-'}
-                  </Text>
-                </Stack>
-              </SimpleGrid>
-            </Stack>
-          </DrawerBody>
+          {renderDrawerHeader()}
+          {renderDrawerBody()}
           {renderDrawerFooter()}
         </DrawerContent>
       </Drawer>
