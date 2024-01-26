@@ -1,3 +1,4 @@
+import { DeleteMenuItem } from '@/components/DeleteMenuItem';
 import { type ProductGetAllOutputSingle } from '@/types';
 import {
   Button,
@@ -5,7 +6,6 @@ import {
   IconButton,
   Menu,
   MenuButton,
-  MenuItem,
   MenuList,
   Modal,
   ModalBody,
@@ -13,9 +13,9 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
+  Text
 } from '@chakra-ui/react';
-import { Dots, Trash } from 'tabler-icons-react';
+import { Dots } from 'tabler-icons-react';
 import useDeleteProduct from './hooks/useDeleteProduct';
 
 export default function DeleteProduct(props: ProductGetAllOutputSingle) {
@@ -36,20 +36,7 @@ export default function DeleteProduct(props: ProductGetAllOutputSingle) {
           <Icon as={Dots} />
         </MenuButton>
         <MenuList>
-          <MenuItem
-            onClick={onOpen}
-            icon={<Icon as={Trash} boxSize={4} />}
-            _hover={{
-              bg: 'red.500',
-              color: 'whiteAlpha.900'
-            }}
-            _focus={{
-              bg: 'red.500',
-              color: 'whiteAlpha.900'
-            }}
-          >
-            Delete product
-          </MenuItem>
+          <DeleteMenuItem onClick={onOpen}>Delete product</DeleteMenuItem>
         </MenuList>
       </Menu>
 

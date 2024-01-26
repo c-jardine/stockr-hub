@@ -1,3 +1,4 @@
+import { DeleteMenuItem } from '@/components/DeleteMenuItem';
 import { type MaterialGetAllOutputSingle } from '@/types';
 import {
   Button,
@@ -5,7 +6,6 @@ import {
   IconButton,
   Menu,
   MenuButton,
-  MenuItem,
   MenuList,
   Modal,
   ModalBody,
@@ -15,7 +15,7 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
-import { Dots, Trash } from 'tabler-icons-react';
+import { Dots } from 'tabler-icons-react';
 import { useDeleteMaterial } from './hooks';
 
 export default function DeleteMaterial(props: MaterialGetAllOutputSingle) {
@@ -36,20 +36,7 @@ export default function DeleteMaterial(props: MaterialGetAllOutputSingle) {
           <Icon as={Dots} />
         </MenuButton>
         <MenuList>
-          <MenuItem
-            onClick={onOpen}
-            icon={<Icon as={Trash} boxSize={4} />}
-            _hover={{
-              bg: 'red.500',
-              color: 'whiteAlpha.900',
-            }}
-            _focus={{
-              bg: 'red.500',
-              color: 'whiteAlpha.900',
-            }}
-          >
-            Delete material
-          </MenuItem>
+          <DeleteMenuItem onClick={onOpen}>Delete material</DeleteMenuItem>
         </MenuList>
       </Menu>
 
