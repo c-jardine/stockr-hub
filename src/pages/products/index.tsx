@@ -29,7 +29,7 @@ export default function Products() {
     return (
       <PageLayout>
         <Flex justifyContent='center' my={8}>
-          <Spinner color='emerald.600' />
+          <Spinner color='sky.600' />
         </Flex>
       </PageLayout>
     );

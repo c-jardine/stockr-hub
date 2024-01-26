@@ -25,7 +25,7 @@ const baseStyle = definePartsStyle({
 
 export const menuTheme = defineMultiStyleConfig({
   defaultProps: {
-    colorScheme: 'emerald',
+    colorScheme: 'sky',
   },
   baseStyle,
 });

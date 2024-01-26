@@ -10,15 +10,15 @@ const baseStyle = definePartsStyle({
     p: 2,
     transition: '150ms ease-in-out',
     _hover: {
-      bg: 'emerald.100',
-      borderColor: 'emerald.500'
+      bg: 'sky.100',
+      borderColor: 'sky.500'
     }
   },
 });
 
 export const checkboxTheme = defineMultiStyleConfig({
   defaultProps: {
-    colorScheme: 'emerald',
+    colorScheme: 'sky',
   },
   baseStyle,
 });
