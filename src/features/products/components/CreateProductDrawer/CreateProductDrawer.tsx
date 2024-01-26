@@ -1,3 +1,4 @@
+import { DrawerHeader } from '@/components/DrawerHeader';
 import {
   Button,
   Drawer,
@@ -11,7 +12,6 @@ import { FormProvider } from 'react-hook-form';
 import { Plus } from 'tabler-icons-react';
 import { CreateProductForm } from '..';
 import { useNewProduct } from './hooks';
-import { DrawerHeader } from '@/components/DrawerHeader';
 
 export default function CreateProductDrawer() {
   const {
@@ -34,7 +34,9 @@ export default function CreateProductDrawer() {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader.Base>
-            <DrawerHeader.Title>New Product</DrawerHeader.Title>
+            <DrawerHeader.Content>
+              <DrawerHeader.Title>New Product</DrawerHeader.Title>
+            </DrawerHeader.Content>
           </DrawerHeader.Base>
           <DrawerBody>
             <FormProvider {...form}>

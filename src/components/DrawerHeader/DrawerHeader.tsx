@@ -4,24 +4,34 @@ import {
   DrawerCloseButton,
   Stack,
   Text,
+  type CloseButtonProps,
 } from '@chakra-ui/react';
 import React from 'react';
 import { X, type Icon } from 'tabler-icons-react';
 
-function Base({ icon, children }: { icon?: Icon; children: React.ReactNode }) {
+function Base({ children }: { children: React.ReactNode }) {
   return (
     <ChakraDrawerHeader display='flex' alignItems='flex-start'>
-      <DrawerCloseButton position='relative'>
-        <ChakraIcon
-          as={icon ?? X}
-          boxSize={8}
-          color='slate.400'
-          strokeWidth={1.5}
-        />
-      </DrawerCloseButton>
-      <Stack mt={2}>{children}</Stack>
+      {children}
     </ChakraDrawerHeader>
   );
+}
+
+function CloseButton({ icon, ...props }: { icon?: Icon } & CloseButtonProps) {
+  return (
+    <DrawerCloseButton position='relative' {...props}>
+      <ChakraIcon
+        as={icon ?? X}
+        boxSize={8}
+        color='slate.400'
+        strokeWidth={1.5}
+      />
+    </DrawerCloseButton>
+  );
+}
+
+function Content({ children }: { children: React.ReactNode }) {
+  return <Stack mt={2}>{children}</Stack>;
 }
 
 function Title({ children }: { children: React.ReactNode }) {
@@ -38,6 +48,8 @@ function Details({ children }: { children: React.ReactNode }) {
 
 const DrawerHeader = {
   Base,
+  CloseButton,
+  Content,
   Title,
   Details,
 };

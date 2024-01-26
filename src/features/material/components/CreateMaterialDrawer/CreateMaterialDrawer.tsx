@@ -34,7 +34,9 @@ export default function CreateMaterialDrawer() {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader.Base>
-            <DrawerHeader.Title>New Material</DrawerHeader.Title>
+            <DrawerHeader.Content>
+              <DrawerHeader.Title>New Material</DrawerHeader.Title>
+            </DrawerHeader.Content>
           </DrawerHeader.Base>
           <DrawerBody>
             <FormProvider {...form}>

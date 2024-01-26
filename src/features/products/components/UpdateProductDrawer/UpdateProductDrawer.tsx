@@ -50,7 +50,10 @@ export default function UpdateProductDrawer(
       <Drawer isOpen={isOpen} onClose={onClose} size='md'>
         <DrawerContent>
           <DrawerHeader.Base>
-            <DrawerHeader.Title>Edit {props.name}</DrawerHeader.Title>
+            <DrawerHeader.CloseButton />
+            <DrawerHeader.Content>
+              <DrawerHeader.Title>Edit {props.name}</DrawerHeader.Title>
+            </DrawerHeader.Content>
           </DrawerHeader.Base>
           <DrawerBody>
             <FormProvider {...form}>

@@ -45,15 +45,18 @@ export default function MaterialViewerDrawer(
 
   function renderDrawerHeader() {
     return (
-      <DrawerHeader.Base icon={ChevronLeft}>
-        <DrawerHeader.Title>{props.name}</DrawerHeader.Title>
-        <DrawerHeader.Details>
-          <Flex gap={1}>
-            {props.categories.map(({ category }) => (
-              <Tag key={category.id}>{category.name}</Tag>
-            ))}
-          </Flex>
-        </DrawerHeader.Details>
+      <DrawerHeader.Base>
+        <DrawerHeader.CloseButton icon={ChevronLeft} />
+        <DrawerHeader.Content>
+          <DrawerHeader.Title>{props.name}</DrawerHeader.Title>
+          <DrawerHeader.Details>
+            <Flex gap={1}>
+              {props.categories.map(({ category }) => (
+                <Tag key={category.id}>{category.name}</Tag>
+              ))}
+            </Flex>
+          </DrawerHeader.Details>
+        </DrawerHeader.Content>
       </DrawerHeader.Base>
     );
   }
