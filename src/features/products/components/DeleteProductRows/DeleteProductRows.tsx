@@ -14,6 +14,7 @@ export default function DeleteProductRows(props: DeleteProductRowsProps) {
 
   return (
     <DeleteRows
+      count={selectedRowIndexes.length}
       isVisible={selectedRowIndexes.length > 0}
       onDeleteRows={onDelete}
     />
