@@ -15,7 +15,7 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
-import { Dots } from 'tabler-icons-react';
+import { Dots, Trash } from 'tabler-icons-react';
 import { useDeleteMaterial } from './hooks';
 
 export default function DeleteMaterial(props: MaterialGetAllOutputSingle) {
@@ -37,10 +37,16 @@ export default function DeleteMaterial(props: MaterialGetAllOutputSingle) {
         </MenuButton>
         <MenuList>
           <MenuItem
-            color='red.500'
-            fontSize='sm'
-            fontWeight='700'
             onClick={onOpen}
+            icon={<Icon as={Trash} boxSize={4} />}
+            _hover={{
+              bg: 'red.500',
+              color: 'whiteAlpha.900',
+            }}
+            _focus={{
+              bg: 'red.500',
+              color: 'whiteAlpha.900',
+            }}
           >
             Delete material
           </MenuItem>

@@ -30,6 +30,15 @@ export default function MaterialViewerDrawer(
     Number(props.stockLevel.minStock)
   );
 
+  function renderDrawerFooter() {
+    return (
+      <DrawerFooter gap={4}>
+        <DeleteMaterial {...props} />
+        <UpdateMaterialDrawer {...props} buttonLabel='Edit details' />
+      </DrawerFooter>
+    );
+  }
+
   return (
     <>
       <Link
@@ -104,13 +113,9 @@ export default function MaterialViewerDrawer(
                   </Text>
                 </Stack>
               </SimpleGrid>
-              <Flex gap={4}>
-                <UpdateMaterialDrawer {...props} buttonLabel='Edit details' />
-                <DeleteMaterial {...props} />
-              </Flex>
             </Stack>
           </DrawerBody>
-          <DrawerFooter></DrawerFooter>
+          {renderDrawerFooter()}
         </DrawerContent>
       </Drawer>
     </>
