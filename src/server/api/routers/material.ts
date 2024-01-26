@@ -1,6 +1,7 @@
 import {
   materialCreateCategorySchema,
   materialCreateSchema,
+  materialDeleteManySchema,
   materialDeleteSchema,
   materialGetByCategorySlugSchema,
   materialGetPaginatedSchema,
@@ -174,6 +175,17 @@ export const materialRouter = createTRPCRouter({
       return ctx.db.material.delete({
         where: {
           id: input.id,
+        },
+      });
+    }),
+  deleteMany: publicProcedure
+    .input(materialDeleteManySchema)
+    .mutation(({ input, ctx }) => {
+      return ctx.db.material.deleteMany({
+        where: {
+          id: {
+            in: input,
+          },
         },
       });
     }),

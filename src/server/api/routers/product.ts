@@ -1,6 +1,7 @@
 import {
   productCreateCategorySchema,
   productCreateSchema,
+  productDeleteManySchema,
   productDeleteSchema,
   productGetByCategorySlugSchema,
   productUpdateSchema,
@@ -219,6 +220,17 @@ export const productRouter = createTRPCRouter({
       return ctx.db.product.delete({
         where: {
           id: input.id,
+        },
+      });
+    }),
+  deleteMany: publicProcedure
+    .input(productDeleteManySchema)
+    .mutation(({ input, ctx }) => {
+      return ctx.db.product.deleteMany({
+        where: {
+          id: {
+            in: input,
+          },
         },
       });
     }),
