@@ -1,7 +1,8 @@
+import { EditCategories } from '@/components/EditCategories';
 import { CreateMaterialDrawer, MaterialsTable } from '@/features/material';
 import { RootLayout } from '@/layouts/RootLayout';
 import { api } from '@/utils/api';
-import { AbsoluteCenter, Image, Spinner } from '@chakra-ui/react';
+import { AbsoluteCenter, Flex, Image, Spinner } from '@chakra-ui/react';
 import Head from 'next/head';
 import React from 'react';
 
@@ -12,11 +13,20 @@ function PageLayout({
   children: React.ReactNode;
   showActionBar?: boolean;
 }) {
+  const query = api.material.getAllCategories.useQuery();
+
   return (
     <RootLayout
       title='Materials'
       subtitle='Manage your raw materials.'
-      actionBar={showActionBar ? <CreateMaterialDrawer /> : undefined}
+      actionBar={
+        showActionBar ? (
+          <Flex gap={2}>
+            <EditCategories categories={query.data} />
+            <CreateMaterialDrawer />
+          </Flex>
+        ) : undefined
+      }
     >
       {children}
     </RootLayout>

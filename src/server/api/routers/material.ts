@@ -5,6 +5,7 @@ import {
   materialDeleteSchema,
   materialGetByCategorySlugSchema,
   materialGetPaginatedSchema,
+  materialUpdateCategoriesSchema,
   materialUpdateSchema,
 } from '@/schemas';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
@@ -214,6 +215,79 @@ export const materialRouter = createTRPCRouter({
             },
           },
         },
+      });
+    }),
+  updateCategories: publicProcedure
+    .input(materialUpdateCategoriesSchema)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.$transaction(async (tx) => {
+        const { categories: inputCategories } = input;
+
+        // Get all existing categories from the database
+        const existingCategories = await ctx.db.materialCategory.findMany({
+          include: {
+            category: true,
+          },
+        });
+        const existingCategoryIds = existingCategories.map(
+          (category) => category.category.id
+        );
+
+        const inputCategoryIds = inputCategories.map((category) => category.id);
+
+        const categoriesToAdd = inputCategories.filter(
+          (category) => !existingCategoryIds.includes(category.id)
+        );
+
+        // Add new categories
+        const addedCategories = await Promise.all(
+          categoriesToAdd.map((category) =>
+            tx.materialCategory.create({
+              data: {
+                category: {
+                  create: {
+                    name: category.name,
+                    slug: slugify(category.name, { lower: true }),
+                  },
+                },
+              },
+            })
+          )
+        );
+
+        // Filter out the categories to be updated or added
+        const categoriesToUpdate = inputCategories.filter((category) =>
+          existingCategoryIds.includes(category.id)
+        );
+
+        // Update existing categories
+        const updatedCategories = await Promise.all(
+          categoriesToUpdate.map((category) =>
+            tx.category.update({
+              where: { id: category.id },
+              data: {
+                name: category.name,
+                slug: slugify(category.name, { lower: true }),
+              },
+            })
+          )
+        );
+
+        // Determine categories to delete
+        const categoriesToDelete = existingCategories.filter(
+          (category) => !inputCategoryIds.includes(category.category.id)
+        );
+
+        // Delete categories not present in the input
+        await Promise.all(
+          categoriesToDelete.map((category) =>
+            tx.category.delete({
+              where: { id: category.category.id },
+            })
+          )
+        );
+
+        return [...addedCategories, ...updatedCategories];
       });
     }),
 });

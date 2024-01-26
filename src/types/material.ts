@@ -6,3 +6,5 @@ export type MaterialCreate = RouterInputs['material']['create'];
 export type MaterialUpdate = RouterInputs['material']['update'];
 export type MaterialGetAllCategoriesOutput =
   RouterOutputs['material']['getAllCategories'];
+export type MaterialCategoriesUpdate =
+  RouterInputs['material']['updateCategories'];
