@@ -158,6 +158,7 @@ async function main() {
       { name: 'Supply Order' },
       { name: 'Audit' },
       { name: 'Product Testing' },
+      { name: 'Damage, Theft, or Loss' },
     ],
   });
 }

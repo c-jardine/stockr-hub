@@ -6,6 +6,7 @@ import { Text } from '@chakra-ui/react';
 import { type ColumnDef } from '@tanstack/react-table';
 import React from 'react';
 import { MaterialViewerDrawer } from '../../..';
+import { EditMaterialStockPopover } from '../../EditMaterialStockPopover';
 
 export default function useMaterialsTableColumns() {
   return React.useMemo<ColumnDef<MaterialGetAllOutputSingle>[]>(
@@ -49,13 +50,7 @@ export default function useMaterialsTableColumns() {
         header: 'Stock',
         sortingFn: 'alphanumeric',
         cell: (info) => (
-          <Text>
-            {Number(info.getValue())}{' '}
-            {getStockUnitTextAbbrev(
-              Number(info.getValue()),
-              info.cell.row.original.stockLevel.stockUnit
-            )}
-          </Text>
+          <EditMaterialStockPopover {...info.cell.row.original} />
         ),
         footer: (props) => props.column.id,
       },

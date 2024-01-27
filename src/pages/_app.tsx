@@ -29,6 +29,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               bg='white'
               shadow='md'
               overflow='hidden'
+              maxW='xs'
             >
               <Box
                 position='absolute'
