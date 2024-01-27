@@ -105,7 +105,7 @@ export default function EditCategories<T extends { category: Category }[]>({
                     )}
                   </FormControl>
                 ))}
-                {form.watch('categories').length === 0 ? (
+                {form.watch('categories')?.length === 0 ? (
                   <Text fontSize='sm' fontStyle='italic' textAlign='center'>
                     You haven't added any categories.
                   </Text>
