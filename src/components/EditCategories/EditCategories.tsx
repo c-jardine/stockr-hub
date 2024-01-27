@@ -58,7 +58,7 @@ export default function EditCategories<T extends { category: Category }[]>({
       <Button
         variant='outline'
         colorScheme='sky'
-        leftIcon={<Icon as={Edit} boxSize={4} />}
+        leftIcon={<Icon as={Edit} strokeWidth={3} boxSize={4} />}
         aria-label='Edit categories'
         rounded='full'
         onClick={onOpen}
