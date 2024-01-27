@@ -6,3 +6,5 @@ export type ProductCreate = RouterInputs['product']['create'];
 export type ProductUpdate = RouterInputs['product']['update'];
 export type ProductGetAllCategoriesOutput =
   RouterOutputs['product']['getAllCategories'];
+export type ProductCategoriesUpdate =
+  RouterInputs['product']['updateCategories'];

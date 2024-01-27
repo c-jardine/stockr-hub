@@ -1,6 +1,8 @@
 import { materialUpdateCategoriesSchema } from '@/schemas';
-import { type MaterialCategoriesUpdate } from '@/types';
-import { api } from '@/utils/api';
+import {
+  type MaterialCategoriesUpdate,
+  type ProductCategoriesUpdate,
+} from '@/types';
 import {
   Button,
   Divider,
@@ -17,8 +19,8 @@ import {
   IconButton,
   Input,
   Stack,
+  Text,
   useDisclosure,
-  useToast,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type Category } from '@prisma/client';
@@ -28,8 +30,10 @@ import { ColorPicker } from '../ColorPicker';
 
 export default function EditCategories<T extends { category: Category }[]>({
   categories,
+  onUpdate,
 }: {
   categories: T | undefined;
+  onUpdate: (data: MaterialCategoriesUpdate | ProductCategoriesUpdate) => void;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -48,26 +52,6 @@ export default function EditCategories<T extends { category: Category }[]>({
     control: form.control,
     name: 'categories',
   });
-
-  const toast = useToast();
-
-  const utils = api.useUtils();
-  const query = api.material.updateCategories.useMutation({
-    onSuccess: async () => {
-      toast({
-        title: 'Categories updated',
-        description: 'Successfully updated categories',
-        status: 'success',
-      });
-      await utils.material.getAll.invalidate();
-      await utils.material.getAllCategories.invalidate();
-      onClose();
-    },
-  });
-
-  function onSubmit(data: MaterialCategoriesUpdate) {
-    query.mutate(data);
-  }
 
   return (
     <>
@@ -90,7 +74,7 @@ export default function EditCategories<T extends { category: Category }[]>({
               <Stack
                 as='form'
                 id='update-categories-form'
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(onUpdate)}
               >
                 {fields.map((field, index) => (
                   <FormControl
@@ -121,7 +105,13 @@ export default function EditCategories<T extends { category: Category }[]>({
                     )}
                   </FormControl>
                 ))}
-                <Divider my={2} />
+                {form.watch('categories').length === 0 ? (
+                  <Text fontSize='sm' fontStyle='italic' textAlign='center'>
+                    You haven't added any categories.
+                  </Text>
+                ) : (
+                  <Divider my={2} />
+                )}
                 <Button
                   variant='outline'
                   leftIcon={<Icon as={Plus} strokeWidth={4} />}

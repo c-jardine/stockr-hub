@@ -101,7 +101,7 @@ export default function useProductTableColumns() {
         cell: (info) => (
           <Flex gap={2}>
             {info.cell.row.original.categories.map(({ category }) => (
-              <Tag key={category.id} size='sm'>
+              <Tag key={category.id} bg={category.color} size='sm'>
                 {category.name}
               </Tag>
             ))}

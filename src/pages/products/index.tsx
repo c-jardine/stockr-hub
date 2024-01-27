@@ -1,4 +1,8 @@
-import { CreateProductDrawer, ProductsTable } from '@/features/products';
+import {
+  CreateProductDrawer,
+  EditProductCategories,
+  ProductsTable,
+} from '@/features/products';
 import { RootLayout } from '@/layouts/RootLayout';
 import { api } from '@/utils/api';
 import { AbsoluteCenter, Flex, Image, Spinner } from '@chakra-ui/react';
@@ -15,7 +19,14 @@ function PageLayout({
     <RootLayout
       title='Products'
       subtitle='Manage your products.'
-      actionBar={showActionBar ? <CreateProductDrawer /> : undefined}
+      actionBar={
+        showActionBar ? (
+          <Flex gap={2}>
+            <EditProductCategories />
+            <CreateProductDrawer />
+          </Flex>
+        ) : undefined
+      }
     >
       {children}
     </RootLayout>

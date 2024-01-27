@@ -52,7 +52,9 @@ export default function MaterialViewerDrawer(
           <DrawerHeader.Details>
             <Flex gap={1}>
               {props.categories.map(({ category }) => (
-                <Tag key={category.id}>{category.name}</Tag>
+                <Tag key={category.id} bg={category.color}>
+                  {category.name}
+                </Tag>
               ))}
             </Flex>
           </DrawerHeader.Details>
