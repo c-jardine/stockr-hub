@@ -35,7 +35,7 @@ model Category {
     id                 String             @id @default(uuid())
     name               String             @unique
     slug               String             @unique
-    color              String             @default("#E2E8F0")
+    color              String             @default("#cbd5e1")
     materialCategories MaterialCategory[]
     productCategories  ProductCategory[]
 }

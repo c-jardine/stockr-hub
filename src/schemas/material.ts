@@ -52,6 +52,7 @@ export const materialUpdateCategoriesSchema = z.object({
     z.object({
       id: z.string(),
       name: z.string().min(2, 'Must be at least 2 characters'),
+      color: z.string(),
     })
   ),
 });

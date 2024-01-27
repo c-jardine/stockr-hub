@@ -22,8 +22,9 @@ import {
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type Category } from '@prisma/client';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { Edit, Plus, Trash } from 'tabler-icons-react';
+import { ColorPicker } from '../ColorPicker';
 
 export default function EditCategories<T extends { category: Category }[]>({
   categories,
@@ -37,6 +38,7 @@ export default function EditCategories<T extends { category: Category }[]>({
       categories: categories?.map((category) => ({
         id: category.category.id,
         name: category.category.name,
+        color: category.category.color,
       })),
     },
     resolver: zodResolver(materialUpdateCategoriesSchema),
@@ -84,45 +86,51 @@ export default function EditCategories<T extends { category: Category }[]>({
         <DrawerContent>
           <DrawerHeader>Edit categories</DrawerHeader>
           <DrawerBody>
-            <Stack
-              as='form'
-              id='update-categories-form'
-              onSubmit={form.handleSubmit(onSubmit)}
-            >
-              {fields.map((field, index) => (
-                <FormControl
-                  key={field.id}
-                  isInvalid={!!form.formState.errors.categories?.[index]}
-                >
-                  <Flex gap={2}>
-                    <Input
-                      fontSize='sm'
-                      {...form.register(`categories.${index}.name`)}
-                    />
-                    <IconButton
-                      variant='outline'
-                      colorScheme='red'
-                      icon={<Icon as={Trash} boxSize={4} />}
-                      aria-label={`Delete category: ${field.name}`}
-                      onClick={() => remove(index)}
-                    />
-                  </Flex>
-                  {form.formState.errors.categories?.[index]?.name && (
-                    <FormErrorMessage>
-                      {form.formState.errors.categories?.[index]?.name?.message}
-                    </FormErrorMessage>
-                  )}
-                </FormControl>
-              ))}
-              <Divider my={2} />
-              <Button
-                variant='outline'
-                leftIcon={<Icon as={Plus} strokeWidth={4} />}
-                onClick={() => append({ id: '', name: '' })}
+            <FormProvider {...form}>
+              <Stack
+                as='form'
+                id='update-categories-form'
+                onSubmit={form.handleSubmit(onSubmit)}
               >
-                Add new
-              </Button>
-            </Stack>
+                {fields.map((field, index) => (
+                  <FormControl
+                    key={field.id}
+                    isInvalid={!!form.formState.errors.categories?.[index]}
+                  >
+                    <Flex gap={2}>
+                      <ColorPicker name={`categories.${index}.color`} />
+                      <Input
+                        fontSize='sm'
+                        {...form.register(`categories.${index}.name`)}
+                      />
+                      <IconButton
+                        variant='outline'
+                        colorScheme='red'
+                        icon={<Icon as={Trash} boxSize={4} />}
+                        aria-label={`Delete category: ${field.name}`}
+                        onClick={() => remove(index)}
+                      />
+                    </Flex>
+                    {form.formState.errors.categories?.[index]?.name && (
+                      <FormErrorMessage>
+                        {
+                          form.formState.errors.categories?.[index]?.name
+                            ?.message
+                        }
+                      </FormErrorMessage>
+                    )}
+                  </FormControl>
+                ))}
+                <Divider my={2} />
+                <Button
+                  variant='outline'
+                  leftIcon={<Icon as={Plus} strokeWidth={4} />}
+                  onClick={() => append({ id: '', name: '', color: '#cbd5e1' })}
+                >
+                  Add new
+                </Button>
+              </Stack>
+            </FormProvider>
           </DrawerBody>
           <DrawerFooter gap={2}>
             <Button variant='outline'>Cancel</Button>

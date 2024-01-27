@@ -248,6 +248,7 @@ export const materialRouter = createTRPCRouter({
                   create: {
                     name: category.name,
                     slug: slugify(category.name, { lower: true }),
+                    color: category.color,
                   },
                 },
               },
@@ -268,6 +269,7 @@ export const materialRouter = createTRPCRouter({
               data: {
                 name: category.name,
                 slug: slugify(category.name, { lower: true }),
+                color: category.color,
               },
             })
           )
