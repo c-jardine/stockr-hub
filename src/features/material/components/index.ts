@@ -4,6 +4,7 @@ export * from './DeleteMaterial';
 export * from './DeleteMaterialRows';
 export * from './EditMaterialCategories';
 export * from './MaterialCategoriesInput';
+export * from './MaterialMenu';
 export * from './MaterialViewerDrawer';
 export * from './MaterialsTable';
 export * from './UpdateMaterialDrawer';

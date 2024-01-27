@@ -2,7 +2,6 @@ import { DesktopNav, MobileNav } from '@/components/Navbar';
 import {
   Box,
   Flex,
-  HStack,
   Heading,
   Icon,
   Input,
@@ -12,7 +11,7 @@ import {
   chakra,
 } from '@chakra-ui/react';
 import React from 'react';
-import { Bell, Moon, Search, Settings } from 'tabler-icons-react';
+import { Search } from 'tabler-icons-react';
 
 export interface RootLayoutProps {
   title: string;
@@ -28,7 +27,6 @@ export default function RootLayout(props: RootLayoutProps) {
       <Box position='relative' w='full' h='full' overflowY='scroll'>
         <Box position='sticky' top={0} mb={4} zIndex={100}>
           <Flex
-            justifyContent='space-between'
             alignItems='center'
             p={4}
             borderBottom='1px solid'
@@ -36,9 +34,10 @@ export default function RootLayout(props: RootLayoutProps) {
             bg='white'
             h={20}
             backdropFilter='blur(24px)'
+            gap={4}
           >
             <MobileNav />
-            <chakra.hgroup display={{ base: 'none', lg: 'block' }}>
+            <chakra.hgroup display={{ base: 'none', lg: 'block' }} w='33.33%'>
               <Heading as='h1' fontSize='xl'>
                 {props.title}
               </Heading>
@@ -48,24 +47,24 @@ export default function RootLayout(props: RootLayoutProps) {
                 </Text>
               )}
             </chakra.hgroup>
-            <Flex gap={4}>
+            <InputGroup
+              ml={{ base: 4, md: 0 }}
+              w={{ base: 'full', lg: '33.33%' }}
+            >
+              <InputLeftElement pointerEvents='none'>
+                <Icon as={Search} />
+              </InputLeftElement>
+              <Input
+                rounded='full'
+                variant='filled'
+                bg='slate.100'
+                w='full'
+                fontSize='sm'
+                placeholder='Search...'
+              />
+            </InputGroup>
+            <Flex justifyContent='flex-end' w={{  lg: '33.33%' }}>
               {props.actionBar && props.actionBar}
-              <HStack display={{ base: 'none', lg: 'flex' }}>
-                <InputGroup>
-                  <InputLeftElement pointerEvents='none'>
-                    <Icon as={Search} />
-                  </InputLeftElement>
-                  <Input
-                    rounded='full'
-                    variant='filled'
-                    bg='slate.100'
-                    placeholder='Search...'
-                  />
-                </InputGroup>
-                <Icon as={Bell} />
-                <Icon as={Settings} />
-                <Icon as={Moon} />
-              </HStack>
             </Flex>
           </Flex>
         </Box>

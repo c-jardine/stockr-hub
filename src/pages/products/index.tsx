@@ -1,6 +1,6 @@
 import {
   CreateProductDrawer,
-  EditProductCategories,
+  ProductMenu,
   ProductsTable,
 } from '@/features/products';
 import { RootLayout } from '@/layouts/RootLayout';
@@ -22,8 +22,8 @@ function PageLayout({
       actionBar={
         showActionBar ? (
           <Flex gap={2}>
-            <EditProductCategories />
             <CreateProductDrawer />
+            <ProductMenu />
           </Flex>
         ) : undefined
       }

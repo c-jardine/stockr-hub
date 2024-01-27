@@ -17,6 +17,7 @@ import {
   Icon,
   IconButton,
   Input,
+  MenuItem,
   Stack,
   Text,
   useDisclosure,
@@ -55,16 +56,10 @@ export default function EditCategories<T extends { category: Category }[]>({
 
   return (
     <>
-      <Button
-        variant='outline'
-        colorScheme='sky'
-        leftIcon={<Icon as={Edit} strokeWidth={3} boxSize={4} />}
-        aria-label='Edit categories'
-        rounded='full'
-        onClick={onOpen}
-      >
+      <MenuItem gap={2} onClick={onOpen}>
+        <Icon as={Edit} strokeWidth={2.5} boxSize={4} />
         Edit categories
-      </Button>
+      </MenuItem>
       <Drawer {...{ isOpen, onClose }} size='md'>
         <DrawerOverlay />
         <DrawerContent>
