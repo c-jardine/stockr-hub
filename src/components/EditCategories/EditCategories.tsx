@@ -10,7 +10,6 @@ import {
   DrawerBody,
   DrawerContent,
   DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   Flex,
   FormControl,
@@ -27,6 +26,7 @@ import { type Category } from '@prisma/client';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { Edit, Plus, Trash } from 'tabler-icons-react';
 import { ColorPicker } from '../ColorPicker';
+import { DrawerHeader } from '../DrawerHeader';
 
 export default function EditCategories<T extends { category: Category }[]>({
   categories,
@@ -68,7 +68,12 @@ export default function EditCategories<T extends { category: Category }[]>({
       <Drawer {...{ isOpen, onClose }} size='md'>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader>Edit categories</DrawerHeader>
+          <DrawerHeader.Base>
+            <DrawerHeader.CloseButton />
+            <DrawerHeader.Content>
+              <DrawerHeader.Title>Edit categories</DrawerHeader.Title>
+            </DrawerHeader.Content>
+          </DrawerHeader.Base>
           <DrawerBody>
             <FormProvider {...form}>
               <Stack
