@@ -1,3 +1,4 @@
+import { DrawerHeader } from '@/components/DrawerHeader';
 import { UpdateMaterialForm } from '@/features/material';
 import { type MaterialGetAllOutputSingle } from '@/types';
 import { getIsLowStock } from '@/utils';
@@ -5,10 +6,8 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
-  DrawerHeader,
   Link,
 } from '@chakra-ui/react';
 import { FormProvider } from 'react-hook-form';
@@ -50,10 +49,12 @@ export default function UpdateMaterialDrawer(
       )}
       <Drawer isOpen={isOpen} onClose={onClose} size='md'>
         <DrawerContent>
-          <DrawerHeader>
-            Update Material
-            <DrawerCloseButton />
-          </DrawerHeader>
+          <DrawerHeader.Base>
+            <DrawerHeader.CloseButton />
+            <DrawerHeader.Content>
+              <DrawerHeader.Title>Edit {props.name}</DrawerHeader.Title>
+            </DrawerHeader.Content>
+          </DrawerHeader.Base>
           <DrawerBody>
             <FormProvider {...form}>
               <form

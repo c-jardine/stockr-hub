@@ -9,6 +9,7 @@ import {
   type SortingState,
 } from '@tanstack/react-table';
 import React from 'react';
+import { DeleteMaterialRows } from '../DeleteMaterialRows';
 import { useMaterialsTableColumns } from './hooks';
 
 type MaterialsTableProps = {
@@ -52,5 +53,10 @@ export default function MaterialsTable(props: MaterialsTableProps) {
     },
   });
 
-  return <Table {...table} />;
+  return (
+    <>
+      <Table {...table} />
+      <DeleteMaterialRows {...{ materials, rowSelection, setRowSelection }} />
+    </>
+  );
 }

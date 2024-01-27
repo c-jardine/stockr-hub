@@ -30,7 +30,7 @@ export const selectStyles: ChakraStylesConfig<Option, false> = {
     fontSize: 'sm',
     rounded: 'md',
     _selected: {
-      bg: 'emerald.600',
+      bg: 'sky.600',
       color: 'white',
     },
     _focus: {
@@ -71,7 +71,7 @@ export const multiSelectStyles: ChakraStylesConfig<Option, true> = {
     fontSize: 'sm',
     rounded: 'md',
     _selected: {
-      bg: 'emerald.600',
+      bg: 'sky.600',
       color: 'white',
     },
     _focus: {

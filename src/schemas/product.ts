@@ -63,6 +63,18 @@ export const productDeleteSchema = z.object({
   id: z.string(),
 });
 
+export const productDeleteManySchema = z.array(z.string());
+
 export const productCreateCategorySchema = z.object({
   name: z.string().min(2, 'Must be at least 2 characters'),
+});
+
+export const productUpdateCategoriesSchema = z.object({
+  categories: z.array(
+    z.object({
+      id: z.string(),
+      name: z.string().min(2, 'Must be at least 2 characters'),
+      color: z.string(),
+    })
+  ),
 });

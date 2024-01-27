@@ -42,7 +42,7 @@ export default function Material(
     return (
       <PageLayout>
         <AbsoluteCenter>
-          <Spinner size='xl' thickness='4px' color='emerald.600' />
+          <Spinner size='xl' thickness='4px' color='sky.600' />
         </AbsoluteCenter>
       </PageLayout>
     );

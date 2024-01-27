@@ -9,6 +9,7 @@ import {
   type SortingState,
 } from '@tanstack/react-table';
 import React from 'react';
+import { DeleteProductRows } from '../DeleteProductRows';
 import { useProductTableColumns } from './hooks';
 
 type ProductsTableProps = {
@@ -52,5 +53,10 @@ export default function ProductsTable(props: ProductsTableProps) {
     },
   });
 
-  return <Table {...table} />;
+  return (
+    <>
+      <Table {...table} />
+      <DeleteProductRows {...{ products, rowSelection, setRowSelection }} />
+    </>
+  );
 }

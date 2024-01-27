@@ -27,7 +27,7 @@ export default function DesktopNav() {
     >
       <VStack h='88px' justifyContent='center'>
         <Text fontSize='2xl' textTransform='uppercase'>
-          <chakra.span fontWeight='black' color='emerald.600'>
+          <chakra.span fontWeight='black' color='sky.600'>
             Stockr
           </chakra.span>{' '}
           Hub
@@ -46,9 +46,9 @@ export default function DesktopNav() {
           mb={4}
           px={4}
           py={2}
-          _hover={{ bg: 'emerald.100' }}
+          _hover={{ bg: 'sky.100' }}
         >
-          <Avatar bg='emerald.300' boxSize={10}></Avatar>
+          <Avatar bg='sky.300' boxSize={10}></Avatar>
           <Text>Your Name</Text>
           <Icon as={ChevronDown} ml='auto' />
         </Flex>

@@ -16,7 +16,7 @@ const outline = defineStyle({
 
 export const buttonTheme = defineStyleConfig({
   defaultProps: {
-    colorScheme: 'emerald',
+    colorScheme: 'sky',
   },
   variants: {
     solid,

@@ -1,7 +1,11 @@
-import { CreateMaterialDrawer, MaterialsTable } from '@/features/material';
+import {
+  CreateMaterialDrawer,
+  EditMaterialCategories,
+  MaterialsTable,
+} from '@/features/material';
 import { RootLayout } from '@/layouts/RootLayout';
 import { api } from '@/utils/api';
-import { AbsoluteCenter, Image, Spinner } from '@chakra-ui/react';
+import { AbsoluteCenter, Flex, Image, Spinner } from '@chakra-ui/react';
 import Head from 'next/head';
 import React from 'react';
 
@@ -16,7 +20,14 @@ function PageLayout({
     <RootLayout
       title='Materials'
       subtitle='Manage your raw materials.'
-      actionBar={showActionBar ? <CreateMaterialDrawer /> : undefined}
+      actionBar={
+        showActionBar ? (
+          <Flex gap={2}>
+            <EditMaterialCategories />
+            <CreateMaterialDrawer />
+          </Flex>
+        ) : undefined
+      }
     >
       {children}
     </RootLayout>
@@ -30,7 +41,7 @@ export default function Materials() {
     return (
       <PageLayout>
         <AbsoluteCenter>
-          <Spinner size='xl' thickness='4px' color='emerald.600' />
+          <Spinner size='xl' thickness='4px' color='sky.600' />
         </AbsoluteCenter>
       </PageLayout>
     );

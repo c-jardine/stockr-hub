@@ -1,13 +1,12 @@
+import { DrawerHeader } from '@/components/DrawerHeader';
 import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
-  Icon,
+  Icon
 } from '@chakra-ui/react';
 import { FormProvider } from 'react-hook-form';
 import { Plus } from 'tabler-icons-react';
@@ -34,15 +33,16 @@ export default function CreateProductDrawer() {
       <Drawer isOpen={isOpen} onClose={onClose} size='md'>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader>
-            New Product
-            <DrawerCloseButton />
-          </DrawerHeader>
+          <DrawerHeader.Base>
+            <DrawerHeader.Content>
+              <DrawerHeader.Title>New Product</DrawerHeader.Title>
+            </DrawerHeader.Content>
+          </DrawerHeader.Base>
           <DrawerBody>
             <FormProvider {...form}>
               <form
                 id='new-product-form'
-                onSubmit={form.handleSubmit(onSubmit, (e) => console.log(e))}
+                onSubmit={form.handleSubmit(onSubmit)}
               >
                 <CreateProductForm />
               </form>

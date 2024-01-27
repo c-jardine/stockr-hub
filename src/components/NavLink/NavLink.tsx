@@ -24,20 +24,20 @@ export default function NavLink(props: LinkProps) {
       gap={4}
       borderLeft='4px solid'
       borderLeftColor={
-        router.asPath.startsWith(props.href) ? 'emerald.600' : 'transparent'
+        router.asPath.startsWith(props.href) ? 'sky.600' : 'transparent'
       }
       fontWeight={isCurrentPage ? 'semibold' : 'unset'}
-      color={isCurrentPage ? 'emerald.600' : 'slate.500'}
+      color={isCurrentPage ? 'sky.600' : 'slate.500'}
       bg={isCurrentPage ? 'slate.100' : 'transparent'}
       transition='200ms ease-in-out'
       _hover={{
-        color: isCurrentPage ? 'emerald.600' : 'black',
+        color: isCurrentPage ? 'sky.600' : 'black',
       }}
     >
       <Icon
         as={props.icon}
         boxSize={5}
-        color={isCurrentPage ? 'emerald.600' : 'unset'}
+        color={isCurrentPage ? 'sky.600' : 'unset'}
       />{' '}
       <Text>{props.label}</Text>
     </Flex>
