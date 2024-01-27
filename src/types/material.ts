@@ -8,3 +8,4 @@ export type MaterialGetAllCategoriesOutput =
   RouterOutputs['material']['getAllCategories'];
 export type MaterialCategoriesUpdate =
   RouterInputs['material']['updateCategories'];
+export type MaterialUpdateStock = RouterInputs['material']['updateStock'];

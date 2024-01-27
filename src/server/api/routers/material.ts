@@ -7,6 +7,7 @@ import {
   materialGetPaginatedSchema,
   materialUpdateCategoriesSchema,
   materialUpdateSchema,
+  materialUpdateStockSchema,
 } from '@/schemas';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import slugify from 'slugify';
@@ -290,6 +291,59 @@ export const materialRouter = createTRPCRouter({
         );
 
         return [...addedCategories, ...updatedCategories];
+      });
+    }),
+
+  getMaterialStockLogTypes: publicProcedure.query(({ ctx }) => {
+    return ctx.db.materialLogType.findMany();
+  }),
+  updateStock: publicProcedure
+    .input(materialUpdateStockSchema)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.$transaction(async (tx) => {
+        const {
+          materialId,
+          stockLogTypeId,
+          prevStock,
+          quantity,
+          newStock,
+          notes,
+        } = input;
+
+        await tx.material.update({
+          where: {
+            id: materialId,
+          },
+          data: {
+            stockLevel: {
+              update: {
+                stock: newStock,
+              },
+            },
+          },
+        });
+
+        await tx.materialStockLog.create({
+          data: {
+            stockLogData: {
+              create: {
+                prevStock,
+                stock: quantity,
+                notes,
+              },
+            },
+            type: {
+              connect: {
+                id: stockLogTypeId,
+              },
+            },
+            material: {
+              connect: {
+                id: materialId,
+              },
+            },
+          },
+        });
       });
     }),
 });

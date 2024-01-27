@@ -1,7 +1,8 @@
+import { CategoryTags } from '@/components/CategoryTags';
 import { IndeterminateCheckbox } from '@/components/IndeterminateCheckbox';
 import { type ProductGetAllOutputSingle } from '@/types';
 import { getCostPerUnit, getStockUnitTextAbbrev } from '@/utils';
-import { Flex, Tag, Text } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 import { type ColumnDef } from '@tanstack/react-table';
 import React from 'react';
 import { ProductViewerDrawer } from '../../..';
@@ -99,13 +100,10 @@ export default function useProductTableColumns() {
         header: 'Categories',
         enableSorting: false,
         cell: (info) => (
-          <Flex gap={2}>
-            {info.cell.row.original.categories.map(({ category }) => (
-              <Tag key={category.id} bg={category.color} size='sm'>
-                {category.name}
-              </Tag>
-            ))}
-          </Flex>
+          <CategoryTags
+            categories={info.cell.row.original.categories}
+            routePrefix='/products'
+          />
         ),
         footer: (props) => props.column.id,
       },

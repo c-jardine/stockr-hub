@@ -1,10 +1,14 @@
-import { CreateMaterialDrawer, MaterialsTable } from '@/features/material';
+import {
+  CreateMaterialDrawer,
+  MaterialMenu,
+  MaterialsTable,
+} from '@/features/material';
 import { RootLayout } from '@/layouts/RootLayout';
 import { appRouter } from '@/server/api/root';
 import { db } from '@/server/db';
 import { superjson } from '@/utils';
 import { api } from '@/utils/api';
-import { AbsoluteCenter, Image, Spinner } from '@chakra-ui/react';
+import { AbsoluteCenter, Flex, Image, Spinner } from '@chakra-ui/react';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import {
   type GetStaticPathsResult,
@@ -25,7 +29,14 @@ function PageLayout({
     <RootLayout
       title='Materials'
       subtitle='Manage your raw materials.'
-      actionBar={showActionBar ? <CreateMaterialDrawer /> : undefined}
+      actionBar={
+        showActionBar ? (
+          <Flex gap={2}>
+            <CreateMaterialDrawer />
+            <MaterialMenu />
+          </Flex>
+        ) : undefined
+      }
     >
       {children}
     </RootLayout>

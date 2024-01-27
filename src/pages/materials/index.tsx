@@ -1,6 +1,6 @@
 import {
   CreateMaterialDrawer,
-  EditMaterialCategories,
+  MaterialMenu,
   MaterialsTable,
 } from '@/features/material';
 import { RootLayout } from '@/layouts/RootLayout';
@@ -23,8 +23,8 @@ function PageLayout({
       actionBar={
         showActionBar ? (
           <Flex gap={2}>
-            <EditMaterialCategories />
             <CreateMaterialDrawer />
+            <MaterialMenu />
           </Flex>
         ) : undefined
       }

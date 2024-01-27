@@ -6,7 +6,8 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerOverlay,
-  Icon
+  Icon,
+  IconButton,
 } from '@chakra-ui/react';
 import { FormProvider } from 'react-hook-form';
 import { Plus } from 'tabler-icons-react';
@@ -23,6 +24,7 @@ export default function CreateProductDrawer() {
   return (
     <>
       <Button
+        display={{ base: 'none', md: 'flex' }}
         rounded='full'
         w='fit-content'
         leftIcon={<Icon as={Plus} strokeWidth={4} />}
@@ -30,6 +32,14 @@ export default function CreateProductDrawer() {
       >
         New Product
       </Button>
+      <IconButton
+        display={{ base: 'flex', md: 'none' }}
+        rounded='full'
+        w='fit-content'
+        icon={<Icon as={Plus} strokeWidth={4} />}
+        aria-label='Add product'
+        onClick={onOpen}
+      />
       <Drawer isOpen={isOpen} onClose={onClose} size='md'>
         <DrawerOverlay />
         <DrawerContent>

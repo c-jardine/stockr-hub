@@ -56,3 +56,12 @@ export const materialUpdateCategoriesSchema = z.object({
     })
   ),
 });
+
+export const materialUpdateStockSchema = z.object({
+  materialId: z.string(),
+  stockLogTypeId: z.string(),
+  prevStock: z.number(),
+  quantity: z.number(),
+  newStock: z.number(),
+  notes: z.string(),
+});

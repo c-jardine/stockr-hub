@@ -1,11 +1,15 @@
 import { CreateMaterialDrawer } from '@/features/material';
-import { ProductsTable } from '@/features/products';
+import {
+  CreateProductDrawer,
+  ProductMenu,
+  ProductsTable,
+} from '@/features/products';
 import { RootLayout } from '@/layouts/RootLayout';
 import { appRouter } from '@/server/api/root';
 import { db } from '@/server/db';
 import { superjson } from '@/utils';
 import { api } from '@/utils/api';
-import { AbsoluteCenter, Image, Spinner } from '@chakra-ui/react';
+import { AbsoluteCenter, Flex, Image, Spinner } from '@chakra-ui/react';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import {
   type GetStaticPathsResult,
@@ -26,7 +30,14 @@ function PageLayout({
     <RootLayout
       title='Products'
       subtitle='Manage your products.'
-      actionBar={showActionBar ? <CreateMaterialDrawer /> : undefined}
+      actionBar={
+        showActionBar ? (
+          <Flex gap={2}>
+            <CreateProductDrawer />
+            <ProductMenu />
+          </Flex>
+        ) : undefined
+      }
     >
       {children}
     </RootLayout>

@@ -6,8 +6,6 @@ import {
   PopoverArrow,
   PopoverBody,
   PopoverContent,
-  PopoverFooter,
-  PopoverHeader,
   PopoverTrigger,
   SimpleGrid,
   useDisclosure,
@@ -126,13 +124,11 @@ export default function ColorPicker<
           <Swatch bg={form.watch(name)} isSelected={isOpen} />
         </Center>
       </PopoverTrigger>
-      <PopoverContent maxW={64}>
-        <PopoverHeader>Color Picker</PopoverHeader>
+      <PopoverContent maxW={64} shadow='xl'>
         <PopoverArrow />
         <PopoverBody>
           <ColorList />
         </PopoverBody>
-        <PopoverFooter></PopoverFooter>
       </PopoverContent>
     </Popover>
   );

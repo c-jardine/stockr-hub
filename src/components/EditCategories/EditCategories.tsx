@@ -10,7 +10,6 @@ import {
   DrawerBody,
   DrawerContent,
   DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   Flex,
   FormControl,
@@ -18,6 +17,7 @@ import {
   Icon,
   IconButton,
   Input,
+  MenuItem,
   Stack,
   Text,
   useDisclosure,
@@ -27,6 +27,7 @@ import { type Category } from '@prisma/client';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { Edit, Plus, Trash } from 'tabler-icons-react';
 import { ColorPicker } from '../ColorPicker';
+import { DrawerHeader } from '../DrawerHeader';
 
 export default function EditCategories<T extends { category: Category }[]>({
   categories,
@@ -55,20 +56,19 @@ export default function EditCategories<T extends { category: Category }[]>({
 
   return (
     <>
-      <Button
-        variant='outline'
-        colorScheme='sky'
-        leftIcon={<Icon as={Edit} boxSize={4} />}
-        aria-label='Edit categories'
-        rounded='full'
-        onClick={onOpen}
-      >
+      <MenuItem gap={2} onClick={onOpen}>
+        <Icon as={Edit} strokeWidth={2.5} boxSize={4} />
         Edit categories
-      </Button>
+      </MenuItem>
       <Drawer {...{ isOpen, onClose }} size='md'>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader>Edit categories</DrawerHeader>
+          <DrawerHeader.Base>
+            <DrawerHeader.CloseButton />
+            <DrawerHeader.Content>
+              <DrawerHeader.Title>Edit categories</DrawerHeader.Title>
+            </DrawerHeader.Content>
+          </DrawerHeader.Base>
           <DrawerBody>
             <FormProvider {...form}>
               <Stack
@@ -105,7 +105,7 @@ export default function EditCategories<T extends { category: Category }[]>({
                     )}
                   </FormControl>
                 ))}
-                {form.watch('categories').length === 0 ? (
+                {form.watch('categories')?.length === 0 ? (
                   <Text fontSize='sm' fontStyle='italic' textAlign='center'>
                     You haven't added any categories.
                   </Text>

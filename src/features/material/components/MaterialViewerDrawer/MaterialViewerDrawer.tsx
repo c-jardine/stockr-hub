@@ -1,3 +1,4 @@
+import { CategoryTags } from '@/components/CategoryTags';
 import { DataDisplay } from '@/components/DataDisplay';
 import { DrawerHeader } from '@/components/DrawerHeader';
 import { type MaterialGetAllOutputSingle } from '@/types';
@@ -8,11 +9,9 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerOverlay,
-  Flex,
   Link,
   SimpleGrid,
   Stack,
-  Tag,
   Text,
 } from '@chakra-ui/react';
 import { ChevronLeft } from 'tabler-icons-react';
@@ -50,13 +49,10 @@ export default function MaterialViewerDrawer(
         <DrawerHeader.Content>
           <DrawerHeader.Title>{props.name}</DrawerHeader.Title>
           <DrawerHeader.Details>
-            <Flex gap={1}>
-              {props.categories.map(({ category }) => (
-                <Tag key={category.id} bg={category.color}>
-                  {category.name}
-                </Tag>
-              ))}
-            </Flex>
+            <CategoryTags
+              categories={props.categories}
+              routePrefix='/materials'
+            />
           </DrawerHeader.Details>
         </DrawerHeader.Content>
       </DrawerHeader.Base>
