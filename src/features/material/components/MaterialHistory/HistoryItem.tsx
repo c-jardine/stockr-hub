@@ -19,8 +19,8 @@ function MaterialHistoryItem({ children }: { children: React.ReactNode }) {
     </Box>
   );
 }
-function Message({ children }: { children: string | string[] }) {
-  return <Text fontWeight='semibold'>{children}</Text>;
+function Message({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }
 
 function StockLevel(props: { previous: string; new: string }) {

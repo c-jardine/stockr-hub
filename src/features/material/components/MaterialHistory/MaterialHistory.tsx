@@ -16,28 +16,92 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { formatDistanceToNowStrict } from 'date-fns';
+import React from 'react';
 import HistoryItem from './HistoryItem';
 import { useMaterialHistory } from './hooks';
 
 export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
   const { query } = useMaterialHistory(props.id);
 
-  function getUpdatedStock(history: MaterialGetHistoryOutput[0]) {
-    const logType = history.type.name;
+  const getStockDifference = (stock1: number, stock2: number): number =>
+    Math.abs(stock1 - stock2);
 
-    if (logType === 'Supply Order') {
-      return (
-        Number(history.stockLogData.prevStock) +
-        Number(history.stockLogData.stock)
-      );
-    } else if (logType === 'Audit') {
-      return Number(history.stockLogData.stock);
-    } else if (logType === 'Product Testing') {
-      return (
-        Number(props.stockLevel.stock) - Number(history.stockLogData.stock)
-      );
-    } else return Number(props.stockLevel.stock);
-  }
+  const renderText = (message: string, logType: string): JSX.Element => (
+    <Text>
+      {message}
+      <Text as='span' fontWeight='semibold'>
+        {logType}
+      </Text>
+    </Text>
+  );
+
+  const getUnit = (stock: number): string =>
+    getStockUnitTextAbbrev(stock, props.stockLevel.stockUnit);
+
+  const getMessage = (
+    history: MaterialGetHistoryOutput[0]
+  ): React.ReactNode => {
+    const logType = history.type.name;
+    const adjustedStock = Number(history.stockLogData.stock);
+    const previousStock = Number(history.stockLogData.prevStock);
+
+    switch (logType) {
+      case 'Supply Order':
+        return renderText(
+          `You received ${adjustedStock} ${getUnit(adjustedStock)}. in a `,
+          'supply order'
+        );
+
+      case 'Audit':
+        if (previousStock === adjustedStock) {
+          return renderText('No stock change in an ', 'audit');
+        }
+
+        const stockDifference = getStockDifference(
+          previousStock,
+          adjustedStock
+        );
+        const action = previousStock > adjustedStock ? 'removed' : 'added';
+
+        return renderText(
+          `You ${action} ${stockDifference} ${getUnit(
+            stockDifference
+          )}. in an `,
+          'audit'
+        );
+
+      case 'Product Testing':
+        const stockUsed = adjustedStock;
+        return (
+          <Text>
+            You used {stockUsed} {getUnit(stockUsed)}. while testing
+          </Text>
+        );
+
+      default:
+        return <Text>{adjustedStock}</Text>;
+    }
+  };
+
+  const getUpdatedStock = (history: MaterialGetHistoryOutput[0]): number => {
+    const logType = history.type.name;
+    const adjustedStock = Number(history.stockLogData.stock);
+    const previousStock = Number(history.stockLogData.prevStock);
+
+    switch (logType) {
+      case 'Supply Order':
+        return previousStock + adjustedStock;
+
+      case 'Audit':
+        return adjustedStock;
+
+      case 'Product Testing':
+        return previousStock - adjustedStock;
+
+      default:
+        return Number(props.stockLevel.stock);
+    }
+  };
 
   return (
     <Stack>
@@ -50,23 +114,23 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
           <TabPanel>
             <Stack spacing={0} pl={5}>
               {query.data?.map((event) => (
-                <Box position='relative' fontSize='sm' pb={4}>
+                <Box role='group' position='relative' fontSize='sm' pb={4}>
                   <Decoration />
                   <HistoryItem.Base>
-                    <HistoryItem.Message>{event.type.name}</HistoryItem.Message>
+                    <HistoryItem.Message>
+                      {getMessage(event)}
+                    </HistoryItem.Message>
                     <HistoryItem.StockLevel
                       previous={`${Number(
                         event.stockLogData.prevStock
                       )} ${getStockUnitTextAbbrev(
-                        Number(props.stockLevel.stock),
+                        Number(event.stockLogData.prevStock),
                         props.stockLevel.stockUnit
-                      )}
-                      .`}
+                      )}.`}
                       new={`${getUpdatedStock(event)} ${getStockUnitTextAbbrev(
-                        Number(props.stockLevel.stock),
+                        Number(getUpdatedStock(event)),
                         props.stockLevel.stockUnit
-                      )}
-                      .`}
+                      )}.`}
                     />
                     <HistoryItem.Date>
                       {formatDistanceToNowStrict(event.stockLogData.createdAt)}{' '}
@@ -77,12 +141,17 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
               ))}
               <Box position='relative' fontSize='sm'>
                 <Decoration hideBar />
-                <Text fontWeight='semibold'>Material created</Text>
+                <Text>Created by you</Text>
                 <Text color='slate.500' fontSize='xs'>
                   {formatDistanceToNowStrict(props.createdAt)} ago
                 </Text>
               </Box>
             </Stack>
+          </TabPanel>
+          <TabPanel>
+            <Text fontSize='sm' fontStyle='italic' textAlign='center'>
+              Feature coming soon!
+            </Text>
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -100,7 +169,7 @@ function Decoration({ hideBar = false }) {
           transform='translateX(-50%)'
           w='2px'
           h='full'
-          bg='slate.500'
+          bg='slate.300'
         />
       )}
       <Circle
@@ -108,9 +177,13 @@ function Decoration({ hideBar = false }) {
         left='50%'
         transform='translateX(-50%)'
         size={3}
-        bg='slate.400'
+        bg='white'
         borderWidth={2}
-        borderColor='white'
+        borderColor='slate.400'
+        transition='200ms ease-in-out'
+        _groupHover={{
+          transform: 'translateX(-50%) scale(1.2)',
+        }}
       />
     </Flex>
   );
