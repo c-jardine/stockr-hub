@@ -161,6 +161,16 @@ async function main() {
       { name: 'Damage, Theft, or Loss' },
     ],
   });
+
+  await db.productLogType.createMany({
+    data: [
+      { name: 'Production' },
+      { name: 'Sale' },
+      { name: 'Return/Restock' },
+      { name: 'Audit' },
+      { name: 'Damage, Theft, or Loss' },
+    ],
+  });
 }
 
 main()
