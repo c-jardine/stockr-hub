@@ -4,6 +4,7 @@ import {
   materialDeleteManySchema,
   materialDeleteSchema,
   materialGetByCategorySlugSchema,
+  materialGetHistorySchema,
   materialGetPaginatedSchema,
   materialUpdateCategoriesSchema,
   materialUpdateSchema,
@@ -344,6 +345,25 @@ export const materialRouter = createTRPCRouter({
             },
           },
         });
+      });
+    }),
+
+  getHistory: publicProcedure
+    .input(materialGetHistorySchema)
+    .query(({ input, ctx }) => {
+      return ctx.db.materialStockLog.findMany({
+        where: {
+          materialId: input.id,
+        },
+        orderBy: {
+          stockLogData: {
+            createdAt: 'desc',
+          },
+        },
+        include: {
+          type: true,
+          stockLogData: true,
+        },
       });
     }),
 });

@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { ChevronLeft } from 'tabler-icons-react';
 import { DeleteMaterial, UpdateMaterialDrawer } from '..';
+import { MaterialHistory } from '../MaterialHistory';
 import { useViewMaterial } from './hooks';
 
 export default function MaterialViewerDrawer(
@@ -103,6 +104,8 @@ export default function MaterialViewerDrawer(
               <DataDisplay label='Min. Stock' value={minStockText} />
             </SimpleGrid>
           </Stack>
+
+          <MaterialHistory {...props} />
         </Stack>
       </DrawerBody>
     );

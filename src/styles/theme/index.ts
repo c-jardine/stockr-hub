@@ -1,7 +1,7 @@
 import { extendTheme } from '@chakra-ui/react';
 import { Poppins } from 'next/font/google';
 import { colors } from './colors';
-import { buttonTheme, checkboxTheme, menuTheme } from './components';
+import { buttonTheme, checkboxTheme, menuTheme, tabsTheme } from './components';
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '700'],
@@ -22,5 +22,6 @@ export const theme = extendTheme({
     Button: buttonTheme,
     Checkbox: checkboxTheme,
     Menu: menuTheme,
+    Tabs: tabsTheme,
   },
 });

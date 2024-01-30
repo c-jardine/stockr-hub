@@ -65,3 +65,7 @@ export const materialUpdateStockSchema = z.object({
   newStock: z.number(),
   notes: z.string(),
 });
+
+export const materialGetHistorySchema = z.object({
+  id: z.string(),
+});
