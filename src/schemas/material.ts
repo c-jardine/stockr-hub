@@ -2,11 +2,6 @@ import { z } from 'zod';
 
 export const materialGetByCategorySlugSchema = z.object({ slug: z.string() });
 
-export const materialGetPaginatedSchema = z.object({
-  skip: z.number(),
-  take: z.number(),
-});
-
 export const materialCreateSchema = z.object({
   name: z.string().trim().min(3, 'Must be at least 3 characters'),
   url: z.string().url().or(z.literal('')),

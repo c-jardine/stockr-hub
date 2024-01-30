@@ -5,7 +5,6 @@ import {
   materialDeleteSchema,
   materialGetByCategorySlugSchema,
   materialGetHistorySchema,
-  materialGetPaginatedSchema,
   materialUpdateCategoriesSchema,
   materialUpdateSchema,
   materialUpdateStockSchema,
@@ -68,38 +67,6 @@ export const materialRouter = createTRPCRouter({
           },
         },
       });
-    }),
-  getAllPaginated: publicProcedure
-    .input(materialGetPaginatedSchema)
-    .query(({ input, ctx }) => {
-      return ctx.db.$transaction([
-        ctx.db.material.count(),
-        ctx.db.material.findMany({
-          orderBy: {
-            name: 'asc',
-          },
-          skip: (input.skip - 1) * input.take,
-          take: input.take,
-          include: {
-            stockLevel: {
-              include: {
-                stockUnit: true,
-              },
-            },
-            vendor: true,
-            categories: {
-              orderBy: {
-                category: {
-                  name: 'asc',
-                },
-              },
-              include: {
-                category: true,
-              },
-            },
-          },
-        }),
-      ]);
     }),
   create: publicProcedure
     .input(materialCreateSchema)
