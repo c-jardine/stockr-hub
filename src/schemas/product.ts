@@ -78,3 +78,7 @@ export const productUpdateCategoriesSchema = z.object({
     })
   ),
 });
+
+export const productGetHistorySchema = z.object({
+  id: z.string(),
+});

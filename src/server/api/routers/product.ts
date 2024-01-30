@@ -4,6 +4,7 @@ import {
   productDeleteManySchema,
   productDeleteSchema,
   productGetByCategorySlugSchema,
+  productGetHistorySchema,
   productUpdateCategoriesSchema,
   productUpdateSchema,
 } from '@/schemas';
@@ -335,6 +336,25 @@ export const productRouter = createTRPCRouter({
         );
 
         return [...addedCategories, ...updatedCategories];
+      });
+    }),
+
+  getHistory: publicProcedure
+    .input(productGetHistorySchema)
+    .query(({ input, ctx }) => {
+      return ctx.db.productStockLog.findMany({
+        where: {
+          productId: input.id,
+        },
+        orderBy: {
+          stockLogData: {
+            createdAt: 'desc',
+          },
+        },
+        include: {
+          type: true,
+          stockLogData: true,
+        },
       });
     }),
 });
