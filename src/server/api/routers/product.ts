@@ -7,6 +7,7 @@ import {
   productGetHistorySchema,
   productUpdateCategoriesSchema,
   productUpdateSchema,
+  productUpdateStockSchema,
 } from '@/schemas';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import slugify from 'slugify';
@@ -338,7 +339,59 @@ export const productRouter = createTRPCRouter({
         return [...addedCategories, ...updatedCategories];
       });
     }),
+  updateStock: publicProcedure
+    .input(productUpdateStockSchema)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.$transaction(async (tx) => {
+        const {
+          productId,
+          stockLogTypeId,
+          prevStock,
+          quantity,
+          newStock,
+          notes,
+        } = input;
 
+        await tx.product.update({
+          where: {
+            id: productId,
+          },
+          data: {
+            stockLevel: {
+              update: {
+                stock: newStock,
+              },
+            },
+          },
+        });
+
+        await tx.productStockLog.create({
+          data: {
+            stockLogData: {
+              create: {
+                prevStock,
+                stock: quantity,
+                notes,
+              },
+            },
+            type: {
+              connect: {
+                id: stockLogTypeId,
+              },
+            },
+            product: {
+              connect: {
+                id: productId,
+              },
+            },
+          },
+        });
+      });
+    }),
+
+  getProductStockLogTypes: publicProcedure.query(({ ctx }) => {
+    return ctx.db.productLogType.findMany();
+  }),
   getHistory: publicProcedure
     .input(productGetHistorySchema)
     .query(({ input, ctx }) => {

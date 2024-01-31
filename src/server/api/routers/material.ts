@@ -320,7 +320,7 @@ export const materialRouter = createTRPCRouter({
     .query(({ input, ctx }) => {
       return ctx.db.materialStockLog.findMany({
         where: {
-          materialId: input.id,
+          materialId: input.id
         },
         orderBy: {
           stockLogData: {

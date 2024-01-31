@@ -44,10 +44,16 @@ export default function ProductHistory(props: ProductGetAllOutputSingle) {
     const previousStock = Number(history.stockLogData.prevStock);
 
     switch (logType) {
-      case 'Supply Order':
+      case 'Production':
         return renderText(
-          `You received ${adjustedStock} ${getUnit(adjustedStock)}. in a `,
-          'supply order'
+          `You created ${adjustedStock} ${getUnit(adjustedStock)}. in a `,
+          'production run'
+        );
+
+      case 'Return/Restock':
+        return renderText(
+          `You marked ${adjustedStock} ${getUnit(adjustedStock)}. as `,
+          'returned or restocked'
         );
 
       case 'Audit':
@@ -68,12 +74,18 @@ export default function ProductHistory(props: ProductGetAllOutputSingle) {
           'audit'
         );
 
-      case 'Product Testing':
+      case 'Sale':
         const stockUsed = adjustedStock;
         return (
           <Text>
-            You used {stockUsed} {getUnit(stockUsed)}. while testing
+            You sold {stockUsed} {getUnit(stockUsed)}.
           </Text>
+        );
+
+      case 'Damage, Theft, or Loss':
+        return renderText(
+          `You marked ${adjustedStock} ${getUnit(adjustedStock)}. as `,
+          'damaged, stolen, or lost'
         );
 
       default:

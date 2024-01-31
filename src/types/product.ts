@@ -8,4 +8,5 @@ export type ProductGetAllCategoriesOutput =
   RouterOutputs['product']['getAllCategories'];
 export type ProductCategoriesUpdate =
   RouterInputs['product']['updateCategories'];
+export type ProductUpdateStock = RouterInputs['product']['updateStock'];
 export type ProductGetHistoryOutput = RouterOutputs['product']['getHistory'];

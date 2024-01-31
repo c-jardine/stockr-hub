@@ -47,7 +47,7 @@ model StockLogData {
     notes            String?
     createdAt        DateTime           @default(now())
     materialStockLog MaterialStockLog[]
-    ProductStockLog  ProductStockLog[]
+    productStockLog  ProductStockLog[]
 }
 
 model Vendor {
@@ -131,14 +131,15 @@ model ProductLogType {
 }
 
 model Product {
-    id              String            @id @default(uuid())
-    name            String
-    stockLevel      StockLevel        @relation(fields: [stockLevelId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    stockLevelId    String
-    batchSize       Int
-    materials       ProductMaterial[]
-    retailPrice     Decimal
-    wholesalePrice  Decimal
-    categories      ProductCategory[]
-    ProductStockLog ProductStockLog[]
+    id             String            @id @default(uuid())
+    name           String
+    stockLevel     StockLevel        @relation(fields: [stockLevelId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    stockLevelId   String
+    batchSize      Int
+    materials      ProductMaterial[]
+    retailPrice    Decimal
+    wholesalePrice Decimal
+    categories     ProductCategory[]
+    stockLogs      ProductStockLog[]
+    createdAt      DateTime          @default(now())
 }

@@ -5,7 +5,7 @@ import { getCostPerUnit, getStockUnitTextAbbrev } from '@/utils';
 import { Text } from '@chakra-ui/react';
 import { type ColumnDef } from '@tanstack/react-table';
 import React from 'react';
-import { ProductViewerDrawer } from '../../..';
+import { EditProductStockPopover, ProductViewerDrawer } from '../../..';
 
 export default function useProductTableColumns() {
   return React.useMemo<ColumnDef<ProductGetAllOutputSingle>[]>(
@@ -48,15 +48,7 @@ export default function useProductTableColumns() {
         id: 'stock',
         header: 'Stock',
         sortingFn: 'alphanumeric',
-        cell: (info) => (
-          <Text>
-            {Number(info.getValue())}{' '}
-            {getStockUnitTextAbbrev(
-              Number(info.getValue()),
-              info.cell.row.original.stockLevel.stockUnit
-            )}
-          </Text>
-        ),
+        cell: (info) => <EditProductStockPopover {...info.cell.row.original} />,
         footer: (props) => props.column.id,
       },
       {
