@@ -1,4 +1,5 @@
 import { DrawerHeader } from '@/components/DrawerHeader';
+import { useAppStateContext } from '@/contexts/AppStateContext/AppStateContext';
 import { UpdateMaterialForm } from '@/features/material';
 import { type MaterialGetAllOutputSingle } from '@/types';
 import { getIsLowStock } from '@/utils';
@@ -9,6 +10,7 @@ import {
   DrawerContent,
   DrawerFooter,
   Link,
+  Tooltip,
 } from '@chakra-ui/react';
 import { FormProvider } from 'react-hook-form';
 import { useUpdateMaterial } from './hooks';
@@ -16,6 +18,8 @@ import { useUpdateMaterial } from './hooks';
 export default function UpdateMaterialDrawer(
   props: MaterialGetAllOutputSingle & { buttonLabel?: string }
 ) {
+  const appState = useAppStateContext();
+
   const {
     form,
     onSubmit,
@@ -30,14 +34,28 @@ export default function UpdateMaterialDrawer(
   return (
     <>
       {props.buttonLabel ? (
-        <Button
-          variant='outline'
-          colorScheme='black'
-          width='fit-content'
-          onClick={onOpen}
-        >
-          {props.buttonLabel}
-        </Button>
+        appState?.auditState.inProgress ? (
+          <Tooltip label='Audit in progress'>
+            <Button
+              isDisabled
+              variant='outline'
+              colorScheme='black'
+              width='fit-content'
+              onClick={onOpen}
+            >
+              {props.buttonLabel}
+            </Button>
+          </Tooltip>
+        ) : (
+          <Button
+            variant='outline'
+            colorScheme='black'
+            width='fit-content'
+            onClick={onOpen}
+          >
+            {props.buttonLabel}
+          </Button>
+        )
       ) : (
         <Link
           onClick={onOpen}

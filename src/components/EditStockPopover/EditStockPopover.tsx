@@ -1,3 +1,4 @@
+import { useAppStateContext } from '@/contexts/AppStateContext/AppStateContext';
 import { getStockUnitTextAbbrev } from '@/utils';
 import {
   Button,
@@ -11,6 +12,7 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Text,
+  Tooltip,
   type UseDisclosureProps,
 } from '@chakra-ui/react';
 import { type StockLevel, type StockUnit } from '@prisma/client';
@@ -35,6 +37,8 @@ interface EditStockPopoverProps<T extends FieldValues> {
 export default function EditStockPopover<T extends FieldValues>(
   props: EditStockPopoverProps<T>
 ) {
+  const appState = useAppStateContext();
+
   const disclosure = props.disclosure;
 
   const form = useFormContext<T>();
@@ -53,14 +57,28 @@ export default function EditStockPopover<T extends FieldValues>(
       onClose={() => disclosure.onClose!()}
     >
       <PopoverTrigger>
-        <Button
-          variant='outline'
-          size='xs'
-          leftIcon={<Icon as={Edit} />}
-          onClick={() => disclosure.onOpen!()}
-        >
-          {renderLabel}
-        </Button>
+        {appState?.auditState.inProgress ? (
+          <Tooltip label='Audit in progress'>
+            <Button
+              isDisabled
+              variant='outline'
+              size='xs'
+              leftIcon={<Icon as={Edit} />}
+              onClick={() => disclosure.onOpen!()}
+            >
+              {renderLabel}
+            </Button>
+          </Tooltip>
+        ) : (
+          <Button
+            variant='outline'
+            size='xs'
+            leftIcon={<Icon as={Edit} />}
+            onClick={() => disclosure.onOpen!()}
+          >
+            {renderLabel}
+          </Button>
+        )}
       </PopoverTrigger>
       <PopoverContent shadow='xl'>
         <PopoverArrow />

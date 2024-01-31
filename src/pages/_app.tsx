@@ -2,6 +2,7 @@ import { type AppType } from 'next/app';
 
 import { api } from '@/utils/api';
 
+import { AppStateProvider } from '@/contexts/AppStateContext';
 import '@/styles/globals.css';
 import { theme } from '@/styles/theme';
 import {
@@ -59,7 +60,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         },
       }}
     >
-      <Component {...pageProps} />
+      <AppStateProvider>
+        <Component {...pageProps} />
+      </AppStateProvider>
     </ChakraProvider>
   );
 };
