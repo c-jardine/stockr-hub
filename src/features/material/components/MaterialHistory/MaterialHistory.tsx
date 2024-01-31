@@ -41,9 +41,9 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
   const getMessage = (
     history: MaterialGetHistoryOutput[0]
   ): React.ReactNode => {
-    const logType = history.type.name;
-    const adjustedStock = Number(history.stockLogData.stock);
-    const previousStock = Number(history.stockLogData.prevStock);
+    const logType = history.stockRecordType.name;
+    const adjustedStock = Number(history.stockRecord.stock);
+    const previousStock = Number(history.stockRecord.prevStock);
 
     switch (logType) {
       case 'Supply Order':
@@ -84,9 +84,9 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
   };
 
   const getUpdatedStock = (history: MaterialGetHistoryOutput[0]): number => {
-    const logType = history.type.name;
-    const adjustedStock = Number(history.stockLogData.stock);
-    const previousStock = Number(history.stockLogData.prevStock);
+    const logType = history.stockRecordType.name;
+    const adjustedStock = Number(history.stockRecord.stock);
+    const previousStock = Number(history.stockRecord.prevStock);
 
     switch (logType) {
       case 'Supply Order':
@@ -122,9 +122,9 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
                     </HistoryItem.Message>
                     <HistoryItem.StockLevel
                       previous={`${Number(
-                        event.stockLogData.prevStock
+                        event.stockRecord.prevStock
                       )} ${getStockUnitTextAbbrev(
-                        Number(event.stockLogData.prevStock),
+                        Number(event.stockRecord.prevStock),
                         props.stockLevel.stockUnit
                       )}.`}
                       new={`${getUpdatedStock(event)} ${getStockUnitTextAbbrev(
@@ -133,7 +133,7 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
                       )}.`}
                     />
                     <HistoryItem.Date>
-                      {formatDistanceToNowStrict(event.stockLogData.createdAt)}{' '}
+                      {formatDistanceToNowStrict(event.stockRecord.createdAt)}{' '}
                       ago
                     </HistoryItem.Date>
                   </HistoryItem.Base>

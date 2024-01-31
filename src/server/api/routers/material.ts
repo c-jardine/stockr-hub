@@ -262,8 +262,8 @@ export const materialRouter = createTRPCRouter({
       });
     }),
 
-  getMaterialStockLogTypes: publicProcedure.query(({ ctx }) => {
-    return ctx.db.materialLogType.findMany();
+  getMaterialStockRecordTypes: publicProcedure.query(({ ctx }) => {
+    return ctx.db.materialStockRecordType.findMany();
   }),
   updateStock: publicProcedure
     .input(materialUpdateStockSchema)
@@ -293,14 +293,14 @@ export const materialRouter = createTRPCRouter({
 
         await tx.materialStockLog.create({
           data: {
-            stockLogData: {
+            stockRecord: {
               create: {
                 prevStock,
                 stock: quantity,
                 notes,
               },
             },
-            type: {
+            stockRecordType: {
               connect: {
                 id: stockLogTypeId,
               },
@@ -320,16 +320,16 @@ export const materialRouter = createTRPCRouter({
     .query(({ input, ctx }) => {
       return ctx.db.materialStockLog.findMany({
         where: {
-          materialId: input.id
+          materialId: input.id,
         },
         orderBy: {
-          stockLogData: {
+          stockRecord: {
             createdAt: 'desc',
           },
         },
         include: {
-          type: true,
-          stockLogData: true,
+          stockRecordType: true,
+          stockRecord: true,
         },
       });
     }),

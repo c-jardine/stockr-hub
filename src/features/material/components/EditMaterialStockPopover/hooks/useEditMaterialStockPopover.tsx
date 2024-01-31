@@ -28,7 +28,8 @@ export default function useEditMaterialStockPopover(
     resolver: zodResolver(materialUpdateStockSchema),
   });
 
-  const { data: logTypes } = api.material.getMaterialStockLogTypes.useQuery();
+  const { data: logTypes } =
+    api.material.getMaterialStockRecordTypes.useQuery();
   const logTypeOptions =
     logTypes?.map((type) => ({
       label: type.name,

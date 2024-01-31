@@ -28,7 +28,7 @@ export default function EditProductStockPopover(
     resolver: zodResolver(productUpdateStockSchema),
   });
 
-  const { data: logTypes } = api.product.getProductStockLogTypes.useQuery();
+  const { data: logTypes } = api.product.getProductStockRecordTypes.useQuery();
   const logTypeOptions =
     logTypes?.map((type) => ({
       label: type.name,

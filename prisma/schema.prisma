@@ -40,14 +40,14 @@ model Category {
     productCategories  ProductCategory[]
 }
 
-model StockLogData {
-    id               String             @id @default(uuid())
-    prevStock        Decimal
-    stock            Decimal
-    notes            String?
-    createdAt        DateTime           @default(now())
-    materialStockLog MaterialStockLog[]
-    productStockLog  ProductStockLog[]
+model StockRecord {
+    id                String             @id @default(uuid())
+    prevStock         Decimal
+    stock             Decimal
+    notes             String?
+    createdAt         DateTime           @default(now())
+    materialStockLogs MaterialStockLog[]
+    productStockLogs  ProductStockLog[]
 }
 
 model Vendor {
@@ -65,20 +65,20 @@ model MaterialCategory {
 }
 
 model MaterialStockLog {
-    material          Material        @relation(fields: [materialId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    material          Material                @relation(fields: [materialId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     materialId        String
-    stockLogData      StockLogData    @relation(fields: [stockLogDataId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    stockLogDataId    String
-    type              MaterialLogType @relation(fields: [materialLogTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    materialLogTypeId String
+    stockRecord       StockRecord             @relation(fields: [stockRecordId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    stockRecordId     String
+    stockRecordType   MaterialStockRecordType @relation(fields: [stockRecordTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    stockRecordTypeId String
 
-    @@id([materialId, stockLogDataId])
+    @@id([materialId, stockRecordId])
 }
 
-model MaterialLogType {
-    id               String             @id @default(uuid())
-    name             String             @unique
-    materialStockLog MaterialStockLog[]
+model MaterialStockRecordType {
+    id   String             @id @default(uuid())
+    name String             @unique
+    logs MaterialStockLog[]
 }
 
 model Material {
@@ -114,17 +114,17 @@ model ProductMaterial {
 }
 
 model ProductStockLog {
-    product          Product        @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    productId        String
-    stockLogData     StockLogData   @relation(fields: [stockLogDataId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    stockLogDataId   String
-    type             ProductLogType @relation(fields: [productLogTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    productLogTypeId String
+    product           Product                @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    productId         String
+    stockRecord       StockRecord            @relation(fields: [stockRecordId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    stockRecordId     String
+    stockRecordType   ProductStockRecordType @relation(fields: [stockRecordTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    stockRecordTypeId String
 
-    @@id([productId, stockLogDataId])
+    @@id([productId, stockRecordId])
 }
 
-model ProductLogType {
+model ProductStockRecordType {
     id              String            @id @default(uuid())
     name            String            @unique
     productStockLog ProductStockLog[]

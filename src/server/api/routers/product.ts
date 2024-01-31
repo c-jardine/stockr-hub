@@ -367,14 +367,14 @@ export const productRouter = createTRPCRouter({
 
         await tx.productStockLog.create({
           data: {
-            stockLogData: {
+            stockRecord: {
               create: {
                 prevStock,
                 stock: quantity,
                 notes,
               },
             },
-            type: {
+            stockRecordType: {
               connect: {
                 id: stockLogTypeId,
               },
@@ -389,8 +389,8 @@ export const productRouter = createTRPCRouter({
       });
     }),
 
-  getProductStockLogTypes: publicProcedure.query(({ ctx }) => {
-    return ctx.db.productLogType.findMany();
+    getProductStockRecordTypes: publicProcedure.query(({ ctx }) => {
+    return ctx.db.productStockRecordType.findMany();
   }),
   getHistory: publicProcedure
     .input(productGetHistorySchema)
@@ -400,13 +400,13 @@ export const productRouter = createTRPCRouter({
           productId: input.id,
         },
         orderBy: {
-          stockLogData: {
+          stockRecord: {
             createdAt: 'desc',
           },
         },
         include: {
-          type: true,
-          stockLogData: true,
+          stockRecordType: true,
+          stockRecord: true,
         },
       });
     }),
