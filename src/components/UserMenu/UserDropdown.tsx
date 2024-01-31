@@ -41,7 +41,7 @@ export default function UserDropdown() {
               <Text>Settings</Text>
             </MenuOption>
             <MenuOption href='/profile'>
-              <Text>My profile</Text>
+              <Text>Account</Text>
             </MenuOption>
             <Divider />
             <MenuOption href='/support'>
