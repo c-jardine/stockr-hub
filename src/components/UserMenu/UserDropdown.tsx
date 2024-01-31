@@ -40,7 +40,7 @@ export default function UserDropdown() {
             <MenuOption href='/settings'>
               <Text>Settings</Text>
             </MenuOption>
-            <MenuOption href='/profile'>
+            <MenuOption href='/account'>
               <Text>Account</Text>
             </MenuOption>
             <Divider />
