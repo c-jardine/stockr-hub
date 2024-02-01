@@ -132,6 +132,11 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
                         props.stockLevel.stockUnit
                       )}.`}
                     />
+                    {event.stockRecord.notes && (
+                      <HistoryItem.Notes>
+                        {event.stockRecord.notes}
+                      </HistoryItem.Notes>
+                    )}
                     <HistoryItem.Date>
                       {formatDistanceToNowStrict(event.stockRecord.createdAt)}{' '}
                       ago
@@ -141,10 +146,12 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
               ))}
               <Box position='relative' fontSize='sm'>
                 <Decoration hideBar />
-                <Text>Created by you</Text>
-                <Text color='slate.500' fontSize='xs'>
-                  {formatDistanceToNowStrict(props.createdAt)} ago
-                </Text>
+                <HistoryItem.Base>
+                  <HistoryItem.Message>Created by you</HistoryItem.Message>
+                  <HistoryItem.Date>
+                    {formatDistanceToNowStrict(props.createdAt)} ago
+                  </HistoryItem.Date>
+                </HistoryItem.Base>
               </Box>
             </Stack>
           </TabPanel>
