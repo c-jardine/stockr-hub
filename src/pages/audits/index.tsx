@@ -47,16 +47,18 @@ export default function Audits() {
         {data?.map((log) => (
           <Flex key={log.id} justifyContent='space-between'>
             <Box>
-              <Text fontWeight='semibold'>{log.category} Audit</Text>
+              <Text fontWeight='semibold'>
+                {log.category === 'all' ? 'Materials' : log.category} Audit
+              </Text>
               <Text color='slate.500' fontSize='sm'>
                 {log.completedAt
-                  ? `Created on ${format(
+                  ? `Completed on ${format(
                       log.completedAt,
-                      "MMM. dd, yyyy 'at' hh:mm a"
+                      "MMM. dd, yyyy 'at' h:mm a"
                     )}`
                   : `Created on ${format(
                       log.createdAt,
-                      "MMM. dd, yyyy 'at' hh:mm a"
+                      "MMM. dd, yyyy 'at' h:mm a"
                     )}`}
               </Text>
             </Box>

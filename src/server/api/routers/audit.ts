@@ -1,6 +1,7 @@
 import {
   cancelMaterialAuditSchema,
   createMaterialAuditSchema,
+  updateMaterialAuditSchema,
 } from '@/schemas';
 import { z } from 'zod';
 import { createTRPCRouter, publicProcedure } from '../trpc';
@@ -113,6 +114,108 @@ export const auditRouter = createTRPCRouter({
             },
           },
         });
+      });
+    }),
+
+  completeAudit: publicProcedure
+    .input(updateMaterialAuditSchema)
+    .mutation(({ input, ctx }) => {
+      const { category, items } = input;
+
+      return ctx.db.$transaction(async (tx) => {
+        const completeAudit = await tx.materialAudit.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            category,
+            completedAt: new Date(),
+            items: {
+              updateMany: items.map((item) => ({
+                where: {
+                  materialId: item.materialId,
+                },
+                data: {
+                  actualStock: item.actualStock,
+                  notes: item.notes,
+                },
+              })),
+            },
+          },
+          select: {
+            id: true,
+          },
+        });
+
+        await Promise.all(
+          items.map(async (item) => {
+            await tx.material.update({
+              where: {
+                id: item.materialId,
+              },
+              data: {
+                stockLevel: {
+                  update: {
+                    stock: item.actualStock,
+                  },
+                },
+              },
+            });
+
+            const stockRecord = await tx.stockRecord.create({
+              data: {
+                prevStock: item.expectedStock,
+                stock: item.actualStock,
+                notes: item.notes,
+              },
+            });
+
+            await tx.materialStockLog.create({
+              data: {
+                material: {
+                  connect: {
+                    id: item.materialId,
+                  },
+                },
+                stockRecord: {
+                  connect: {
+                    id: stockRecord.id,
+                  },
+                },
+                stockRecordType: {
+                  connect: {
+                    name: 'Audit',
+                  },
+                },
+              },
+            });
+          })
+        );
+
+        await tx.appState.update({
+          where: {
+            id: 1,
+          },
+          data: {
+            auditState: {
+              update: {
+                where: {
+                  id: 1,
+                },
+                data: {
+                  inProgress: false,
+                  materialAudit: {
+                    disconnect: {
+                      id: completeAudit.id,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        return completeAudit;
       });
     }),
 });
