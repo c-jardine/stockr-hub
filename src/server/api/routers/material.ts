@@ -3,6 +3,7 @@ import {
   materialCreateSchema,
   materialDeleteManySchema,
   materialDeleteSchema,
+  materialGetAllStockUpdatesFilteredSchema,
   materialGetByCategorySlugSchema,
   materialGetHistorySchema,
   materialUpdateCategoriesSchema,
@@ -10,8 +11,9 @@ import {
   materialUpdateStockSchema,
 } from "@/schemas";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { endOfDay, startOfYear, subDays, subMonths, subYears } from "date-fns";
 import slugify from "slugify";
-import { z } from "zod";
+import { type z } from "zod";
 
 export const materialRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -70,12 +72,50 @@ export const materialRouter = createTRPCRouter({
       });
     }),
 
-  getAllStockUpdates: publicProcedure
-    .input(z.object({ id: z.string() }))
+  getAllStockUpdatesFiltered: publicProcedure
+    .input(materialGetAllStockUpdatesFilteredSchema)
     .query(({ input, ctx }) => {
+      const getDateRangeStart = (
+        filter: z.infer<
+          typeof materialGetAllStockUpdatesFilteredSchema
+        >["filter"]
+      ) => {
+        const today = new Date();
+        switch (filter) {
+          case "1D":
+            return subDays(today, 1);
+          case "5D":
+            return subDays(today, 5);
+          case "1M":
+            return subMonths(today, 1);
+          case "6M":
+            return subMonths(today, 6);
+          case "1Y":
+            return subYears(today, 1);
+          case "YTD":
+            return startOfYear(today);
+          default:
+            return today; // Default to today if no valid input is provided
+        }
+      };
+
+      const startDate = getDateRangeStart(input.filter);
+      const endDate = endOfDay(new Date());
+
       return ctx.db.materialStockLog.findMany({
         where: {
           materialId: input.id,
+          stockRecord: {
+            createdAt: {
+              gte: startDate, // Greater than or equal to the start date
+              lte: endDate, // Less than or equal to today
+            },
+          },
+        },
+        orderBy: {
+          stockRecord: {
+            createdAt: "asc",
+          },
         },
         include: {
           stockRecord: true,

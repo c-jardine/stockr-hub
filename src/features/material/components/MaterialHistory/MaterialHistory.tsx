@@ -1,36 +1,23 @@
+import { StockGraph } from "@/components/StockGraph";
 import {
   type MaterialGetAllOutputSingle,
   type MaterialGetHistoryOutput,
 } from "@/types";
 import { getStockUnitTextAbbrev } from "@/utils";
-import { api } from "@/utils/api";
 import {
   Box,
   Circle,
   Flex,
-  Spinner,
   Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
-  useToken,
+  Text
 } from "@chakra-ui/react";
-import { format, formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 import React from "react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Legend,
-  ReferenceLine,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import HistoryItem from "./HistoryItem";
 import { useMaterialHistory } from "./hooks";
 
@@ -176,7 +163,7 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
             </Text>
           </TabPanel>
           <TabPanel>
-            <StockChart {...props} />
+            <StockGraph {...props} />
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -184,69 +171,7 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
   );
 }
 
-function StockChart(material: MaterialGetAllOutputSingle) {
-  const [lineColor, fillColor, referenceLineColor] = useToken("colors", [
-    "sky.500",
-    "sky.200",
-    "orange.500",
-  ]);
 
-  const { data } = api.material.getAllStockUpdates.useQuery({
-    id: material.id,
-  });
-
-  if (!data) {
-    return <Spinner />;
-  }
-
-  const chartData = data.map((log) => ({
-    name: format(log.stockRecord.createdAt, "h:mm a"),
-    Stock: Number(log.stockRecord.stock),
-  }));
-
-  const total = chartData.reduce((sum, item) => sum + item.Stock, 0);
-  const average = total / chartData.length;
-
-  return (
-    <Box h={72} w="full">
-      <ResponsiveContainer width="100%" height="100%" aspect={1.5}>
-        <AreaChart width={500} height={300} data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" fontSize={12} />
-          <YAxis fontSize={12} width={30} />
-          <Tooltip
-            contentStyle={{
-              fontSize: 12,
-            }}
-          />
-          <Legend
-            layout="horizontal"
-            verticalAlign="top"
-            align="center"
-            wrapperStyle={{
-              marginTop: -8,
-              fontSize: 14,
-              fontWeight: 600,
-            }}
-          />
-          <ReferenceLine
-            y={average}
-            // label={{ value: "Average", position: "left" }}
-            stroke={referenceLineColor}
-            strokeDasharray="4 4"
-          />
-          <Area
-            type="monotone"
-            dataKey="Stock"
-            stroke={lineColor}
-            strokeWidth={2}
-            fill={fillColor}
-          />
-        </AreaChart>
-      </ResponsiveContainer>
-    </Box>
-  );
-}
 
 function Decoration({ hideBar = false }) {
   return (
