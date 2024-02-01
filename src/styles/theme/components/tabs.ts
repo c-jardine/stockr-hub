@@ -1,5 +1,5 @@
-import { tabsAnatomy } from '@chakra-ui/anatomy';
-import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
+import { tabsAnatomy } from "@chakra-ui/anatomy";
+import { createMultiStyleConfigHelpers } from "@chakra-ui/react";
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { definePartsStyle, defineMultiStyleConfig } =
@@ -8,20 +8,20 @@ const { definePartsStyle, defineMultiStyleConfig } =
 const baseStyle = definePartsStyle({
   tab: {
     p: 2,
-    fontWeight: 'semibold',
-    transition: '150ms ease-in-out',
+    fontWeight: "semibold",
+    transition: "150ms ease-in-out",
     _selected: {
-      color: 'black',
+      color: "black",
     },
     _hover: {
-      borderColor: 'black',
+      borderColor: "black",
     },
   },
 });
 
 export const tabsTheme = defineMultiStyleConfig({
   defaultProps: {
-    colorScheme: 'sky',
+    colorScheme: "sky",
   },
   baseStyle,
 });

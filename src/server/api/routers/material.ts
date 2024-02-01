@@ -8,9 +8,10 @@ import {
   materialUpdateCategoriesSchema,
   materialUpdateSchema,
   materialUpdateStockSchema,
-} from '@/schemas';
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
-import slugify from 'slugify';
+} from "@/schemas";
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import slugify from "slugify";
+import { z } from "zod";
 
 export const materialRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -25,7 +26,7 @@ export const materialRouter = createTRPCRouter({
         categories: {
           orderBy: {
             category: {
-              name: 'asc',
+              name: "asc",
             },
           },
           include: {
@@ -58,7 +59,7 @@ export const materialRouter = createTRPCRouter({
           categories: {
             orderBy: {
               category: {
-                name: 'asc',
+                name: "asc",
               },
             },
             include: {
@@ -68,6 +69,20 @@ export const materialRouter = createTRPCRouter({
         },
       });
     }),
+
+  getAllStockUpdates: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.materialStockLog.findMany({
+        where: {
+          materialId: input.id,
+        },
+        include: {
+          stockRecord: true,
+        },
+      });
+    }),
+
   create: publicProcedure
     .input(materialCreateSchema)
     .mutation(async ({ input, ctx }) => {
@@ -164,7 +179,7 @@ export const materialRouter = createTRPCRouter({
     return ctx.db.materialCategory.findMany({
       orderBy: {
         category: {
-          name: 'asc',
+          name: "asc",
         },
       },
       include: {
@@ -324,7 +339,7 @@ export const materialRouter = createTRPCRouter({
         },
         orderBy: {
           stockRecord: {
-            createdAt: 'desc',
+            createdAt: "desc",
           },
         },
         include: {
