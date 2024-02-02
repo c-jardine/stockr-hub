@@ -109,8 +109,7 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
       <Tabs>
         <TabList>
           <Tab fontSize={{ base: "xs", sm: "md" }}>History</Tab>
-          <Tab fontSize={{ base: "xs", sm: "md" }}>Supply Orders</Tab>
-          <Tab fontSize={{ base: "xs", sm: "md" }}>Stock History</Tab>
+          <Tab fontSize={{ base: "xs", sm: "md" }}>Visualization</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -162,11 +161,6 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
                 </HistoryItem.Base>
               </Box>
             </Stack>
-          </TabPanel>
-          <TabPanel>
-            <Text fontSize="sm" fontStyle="italic" textAlign="center">
-              Feature coming soon!
-            </Text>
           </TabPanel>
           <TabPanel>
             <StockGraph {...props} />

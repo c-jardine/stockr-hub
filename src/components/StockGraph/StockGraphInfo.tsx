@@ -1,6 +1,7 @@
 import { type MaterialStockFilterType } from "@/types";
 import {
   Box,
+  Flex,
   HStack,
   Stack,
   Text,
@@ -9,14 +10,16 @@ import {
   type UseRadioProps,
 } from "@chakra-ui/react";
 import React from "react";
-import { useStockFilterGroup } from "./hooks";
+import { useStockGraphInfo } from "./hooks";
 
-export default function StockGraphFilter({
+export default function StockGraphInfo({
   filter,
   setFilter,
+  trend,
 }: {
   filter: MaterialStockFilterType;
   setFilter: React.Dispatch<React.SetStateAction<MaterialStockFilterType>>;
+  trend: React.ReactNode;
 }) {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: "filter",
@@ -27,22 +30,25 @@ export default function StockGraphFilter({
 
   const group = getRootProps();
 
-  const { options, dateRangeText } = useStockFilterGroup(filter);
+  const { options, dateRangeText } = useStockGraphInfo(filter);
 
   return (
     <Stack>
-      <Box
-        border="1px solid"
-        borderColor="slate.200"
-        w="fit-content"
-        rounded="md"
-        px={2}
-        py={1}
-      >
-        <Text color="slate.500" fontSize="sm" fontWeight="semibold">
-          {dateRangeText}
-        </Text>
-      </Box>
+      <Flex justifyContent="space-between" alignItems="center">
+        <Box
+          border="1px solid"
+          borderColor="slate.200"
+          w="fit-content"
+          rounded="md"
+          px={2}
+          py={1}
+        >
+          <Text color="slate.500" fontSize="sm" fontWeight="semibold">
+            {dateRangeText}
+          </Text>
+        </Box>
+        {trend}
+      </Flex>
       <HStack {...group} overflowX="scroll" pb={4}>
         {options.map((value) => {
           const radio = getRadioProps({ value });
