@@ -14,7 +14,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { formatDistanceToNowStrict } from "date-fns";
 import React from "react";
@@ -170,8 +170,6 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
     </Stack>
   );
 }
-
-
 
 function Decoration({ hideBar = false }) {
   return (

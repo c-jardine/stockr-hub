@@ -11,9 +11,18 @@ import {
   materialUpdateStockSchema,
 } from "@/schemas";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { endOfDay, startOfYear, subDays, subMonths, subYears } from "date-fns";
+import {
+  addDays,
+  differenceInCalendarDays,
+  endOfDay,
+  parseISO,
+  startOfYear,
+  subDays,
+  subMonths,
+  subYears,
+} from "date-fns";
 import slugify from "slugify";
-import { type z } from "zod";
+import { z } from "zod";
 
 export const materialRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -121,6 +130,68 @@ export const materialRouter = createTRPCRouter({
           stockRecord: true,
         },
       });
+    }),
+
+  tempSeed: publicProcedure
+    .input(z.object({ materialId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const { materialId } = input;
+      const today = new Date();
+      const startOfYearDate = parseISO("2023-01-01");
+      const stockRecordTypeId = "204312ea-59aa-4bdb-9e9e-1d7226226b22";
+
+      const stockLogs = Array.from({ length: 100 }).map(() => {
+        const daysSinceStartOfYear = differenceInCalendarDays(
+          today,
+          startOfYearDate
+        );
+        return {
+          materialId,
+          stockRecord: {
+            create: {
+              prevStock: Math.floor(Math.random() * 101), // 0 to 100
+              stock: Math.floor(Math.random() * 101), // 0 to 100
+              notes: Math.random() > 0.5 ? "" : undefined,
+              createdAt: addDays(
+                startOfYearDate,
+                Math.floor(Math.random() * daysSinceStartOfYear)
+              ),
+              stockRecordType: {
+                connect: { id: stockRecordTypeId },
+              },
+            },
+          },
+        };
+      });
+
+      for (const stockLog of stockLogs) {
+        await ctx.db.materialStockLog.create({
+          data: {
+            stockRecord: {
+              create: {
+                prevStock: stockLog.stockRecord.create.prevStock,
+                stock: stockLog.stockRecord.create.stock,
+                createdAt: stockLog.stockRecord.create.createdAt,
+              },
+            },
+            stockRecordType: {
+              connect: {
+                id: stockRecordTypeId,
+              },
+            },
+            material: {
+              connect: {
+                id: materialId,
+              },
+            },
+          },
+        });
+      }
+
+      return {
+        success: true,
+        message: "Material stock logs inserted successfully.",
+      };
     }),
 
   create: publicProcedure

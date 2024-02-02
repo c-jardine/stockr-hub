@@ -1,5 +1,8 @@
 import { type materialGetAllStockUpdatesFilteredSchema } from "@/schemas";
-import { type MaterialGetAllOutputSingle } from "@/types";
+import {
+  type MaterialGetAllOutputSingle,
+  type MaterialGetFilteredStockUpdates,
+} from "@/types";
 import { api } from "@/utils/api";
 import {
   Box,
@@ -15,6 +18,7 @@ import {
 import {
   endOfDay,
   format,
+  isSameDay,
   startOfYear,
   subDays,
   subMonths,
@@ -56,12 +60,45 @@ export default function StockGraph(material: MaterialGetAllOutputSingle) {
     return <Spinner />;
   }
 
-  const chartData = data.map((log) => ({
-    name: format(log.stockRecord.createdAt, "MMM. dd, yyyy 'at' h:mm a"),
-    Stock: Number(log.stockRecord.stock),
+  // Helper function to get data ready for the graph. For days with multiple
+  // stock updates, filters out all but the last update for the day.
+  const preprocessData = (data: MaterialGetFilteredStockUpdates) => {
+    const filteredData: MaterialGetFilteredStockUpdates = [];
+    let lastRecordDate: Date | null = null;
+
+    data.forEach((record, index) => {
+      const currentRecordDate = record.stockRecord.createdAt;
+      const nextRecord = data[index + 1];
+      const isLastItem = index === data.length - 1;
+
+      if (isLastItem) {
+        filteredData.push(record);
+        return;
+      }
+
+      if (nextRecord) {
+        const nextRecordDate = nextRecord.stockRecord.createdAt;
+        if (!isSameDay(currentRecordDate, nextRecordDate)) {
+          filteredData.push(record);
+        } else if (
+          lastRecordDate &&
+          !isSameDay(lastRecordDate, currentRecordDate)
+        ) {
+          filteredData.push(record);
+        }
+        lastRecordDate = currentRecordDate;
+      }
+    });
+
+    return filteredData;
+  };
+
+  const chartData = preprocessData(data).map((item) => ({
+    createdAt: format(item.stockRecord.createdAt, "MMM. dd, yyyy 'at' h:mm a"),
+    stock: Number(item.stockRecord.stock),
   }));
 
-  const total = chartData.reduce((sum, item) => sum + item.Stock, 0);
+  const total = chartData.reduce((sum, item) => sum + item.stock, 0);
   const average = total / chartData.length;
 
   return (
@@ -71,7 +108,7 @@ export default function StockGraph(material: MaterialGetAllOutputSingle) {
         <ResponsiveContainer width="100%" height="100%" aspect={1.5}>
           <AreaChart width={500} height={300} data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" fontSize={12} />
+            <XAxis dataKey="createdAt" fontSize={12} />
             <YAxis fontSize={12} width={30} />
             <Tooltip
               contentStyle={{
@@ -96,7 +133,7 @@ export default function StockGraph(material: MaterialGetAllOutputSingle) {
             />
             <Area
               type="monotone"
-              dataKey="Stock"
+              dataKey="stock"
               stroke={lineColor}
               strokeWidth={2}
               fill={fillColor}
