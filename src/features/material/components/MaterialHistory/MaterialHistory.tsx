@@ -116,7 +116,13 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
           <TabPanel>
             <Stack spacing={0} pl={5}>
               {query.data?.map((event) => (
-                <Box role="group" position="relative" fontSize="sm" pb={4}>
+                <Box
+                  key={event.stockRecordId}
+                  role="group"
+                  position="relative"
+                  fontSize="sm"
+                  pb={4}
+                >
                   <Decoration />
                   <HistoryItem.Base>
                     <HistoryItem.Message>
