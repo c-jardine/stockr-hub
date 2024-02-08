@@ -64,88 +64,95 @@ export default function StockGraph(material: MaterialGetAllOutputSingle) {
       <StockGraphInfo
         filter={filter}
         setFilter={setFilter}
-        trend={<RenderTrend />}
+        trend={chartData.length > 0 && <RenderTrend />}
       />
-      <Box h={72} w="full">
-        <ResponsiveContainer width="100%" height="100%" aspect={1.5}>
-          <AreaChart width={500} height={300} data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="createdAt" fontSize={12} />
-            <YAxis fontSize={12} width={30} />
-            <Tooltip
-              contentStyle={{
-                fontSize: 12,
-              }}
-              content={({ active, payload, label }) => {
-                if (active && payload?.length) {
-                  return (
-                    <Box
-                      px={4}
-                      py={2}
-                      rounded="md"
-                      border="1px solid"
-                      borderColor="slate.300"
-                      bg="white"
-                      shadow="lg"
-                    >
-                      <Text fontSize="sm">
-                        {format(label, "MMM. dd, yyyy")}
-                      </Text>
-                      <Box mt={2}>
-                        {payload.map((item, index) => (
-                          <Box
-                            key={index}
-                            pl={2}
-                            borderLeft="4px solid"
-                            borderColor="sky.500"
-                          >
-                            <Text
-                              as="span"
-                              fontSize="sm"
-                              fontWeight="semibold"
-                              textTransform="uppercase"
+      {chartData.length === 0 && (
+        <Text fontStyle="italic" textAlign="center">
+          No data for the selected time period.
+        </Text>
+      )}
+      {chartData.length > 0 && (
+        <Box h={72} w="full">
+          <ResponsiveContainer width="100%" height="100%" aspect={1.5}>
+            <AreaChart width={500} height={300} data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="createdAt" fontSize={12} />
+              <YAxis fontSize={12} width={30} />
+              <Tooltip
+                contentStyle={{
+                  fontSize: 12,
+                }}
+                content={({ active, payload, label }) => {
+                  if (active && payload?.length) {
+                    return (
+                      <Box
+                        px={4}
+                        py={2}
+                        rounded="md"
+                        border="1px solid"
+                        borderColor="slate.300"
+                        bg="white"
+                        shadow="lg"
+                      >
+                        <Text fontSize="sm">
+                          {format(label, "MMM. dd, yyyy")}
+                        </Text>
+                        <Box mt={2}>
+                          {payload.map((item, index) => (
+                            <Box
+                              key={index}
+                              pl={2}
+                              borderLeft="4px solid"
+                              borderColor="sky.500"
                             >
-                              {item.value}{" "}
-                              {getStockUnitTextAbbrev(
-                                Number(item.value),
-                                material.stockLevel.stockUnit
-                              )}
-                              . in stock
-                            </Text>
-                          </Box>
-                        ))}
+                              <Text
+                                as="span"
+                                fontSize="sm"
+                                fontWeight="semibold"
+                                textTransform="uppercase"
+                              >
+                                {item.value}{" "}
+                                {getStockUnitTextAbbrev(
+                                  Number(item.value),
+                                  material.stockLevel.stockUnit
+                                )}
+                                . in stock
+                              </Text>
+                            </Box>
+                          ))}
+                        </Box>
                       </Box>
-                    </Box>
-                  );
-                }
-              }}
-            />
-            <Legend
-              layout="horizontal"
-              verticalAlign="top"
-              align="center"
-              wrapperStyle={{
-                marginTop: -8,
-                fontSize: 14,
-                fontWeight: 600,
-              }}
-            />
-            <ReferenceLine
-              y={average}
-              // label={{ value: "Average", position: "left" }}
-              stroke={colors.referenceLineColor}
-              strokeDasharray="4 4"
-            />
-            <Area
-              type="monotone"
-              dataKey="stock"
-              stroke={colors.lineColor}
-              strokeWidth={2}
-              fill={colors.fillColor}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      </Box>
+                    );
+                  }
+                }}
+              />
+              <Legend
+                layout="horizontal"
+                verticalAlign="top"
+                align="center"
+                wrapperStyle={{
+                  marginTop: -8,
+                  fontSize: 14,
+                  fontWeight: 600,
+                }}
+              />
+              <ReferenceLine
+                y={average}
+                // label={{ value: "Average", position: "left" }}
+                stroke={colors.referenceLineColor}
+                strokeDasharray="4 4"
+              />
+              <Area
+                type="monotone"
+                dataKey="stock"
+                stroke={colors.lineColor}
+                strokeWidth={2}
+                fill={colors.fillColor}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </Box>
+      )}
     </Stack>
   );
 }
