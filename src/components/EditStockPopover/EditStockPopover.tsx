@@ -1,5 +1,5 @@
-import { useAppStateContext } from '@/contexts/AppStateContext/AppStateContext';
-import { getStockUnitTextAbbrev } from '@/utils';
+import { useAppStateContext } from "@/contexts/AppStateContext/AppStateContext";
+import { getStockUnitTextAbbrev } from "@/utils";
 import {
   Button,
   Icon,
@@ -14,16 +14,16 @@ import {
   Text,
   Tooltip,
   type UseDisclosureProps,
-} from '@chakra-ui/react';
-import { type StockLevel, type StockUnit } from '@prisma/client';
+} from "@chakra-ui/react";
+import { type StockLevel, type StockUnit } from "@prisma/client";
 import {
   useFormContext,
   type FieldValues,
   type SubmitHandler,
-} from 'react-hook-form';
-import { Edit } from 'tabler-icons-react';
-import { type Option } from '../Select';
-import EditStockPopoverForm from './EditStockPopoverForm';
+} from "react-hook-form";
+import { Edit } from "tabler-icons-react";
+import { type Option } from "../Select";
+import EditStockPopoverForm from "./EditStockPopoverForm";
 
 interface EditStockPopoverProps<T extends FieldValues> {
   disclosure: UseDisclosureProps;
@@ -52,17 +52,18 @@ export default function EditStockPopover<T extends FieldValues>(
 
   return (
     <Popover
-      placement='auto'
+      isLazy
+      placement="auto"
       isOpen={disclosure.isOpen}
       onClose={() => disclosure.onClose!()}
     >
       <PopoverTrigger>
         {appState?.auditState.inProgress ? (
-          <Tooltip label='Audit in progress'>
+          <Tooltip label="Audit in progress">
             <Button
               isDisabled
-              variant='outline'
-              size='xs'
+              variant="outline"
+              size="xs"
               leftIcon={<Icon as={Edit} />}
               onClick={() => disclosure.onOpen!()}
             >
@@ -71,8 +72,8 @@ export default function EditStockPopover<T extends FieldValues>(
           </Tooltip>
         ) : (
           <Button
-            variant='outline'
-            size='xs'
+            variant="outline"
+            size="xs"
             leftIcon={<Icon as={Edit} />}
             onClick={() => disclosure.onOpen!()}
           >
@@ -80,30 +81,30 @@ export default function EditStockPopover<T extends FieldValues>(
           </Button>
         )}
       </PopoverTrigger>
-      <PopoverContent shadow='xl'>
+      <PopoverContent shadow="xl">
         <PopoverArrow />
         <PopoverCloseButton />
         <PopoverHeader>
-          <Text fontSize='md' fontWeight='semibold'>
+          <Text fontSize="md" fontWeight="semibold">
             Update stock
           </Text>
-          <Text color='slate.600' fontSize='xs'>
+          <Text color="slate.600" fontSize="xs">
             {props.name}
           </Text>
         </PopoverHeader>
         <PopoverBody>
           <form
-            id='update-stock-form'
+            id="update-stock-form"
             onSubmit={form.handleSubmit(props.onSubmit)}
           >
             <EditStockPopoverForm {...props} />
           </form>
         </PopoverBody>
-        <PopoverFooter display='flex' justifyContent='flex-end' gap={2}>
-          <Button variant='outline' onClick={() => disclosure.onClose!()}>
+        <PopoverFooter display="flex" justifyContent="flex-end" gap={2}>
+          <Button variant="outline" onClick={() => disclosure.onClose!()}>
             Cancel
           </Button>
-          <Button type='submit' form='update-stock-form'>
+          <Button type="submit" form="update-stock-form">
             Update
           </Button>
         </PopoverFooter>

@@ -1,31 +1,30 @@
-import { materialUpdateStockSchema } from '@/schemas';
+import { materialUpdateStockSchema } from "@/schemas";
 import {
   type MaterialGetAllOutputSingle,
   type MaterialUpdateStock,
-} from '@/types';
-import { getStockUnitTextAbbrev } from '@/utils';
-import { api } from '@/utils/api';
-import { Text, useDisclosure, useToast } from '@chakra-ui/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+} from "@/types";
+import { getStockUnitTextAbbrev } from "@/utils";
+import { api } from "@/utils/api";
+import { Text, useDisclosure, useToast } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 export default function useEditMaterialStockPopover(
   material: MaterialGetAllOutputSingle
 ) {
-  const disclosure = useDisclosure();
-
-  const defaultValues = {
-    stockLogTypeId: '',
-    materialId: material.id,
-    prevStock: Number(material.stockLevel.stock),
-    quantity: undefined,
-    newStock: Number(material.stockLevel.stock),
-    notes: '',
-  };
-
   const form = useForm<MaterialUpdateStock>({
-    defaultValues,
+    defaultValues: {
+      materialId: material.id,
+      prevStock: Number(material.stockLevel.stock),
+      newStock: Number(material.stockLevel.stock),
+    },
     resolver: zodResolver(materialUpdateStockSchema),
+  });
+
+  const disclosure = useDisclosure({
+    onOpen: () => {
+      form.reset();
+    },
   });
 
   const { data: logTypes } =
@@ -37,17 +36,17 @@ export default function useEditMaterialStockPopover(
     })) ?? [];
 
   function getUpdatedStock() {
-    const logTypeId = form.watch('stockLogTypeId');
+    const logTypeId = form.watch("stockLogTypeId");
     const logType = logTypeOptions?.find(
       (option) => option.value === logTypeId
     )?.label;
 
-    if (logType === 'Supply Order') {
-      return Number(material.stockLevel.stock) + form.watch('quantity');
-    } else if (logType === 'Audit') {
-      return form.watch('quantity');
-    } else if (logType === 'Product Testing') {
-      return Number(material.stockLevel.stock) - form.watch('quantity');
+    if (logType === "Supply Order") {
+      return Number(material.stockLevel.stock) + form.watch("quantity");
+    } else if (logType === "Audit") {
+      return form.watch("quantity");
+    } else if (logType === "Product Testing") {
+      return Number(material.stockLevel.stock) - form.watch("quantity");
     } else return Number(material.stockLevel.stock);
   }
 
@@ -60,13 +59,13 @@ export default function useEditMaterialStockPopover(
         title: `Stock updated`,
         description: (
           <Text>
-            Stock for{' '}
-            <Text as='span' fontWeight='semibold'>
+            Stock for{" "}
+            <Text as="span" fontWeight="semibold">
               {material.name}
-            </Text>{' '}
-            has been updated to{' '}
-            <Text as='span' fontWeight='semibold'>
-              {getUpdatedStock()}{' '}
+            </Text>{" "}
+            has been updated to{" "}
+            <Text as="span" fontWeight="semibold">
+              {getUpdatedStock()}{" "}
               {getStockUnitTextAbbrev(
                 Number(material.stockLevel.stock),
                 material.stockLevel.stockUnit
@@ -75,7 +74,7 @@ export default function useEditMaterialStockPopover(
             .
           </Text>
         ),
-        status: 'success',
+        status: "success",
       });
       await utils.material.getAll.invalidate();
       disclosure.onClose();
