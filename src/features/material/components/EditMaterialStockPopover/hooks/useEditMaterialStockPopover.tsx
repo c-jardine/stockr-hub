@@ -45,7 +45,10 @@ export default function useEditMaterialStockPopover(
       return Number(material.stockLevel.stock) + form.watch("quantity");
     } else if (logType === "Audit") {
       return form.watch("quantity");
-    } else if (logType === "Product Testing") {
+    } else if (
+      logType === "Product Testing" ||
+      logType === "Damage, Theft, or Loss"
+    ) {
       return Number(material.stockLevel.stock) - form.watch("quantity");
     } else return Number(material.stockLevel.stock);
   }

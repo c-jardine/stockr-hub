@@ -8,9 +8,9 @@ import {
   productUpdateCategoriesSchema,
   productUpdateSchema,
   productUpdateStockSchema,
-} from '@/schemas';
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
-import slugify from 'slugify';
+} from "@/schemas";
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import slugify from "slugify";
 
 export const productRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -43,7 +43,7 @@ export const productRouter = createTRPCRouter({
         categories: {
           orderBy: {
             category: {
-              name: 'asc',
+              name: "asc",
             },
           },
           include: {
@@ -94,7 +94,7 @@ export const productRouter = createTRPCRouter({
           categories: {
             orderBy: {
               category: {
-                name: 'asc',
+                name: "asc",
               },
             },
             include: {
@@ -242,7 +242,7 @@ export const productRouter = createTRPCRouter({
     return ctx.db.productCategory.findMany({
       orderBy: {
         category: {
-          name: 'asc',
+          name: "asc",
         },
       },
       include: {
@@ -343,14 +343,7 @@ export const productRouter = createTRPCRouter({
     .input(productUpdateStockSchema)
     .mutation(async ({ input, ctx }) => {
       return await ctx.db.$transaction(async (tx) => {
-        const {
-          productId,
-          stockLogTypeId,
-          prevStock,
-          quantity,
-          newStock,
-          notes,
-        } = input;
+        const { productId, stockLogTypeId, prevStock, newStock, notes } = input;
 
         await tx.product.update({
           where: {
@@ -370,7 +363,7 @@ export const productRouter = createTRPCRouter({
             stockRecord: {
               create: {
                 prevStock,
-                stock: quantity,
+                stock: newStock,
                 notes,
               },
             },
@@ -389,7 +382,7 @@ export const productRouter = createTRPCRouter({
       });
     }),
 
-    getProductStockRecordTypes: publicProcedure.query(({ ctx }) => {
+  getProductStockRecordTypes: publicProcedure.query(({ ctx }) => {
     return ctx.db.productStockRecordType.findMany();
   }),
   getHistory: publicProcedure
@@ -401,7 +394,7 @@ export const productRouter = createTRPCRouter({
         },
         orderBy: {
           stockRecord: {
-            createdAt: 'desc',
+            createdAt: "desc",
           },
         },
         include: {

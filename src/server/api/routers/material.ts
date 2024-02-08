@@ -395,14 +395,8 @@ export const materialRouter = createTRPCRouter({
     .input(materialUpdateStockSchema)
     .mutation(async ({ input, ctx }) => {
       return await ctx.db.$transaction(async (tx) => {
-        const {
-          materialId,
-          stockLogTypeId,
-          prevStock,
-          quantity,
-          newStock,
-          notes,
-        } = input;
+        const { materialId, stockLogTypeId, prevStock, newStock, notes } =
+          input;
 
         await tx.material.update({
           where: {
@@ -422,7 +416,7 @@ export const materialRouter = createTRPCRouter({
             stockRecord: {
               create: {
                 prevStock,
-                stock: quantity,
+                stock: newStock,
                 notes,
               },
             },
