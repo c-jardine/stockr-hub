@@ -1,7 +1,7 @@
-import { useAppStateContext } from '@/contexts/AppStateContext/AppStateContext';
-import { CancelMaterialAudit } from '@/features/material';
-import { RootLayout } from '@/layouts/RootLayout';
-import { api } from '@/utils/api';
+import { useAppStateContext } from "@/contexts/AppStateContext/AppStateContext";
+import { CancelMaterialAudit } from "@/features/material";
+import { RootLayout } from "@/layouts/RootLayout";
+import { api } from "@/utils/api";
 import {
   AbsoluteCenter,
   Box,
@@ -12,10 +12,10 @@ import {
   Image,
   Stack,
   Text,
-} from '@chakra-ui/react';
-import { format } from 'date-fns';
-import NextLink from 'next/link';
-import { ArrowRight, Plus } from 'tabler-icons-react';
+} from "@chakra-ui/react";
+import { format } from "date-fns";
+import NextLink from "next/link";
+import { ArrowRight, Plus } from "tabler-icons-react";
 
 export default function Audits() {
   const { data } = api.audit.getAllMaterialAudits.useQuery();
@@ -23,15 +23,15 @@ export default function Audits() {
 
   if (!data || data.length === 0) {
     return (
-      <RootLayout title='Audits'>
+      <RootLayout title="Audits">
         <AbsoluteCenter>
           <NewAuditButton />
         </AbsoluteCenter>
-        <AbsoluteCenter mt='84px'>
+        <AbsoluteCenter mt="84px">
           <Image
-            src='/images/arrow-illustration.png'
+            src="/images/arrow-illustration.png"
             mt={2}
-            transform='rotate(180deg)'
+            transform="rotate(180deg)"
           />
         </AbsoluteCenter>
       </RootLayout>
@@ -40,17 +40,17 @@ export default function Audits() {
 
   return (
     <RootLayout
-      title='Audits'
+      title="Audits"
       actionBar={!appState?.auditState.inProgress && <NewAuditButton />}
     >
-      <Stack mx='auto' maxW='lg'>
+      <Stack mx="auto" maxW="lg">
         {data?.map((log) => (
-          <Flex key={log.id} justifyContent='space-between'>
+          <Flex key={log.id} justifyContent="space-between">
             <Box>
-              <Text fontWeight='semibold'>
-                {log.category === 'all' ? 'Materials' : log.category} Audit
+              <Text fontWeight="semibold">
+                {log.category === "all" ? "Materials" : log.category} Audit
               </Text>
-              <Text color='slate.500' fontSize='sm'>
+              <Text color="slate.500" fontSize="sm">
                 {log.completedAt
                   ? `Completed on ${format(
                       log.completedAt,
@@ -66,10 +66,10 @@ export default function Audits() {
               <Button
                 as={NextLink}
                 href={`/audits/${log.id}`}
-                variant={appState?.auditState.inProgress ? 'solid' : 'outline'}
+                variant={appState?.auditState.inProgress ? "solid" : "outline"}
                 rightIcon={<Icon as={ArrowRight} />}
               >
-                {appState?.auditState.inProgress ? 'Continue' : 'View'}
+                {appState?.auditState.inProgress ? "Continue" : "View"}
               </Button>
               <CancelMaterialAudit isIcon id={log.id} name={log.category} />
             </HStack>

@@ -1,9 +1,9 @@
-import { selectComponents } from '@/components/Select/components';
-import { selectStyles } from '@/styles';
-import { Button, Flex, FormControl, FormLabel, Stack } from '@chakra-ui/react';
-import { Select } from 'chakra-react-select';
-import { Controller } from 'react-hook-form';
-import { useNewAuditForm } from './hooks';
+import { selectComponents } from "@/components/Select/components";
+import { selectStyles } from "@/styles";
+import { Button, Flex, FormControl, FormLabel, Stack } from "@chakra-ui/react";
+import { Select } from "chakra-react-select";
+import { Controller } from "react-hook-form";
+import { useNewAuditForm } from "./hooks";
 
 export default function NewAudit() {
   const {
@@ -14,12 +14,12 @@ export default function NewAudit() {
   } = useNewAuditForm();
 
   return (
-    <Stack as='form' id='new-audit-form' onSubmit={handleSubmit(onSubmit)}>
+    <Stack as="form" id="new-audit-form" onSubmit={handleSubmit(onSubmit)}>
       <FormControl>
         <FormLabel>Type</FormLabel>
         <Controller
           control={control}
-          name='type'
+          name="type"
           render={({ field }) => (
             <Select
               {...field}
@@ -29,7 +29,7 @@ export default function NewAudit() {
               onChange={(data) => {
                 if (data) {
                   field.onChange(data.value);
-                  setValue('type', data.value);
+                  setValue("type", data.value);
                 }
               }}
               options={auditTypeOptions}
@@ -43,7 +43,7 @@ export default function NewAudit() {
         <FormLabel>Category</FormLabel>
         <Controller
           control={control}
-          name='category'
+          name="category"
           render={({ field }) => (
             <Select
               {...field}
@@ -53,7 +53,7 @@ export default function NewAudit() {
               onChange={(data) => {
                 if (data) {
                   field.onChange(data.value);
-                  setValue('category', data.value);
+                  setValue("category", data.value);
                 }
               }}
               options={categoryOptions}
@@ -64,9 +64,9 @@ export default function NewAudit() {
         />
       </FormControl>
 
-      <Flex mt={4} gap={4} justifyContent='flex-end'>
-        <Button variant='outline'>Cancel</Button>
-        <Button type='submit' form='new-audit-form'>
+      <Flex mt={4} gap={4} justifyContent="flex-end">
+        <Button variant="outline">Cancel</Button>
+        <Button type="submit" form="new-audit-form">
           Create audit
         </Button>
       </Flex>

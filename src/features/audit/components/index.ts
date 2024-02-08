@@ -1,1 +1,2 @@
-export { default as NewAudit } from './NewAudit/NewAudit';
+export * from "./AuditForm";
+export * from "./NewAudit";

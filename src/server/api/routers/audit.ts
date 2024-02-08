@@ -2,9 +2,9 @@ import {
   cancelMaterialAuditSchema,
   createMaterialAuditSchema,
   updateMaterialAuditSchema,
-} from '@/schemas';
-import { z } from 'zod';
-import { createTRPCRouter, publicProcedure } from '../trpc';
+} from "@/schemas";
+import { z } from "zod";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const auditRouter = createTRPCRouter({
   getAllMaterialAudits: publicProcedure.query(({ ctx }) => {
@@ -62,15 +62,10 @@ export const auditRouter = createTRPCRouter({
           data: {
             auditState: {
               update: {
-                where: {
-                  id: 1,
-                },
-                data: {
-                  inProgress: true,
-                  materialAudit: {
-                    connect: {
-                      id: createAudit.id,
-                    },
+                inProgress: true,
+                materialAudit: {
+                  connect: {
+                    id: createAudit.id,
                   },
                 },
               },
@@ -99,17 +94,10 @@ export const auditRouter = createTRPCRouter({
           data: {
             auditState: {
               update: {
-                where: {
-                  id: 1,
+                materialAudit: {
+                  disconnect: true,
                 },
-                data: {
-                  materialAudit: {
-                    disconnect: {
-                      id,
-                    },
-                  },
-                  inProgress: false,
-                },
+                inProgress: false,
               },
             },
           },
@@ -184,7 +172,7 @@ export const auditRouter = createTRPCRouter({
                 },
                 stockRecordType: {
                   connect: {
-                    name: 'Audit',
+                    name: "Audit",
                   },
                 },
               },
@@ -199,17 +187,10 @@ export const auditRouter = createTRPCRouter({
           data: {
             auditState: {
               update: {
-                where: {
-                  id: 1,
+                materialAudit: {
+                  disconnect: true,
                 },
-                data: {
-                  inProgress: false,
-                  materialAudit: {
-                    disconnect: {
-                      id: completeAudit.id,
-                    },
-                  },
-                },
+                inProgress: false,
               },
             },
           },
