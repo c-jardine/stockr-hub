@@ -11,6 +11,19 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model AppState {
+    id           Int           @id @default(1)
+    auditState   AuditAppState @relation(fields: [auditStateId], references: [id])
+    auditStateId Int           @unique
+}
+
+model AuditAppState {
+    id            Int            @id @default(1)
+    inProgress    Boolean        @default(false)
+    appState      AppState?
+    materialAudit MaterialAudit?
+}
+
 model StockLevel {
     id          String     @id @default(uuid())
     stock       Decimal
@@ -40,13 +53,14 @@ model Category {
     productCategories  ProductCategory[]
 }
 
-model StockLogData {
-    id               String             @id @default(uuid())
-    prevStock        Decimal
-    stock            Decimal
-    notes            String?
-    createdAt        DateTime           @default(now())
-    materialStockLog MaterialStockLog[]
+model StockRecord {
+    id                String             @id @default(uuid())
+    prevStock         Decimal
+    stock             Decimal
+    notes             String?
+    createdAt         DateTime           @default(now())
+    materialStockLogs MaterialStockLog[]
+    productStockLogs  ProductStockLog[]
 }
 
 model Vendor {
@@ -64,35 +78,59 @@ model MaterialCategory {
 }
 
 model MaterialStockLog {
-    material          Material        @relation(fields: [materialId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    material          Material                @relation(fields: [materialId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     materialId        String
-    stockLogData      StockLogData    @relation(fields: [stockLogDataId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    stockLogDataId    String
-    type              MaterialLogType @relation(fields: [materialLogTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    materialLogTypeId String
+    stockRecord       StockRecord             @relation(fields: [stockRecordId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    stockRecordId     String
+    stockRecordType   MaterialStockRecordType @relation(fields: [stockRecordTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    stockRecordTypeId String
 
-    @@id([materialId, stockLogDataId])
+    @@id([materialId, stockRecordId])
 }
 
-model MaterialLogType {
-    id               String             @id @default(uuid())
-    name             String             @unique
-    materialStockLog MaterialStockLog[]
+model MaterialStockRecordType {
+    id   String             @id @default(uuid())
+    name String             @unique
+    logs MaterialStockLog[]
+}
+
+model MaterialAudit {
+    id              String              @id @default(uuid())
+    category        String
+    items           MaterialAuditItem[]
+    createdAt       DateTime            @default(now())
+    completedAt     DateTime?
+    auditAppState   AuditAppState?      @relation(fields: [auditAppStateId], references: [id])
+    auditAppStateId Int?                @unique
+}
+
+model MaterialAuditItem {
+    id            String         @id @default(uuid())
+    name          String
+    expectedStock Decimal
+    actualStock   Decimal
+    stockUnit     String
+    notes         String
+    audit         MaterialAudit? @relation(fields: [auditId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    material      Material       @relation(fields: [materialId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    auditId       String?
+    materialId    String
 }
 
 model Material {
-    id               String             @id @default(uuid())
+    id               String              @id @default(uuid())
     name             String
     url              String?
-    stockLevel       StockLevel         @relation(fields: [stockLevelId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    stockLevel       StockLevel          @relation(fields: [stockLevelId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     stockLevelId     String
     costPerUnit      Decimal
     categories       MaterialCategory[]
-    vendor           Vendor             @relation(fields: [vendorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    vendor           Vendor              @relation(fields: [vendorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     vendorId         String
     stockLogs        MaterialStockLog[]
     productMaterials ProductMaterial[]
-    createdAt        DateTime           @default(now())
+    createdAt        DateTime            @default(now())
+    auditItems       MaterialAuditItem[]
 }
 
 model ProductCategory {
@@ -112,6 +150,23 @@ model ProductMaterial {
     @@id([productId, materialId])
 }
 
+model ProductStockLog {
+    product           Product                @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    productId         String
+    stockRecord       StockRecord            @relation(fields: [stockRecordId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    stockRecordId     String
+    stockRecordType   ProductStockRecordType @relation(fields: [stockRecordTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    stockRecordTypeId String
+
+    @@id([productId, stockRecordId])
+}
+
+model ProductStockRecordType {
+    id              String            @id @default(uuid())
+    name            String            @unique
+    productStockLog ProductStockLog[]
+}
+
 model Product {
     id             String            @id @default(uuid())
     name           String
@@ -122,4 +177,6 @@ model Product {
     retailPrice    Decimal
     wholesalePrice Decimal
     categories     ProductCategory[]
+    stockLogs      ProductStockLog[]
+    createdAt      DateTime          @default(now())
 }

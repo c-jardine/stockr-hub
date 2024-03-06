@@ -1,8 +1,8 @@
-import { CategoryTags } from '@/components/CategoryTags';
-import { DataDisplay } from '@/components/DataDisplay';
-import { DrawerHeader } from '@/components/DrawerHeader';
-import { type MaterialGetAllOutputSingle } from '@/types';
-import { getIsLowStock, getStockUnitTextAbbrev } from '@/utils';
+import { CategoryTags } from "@/components/CategoryTags";
+import { DataDisplay } from "@/components/DataDisplay";
+import { DrawerHeader } from "@/components/DrawerHeader";
+import { type MaterialGetAllOutputSingle } from "@/types";
+import { getIsLowStock, getStockUnitTextAbbrev } from "@/utils";
 import {
   Drawer,
   DrawerBody,
@@ -13,10 +13,11 @@ import {
   SimpleGrid,
   Stack,
   Text,
-} from '@chakra-ui/react';
-import { ChevronLeft } from 'tabler-icons-react';
-import { DeleteMaterial, UpdateMaterialDrawer } from '..';
-import { useViewMaterial } from './hooks';
+} from "@chakra-ui/react";
+import { ChevronLeft } from "tabler-icons-react";
+import { DeleteMaterial, UpdateMaterialDrawer } from "..";
+import { MaterialHistory } from "../MaterialHistory";
+import { useViewMaterial } from "./hooks";
 
 export default function MaterialViewerDrawer(
   props: MaterialGetAllOutputSingle
@@ -34,8 +35,8 @@ export default function MaterialViewerDrawer(
     return (
       <Link
         onClick={onOpen}
-        color={isLowStock ? 'red.500' : 'unset'}
-        fontWeight='semibold'
+        color={isLowStock ? "red.500" : "unset"}
+        fontWeight="semibold"
       >
         {props.name}
       </Link>
@@ -51,7 +52,7 @@ export default function MaterialViewerDrawer(
           <DrawerHeader.Details>
             <CategoryTags
               categories={props.categories}
-              routePrefix='/materials'
+              routePrefix="/materials"
             />
           </DrawerHeader.Details>
         </DrawerHeader.Content>
@@ -81,7 +82,7 @@ export default function MaterialViewerDrawer(
           Number(props.stockLevel.minStock),
           props.stockLevel.stockUnit
         )}`
-      : '-'
+      : "-"
   }`;
 
   function renderDrawerBody() {
@@ -89,20 +90,22 @@ export default function MaterialViewerDrawer(
       <DrawerBody>
         <Stack spacing={8}>
           <Stack>
-            <Text fontSize='lg' fontWeight='bold'>
+            <Text fontSize="lg" fontWeight="bold">
               Details
             </Text>
             <SimpleGrid columns={3} gap={4}>
               <DataDisplay
-                label='Stock Level'
+                label="Stock Level"
                 value={stockLevelText}
                 isHighlighted={isLowStock}
               />
-              <DataDisplay label='Unit Cost' value={unitCostText} />
-              <DataDisplay label='Vendor' value={vendorText} />
-              <DataDisplay label='Min. Stock' value={minStockText} />
+              <DataDisplay label="Unit Cost" value={unitCostText} />
+              <DataDisplay label="Vendor" value={vendorText} />
+              <DataDisplay label="Min. Stock" value={minStockText} />
             </SimpleGrid>
           </Stack>
+
+          <MaterialHistory {...props} />
         </Stack>
       </DrawerBody>
     );
@@ -112,7 +115,7 @@ export default function MaterialViewerDrawer(
     return (
       <DrawerFooter gap={4}>
         <DeleteMaterial {...props} />
-        <UpdateMaterialDrawer {...props} buttonLabel='Edit details' />
+        <UpdateMaterialDrawer {...props} buttonLabel="Edit details" />
       </DrawerFooter>
     );
   }
@@ -120,7 +123,7 @@ export default function MaterialViewerDrawer(
   return (
     <>
       {renderDrawerTrigger()}
-      <Drawer isOpen={isOpen} onClose={onClose} size='md'>
+      <Drawer isOpen={isOpen} onClose={onClose} size="md">
         <DrawerOverlay />
         <DrawerContent>
           {renderDrawerHeader()}

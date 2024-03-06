@@ -4,11 +4,13 @@ import {
   productDeleteManySchema,
   productDeleteSchema,
   productGetByCategorySlugSchema,
+  productGetHistorySchema,
   productUpdateCategoriesSchema,
   productUpdateSchema,
-} from '@/schemas';
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
-import slugify from 'slugify';
+  productUpdateStockSchema,
+} from "@/schemas";
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import slugify from "slugify";
 
 export const productRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -41,7 +43,7 @@ export const productRouter = createTRPCRouter({
         categories: {
           orderBy: {
             category: {
-              name: 'asc',
+              name: "asc",
             },
           },
           include: {
@@ -92,7 +94,7 @@ export const productRouter = createTRPCRouter({
           categories: {
             orderBy: {
               category: {
-                name: 'asc',
+                name: "asc",
               },
             },
             include: {
@@ -240,7 +242,7 @@ export const productRouter = createTRPCRouter({
     return ctx.db.productCategory.findMany({
       orderBy: {
         category: {
-          name: 'asc',
+          name: "asc",
         },
       },
       include: {
@@ -335,6 +337,70 @@ export const productRouter = createTRPCRouter({
         );
 
         return [...addedCategories, ...updatedCategories];
+      });
+    }),
+  updateStock: publicProcedure
+    .input(productUpdateStockSchema)
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.$transaction(async (tx) => {
+        const { productId, stockLogTypeId, prevStock, newStock, notes } = input;
+
+        await tx.product.update({
+          where: {
+            id: productId,
+          },
+          data: {
+            stockLevel: {
+              update: {
+                stock: newStock,
+              },
+            },
+          },
+        });
+
+        await tx.productStockLog.create({
+          data: {
+            stockRecord: {
+              create: {
+                prevStock,
+                stock: newStock,
+                notes,
+              },
+            },
+            stockRecordType: {
+              connect: {
+                id: stockLogTypeId,
+              },
+            },
+            product: {
+              connect: {
+                id: productId,
+              },
+            },
+          },
+        });
+      });
+    }),
+
+  getProductStockRecordTypes: publicProcedure.query(({ ctx }) => {
+    return ctx.db.productStockRecordType.findMany();
+  }),
+  getHistory: publicProcedure
+    .input(productGetHistorySchema)
+    .query(({ input, ctx }) => {
+      return ctx.db.productStockLog.findMany({
+        where: {
+          productId: input.id,
+        },
+        orderBy: {
+          stockRecord: {
+            createdAt: "desc",
+          },
+        },
+        include: {
+          stockRecordType: true,
+          stockRecord: true,
+        },
       });
     }),
 });

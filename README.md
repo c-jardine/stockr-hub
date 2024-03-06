@@ -1,28 +1,82 @@
-# Create T3 App
+<!-- omit from toc -->
+# StockrHub
+StockrHub is an inventory and production management app designed for crafters, artisans, and other creative entrepreneurs. Take control of your creative process by managing your raw materials, final products, and production runs. Once setup, StockrHub will track everything for you, giving you more time to focus on your passion rather than dealing with the complexities of inventory management.
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+<!-- omit from toc -->
+## Table of Contents
+- [Features](#features)
+  - [Raw Material Management](#raw-material-management)
+  - [Product Management](#product-management)
+  - [Production Planning (Coming Soon)](#production-planning-coming-soon)
+  - [Auditing](#auditing)
+  - [Stock History](#stock-history)
+- [Installation](#installation)
+  - [Clone the repository](#clone-the-repository)
+  - [Install the dependencies](#install-the-dependencies)
+  - [Update environment variables](#update-environment-variables)
+  - [Push the database schema and seed the database](#push-the-database-schema-and-seed-the-database)
+  - [Run the app](#run-the-app)
 
-## What's next? How do I make an app with this?
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Features
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### Raw Material Management
+Keep a detailed record of your raw materials, including quantities, purchase URLs, cost per unit, vendors, and categories. Set a minimum quantity to receive alerts when a material is running low and needs reordered.
 
-## Learn More
+### Product Management
+Build a catalog of all your products and the raw materials used in their creation. StockrHub will automatically calculate the quantity and price of materials used in each product. When you set retail and wholesale prices for your products, StockrHub will also calculate the profit margin for each.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Production Planning (Coming Soon)
+As previously mentioned, creating a product allows you to enter the materials used in each product. In the likely event that you're creating more than one product at a time, this information can be entered by batch size. Production runs allow you to adjust your batch size for each run, and StockrHub will calculate the amount of material needed for the batch&mdash;no more painful math! Once your production run is complete, StockrHub will automatically adjust the quantities of your products remaining raw materials.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### Auditing
+It's wise to do a manual count of your stock once in a while. StockrHub allows you to create audits to help you update your quantities in bulk. Although the app is designed to be mobile-friendly, you can export audit sheets so you can print out a physical copy if that fits better with your workflow. Then, just come back and enter the values into the app.
+> Note: In order to prevent incorrect inventory levels, raw material and product quantity updates will be disabled while an audit is in progress.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+### Stock History
+The details panel of your raw materials and products show a history of stock changes, whether from manual changes or automatic updates from production runs. A graph is also available in case you want to see the fluctuations over time at a glance.
 
-## How do I deploy this?
+## Installation
+StockrHub uses PostgreSQL by default. This guide assumes you already have it installed, as well as node, npm, git, etc. You'll also need a database created for the project. We called ours ```stockr-hub```.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### Clone the repository
+In your terminal, navigate to the directory where you want your project and run:
+```
+git clone https://github.com/c-jardine/stockr-hub.git
+```
+
+### Install the dependencies
+To install dependencies, simply run the following command inside the project directory:
+```
+npm i
+```
+
+### Update environment variables
+Make a copy of the ```.env.example``` file and change it to ```.env.local```.
+
+Inside, you'll find an environment variable called ```DATABASE_URL```. Enter your connection string here. For example:
+```
+DATABASE_URL="postgres://postgres@localhost:5432/stockr-hub"
+```
+
+### Push the database schema and seed the database
+Once your ```DATABASE_URL``` is set, you can push the database schema:
+```
+npm run db:push
+```
+
+Next, seed the database with the required data located in ```/prisma/seed.ts```:
+```
+npm run db:seed
+```
+
+### Run the app
+At this point, StockrHub is ready to use! Get started by running:
+```
+npm run build
+```
+then:
+```
+npm run start
+```

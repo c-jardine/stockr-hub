@@ -1,11 +1,11 @@
 import { selectComponents } from '@/components/Select/components';
-import { useCreateVendor } from '@/hooks/vendor';
 import { selectStyles } from '@/styles';
 import { type MaterialCreate, type MaterialUpdate } from '@/types';
 import { api } from '@/utils/api';
 import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
 import { CreatableSelect } from 'chakra-react-select';
 import { Controller, useFormContext } from 'react-hook-form';
+import { useCreateVendor } from './hooks';
 
 /**
  * An input for material vendors.
@@ -39,7 +39,11 @@ export default function VendorsInput() {
             menuPlacement='auto'
             options={options}
             value={options?.find((c) => c.value === field.value)}
-            onChange={(selected) => field.onChange(selected?.value)}
+            onChange={(selected) => {
+              if (selected) {
+                field.onChange(selected.value);
+              }
+            }}
             onCreateOption={onCreate}
             chakraStyles={selectStyles}
             components={selectComponents}

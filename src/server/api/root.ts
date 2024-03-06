@@ -1,10 +1,13 @@
+import { createTRPCRouter } from '@/server/api/trpc';
 import {
+  appStateRouter,
+  auditRouter,
+  categoriesRouter,
+  materialRouter,
   productRouter,
   stockUnitRouter,
   vendorRouter,
 } from './routers';
-import { createTRPCRouter } from '@/server/api/trpc';
-import { materialRouter } from './routers/material';
 
 /**
  * This is the primary router for your server.
@@ -12,10 +15,13 @@ import { materialRouter } from './routers/material';
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+  appState: appStateRouter,
   material: materialRouter,
   product: productRouter,
   stockUnit: stockUnitRouter,
   vendor: vendorRouter,
+  categories: categoriesRouter,
+  audit: auditRouter,
 });
 
 // export type definition of API

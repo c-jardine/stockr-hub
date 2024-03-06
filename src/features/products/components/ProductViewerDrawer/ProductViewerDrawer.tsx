@@ -17,6 +17,7 @@ import {
 import { ChevronLeft } from 'tabler-icons-react';
 import { MaterialsUsed } from '..';
 import { DeleteProduct } from '../DeleteProduct';
+import { ProductHistory } from '../ProductHistory';
 import { ProfitTable } from '../ProfitTable';
 import { UpdateProductDrawer } from '../UpdateProductDrawer';
 import { useViewProduct } from './hooks';
@@ -125,6 +126,7 @@ export default function ProductViewerDrawer(props: ProductGetAllOutputSingle) {
             )}
             <MaterialsUsed {...props} />
           </Stack>
+          <ProductHistory {...props} />
         </Stack>
       </DrawerBody>
     );

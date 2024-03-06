@@ -1,13 +1,5 @@
-import {
-  Avatar,
-  chakra,
-  Flex,
-  Icon,
-  Stack,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
-import { ChevronDown } from 'tabler-icons-react';
+import { chakra, Stack, Text, VStack } from '@chakra-ui/react';
+import { UserDropdown } from '../UserMenu';
 import AuditNav from './AuditNav';
 import MaterialsNav from './MaterialsNav';
 import ProductsNav from './ProductsNav';
@@ -39,19 +31,7 @@ export default function DesktopNav() {
           <ProductsNav />
           <AuditNav />
         </Stack>
-        <Flex
-          as='button'
-          alignItems='center'
-          gap={2}
-          mb={4}
-          px={4}
-          py={2}
-          _hover={{ bg: 'sky.100' }}
-        >
-          <Avatar bg='sky.300' boxSize={10}></Avatar>
-          <Text>Your Name</Text>
-          <Icon as={ChevronDown} ml='auto' />
-        </Flex>
+        <UserDropdown />
       </Stack>
     </Stack>
   );

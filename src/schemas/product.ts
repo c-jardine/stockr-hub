@@ -78,3 +78,16 @@ export const productUpdateCategoriesSchema = z.object({
     })
   ),
 });
+
+export const productUpdateStockSchema = z.object({
+  productId: z.string(),
+  stockLogTypeId: z.string(),
+  prevStock: z.number(),
+  quantity: z.number(),
+  newStock: z.number(),
+  notes: z.string(),
+});
+
+export const productGetHistorySchema = z.object({
+  id: z.string(),
+});
