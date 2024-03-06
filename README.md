@@ -11,11 +11,6 @@ StockrHub is an inventory and production management app designed for crafters, a
   - [Auditing](#auditing)
   - [Stock History](#stock-history)
 - [Installation](#installation)
-  - [Clone the repository](#clone-the-repository)
-  - [Install the dependencies](#install-the-dependencies)
-  - [Update environment variables](#update-environment-variables)
-  - [Push the database schema and seed the database](#push-the-database-schema-and-seed-the-database)
-  - [Run the app](#run-the-app)
 
 
 
@@ -40,18 +35,21 @@ The details panel of your raw materials and products show a history of stock cha
 ## Installation
 StockrHub uses PostgreSQL by default. This guide assumes you already have it installed, as well as node, npm, git, etc. You'll also need a database created for the project. We called ours ```stockr-hub```.
 
+<!-- omit from toc -->
 ### Clone the repository
 In your terminal, navigate to the directory where you want your project and run:
 ```
 git clone https://github.com/c-jardine/stockr-hub.git
 ```
 
+<!-- omit from toc -->
 ### Install the dependencies
 To install dependencies, simply run the following command inside the project directory:
 ```
 npm i
 ```
 
+<!-- omit from toc -->
 ### Update environment variables
 Make a copy of the ```.env.example``` file and change it to ```.env.local```.
 
@@ -60,6 +58,7 @@ Inside, you'll find an environment variable called ```DATABASE_URL```. Enter you
 DATABASE_URL="postgres://postgres@localhost:5432/stockr-hub"
 ```
 
+<!-- omit from toc -->
 ### Push the database schema and seed the database
 Once your ```DATABASE_URL``` is set, you can push the database schema:
 ```
@@ -71,6 +70,7 @@ Next, seed the database with the required data located in ```/prisma/seed.ts```:
 npm run db:seed
 ```
 
+<!-- omit from toc -->
 ### Run the app
 At this point, StockrHub is ready to use! Get started by running:
 ```
