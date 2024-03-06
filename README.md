@@ -1,3 +1,5 @@
+> Note: StockrHub is still in active development. While I'll try my best to avoid breaking changes, I can't make any promises at this time!
+
 <!-- omit from toc -->
 # StockrHub
 StockrHub is an inventory and production management app designed for crafters, artisans, and other creative entrepreneurs. Take control of your creative process by managing your raw materials, final products, and production runs. Once setup, StockrHub will track everything for you, giving you more time to focus on your passion rather than dealing with the complexities of inventory management.
@@ -33,7 +35,7 @@ It's wise to do a manual count of your stock once in a while. StockrHub allows y
 The details panel of your raw materials and products show a history of stock changes, whether from manual changes or automatic updates from production runs. A graph is also available in case you want to see the fluctuations over time at a glance.
 
 ## Installation
-StockrHub uses PostgreSQL by default. This guide assumes you already have it installed, as well as node, npm, git, etc. You'll also need a database created for the project. We called ours ```stockr-hub```.
+StockrHub uses PostgreSQL by default. This guide assumes you already have it installed, as well as node, npm, git, etc. You'll also need a database created for the project. I called mine ```stockr-hub```.
 
 <!-- omit from toc -->
 ### Clone the repository
