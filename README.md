@@ -1,5 +1,5 @@
-![StockrHub logo](public/images/stockr-hub-light-theme.png#gh-light-mode-only")
-![StockrHub logo](public/images/stockr-hub-logo-dark-theme.png#gh-dark-mode-only")
+![StockrHub logo](public/images/stockr-hub-light-theme.png#gh-light-mode-only)
+![StockrHub logo](public/images/stockr-hub-logo-dark-theme.png#gh-dark-mode-only)
 
 > Note: StockrHub is still in active development. While I'll try my best to avoid breaking changes, I can't make any promises at this time!
 
