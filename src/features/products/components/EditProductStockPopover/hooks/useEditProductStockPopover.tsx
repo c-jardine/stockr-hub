@@ -7,29 +7,33 @@ import { getStockUnitTextAbbrev } from "@/utils";
 import { api } from "@/utils/api";
 import { Text, useDisclosure, useToast } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { InventoryAdjustmentType } from "@prisma/client";
 import { useForm } from "react-hook-form";
 
 export default function EditProductStockPopover(
   product: ProductGetAllOutputSingle
 ) {
-  const input = {
-    productId: product.id,
-    prevStock: Number(product.stockLevel.stock),
-    newStock: Number(product.stockLevel.stock),
-  };
-
   const form = useForm<ProductUpdateStock>({
-    defaultValues: input,
+    defaultValues: {
+      productId: product.id,
+      previousQuantity: Number(product.stockLevel.stock),
+      newQuantity: Number(product.stockLevel.stock),
+    },
     resolver: zodResolver(productUpdateStockSchema),
   });
 
   const disclosure = useDisclosure({
     onOpen: () => {
-      form.reset();
+      form.reset({
+        productId: product.id,
+        previousQuantity: Number(product.stockLevel.stock),
+        newQuantity: Number(product.stockLevel.stock),
+      });
     },
   });
 
-  const { data: logTypes } = api.product.getProductStockRecordTypes.useQuery();
+  const { data: logTypes } =
+    api.logChangeTypes.getProductChangeTypes.useQuery();
   const logTypeOptions =
     logTypes?.map((type) => ({
       label: type.name,
@@ -37,22 +41,19 @@ export default function EditProductStockPopover(
     })) ?? [];
 
   function getUpdatedStock() {
-    const logTypeId = form.watch("stockLogTypeId");
-    const logType = logTypeOptions?.find(
-      (option) => option.value === logTypeId
-    )?.label;
+    const logTypeId = form.watch("changeTypeId");
+    const logType = logTypes?.find((type) => logTypeId === type.id);
 
-    if (logType === "Production" || logType === "Return/Restock") {
-      return Number(product.stockLevel.stock) + form.watch("quantity");
-    } else if (logType === "Audit") {
-      return form.watch("quantity");
-    } else if (
-      logType === "Product Testing" ||
-      logType === "Sale" ||
-      logType === "Damage, Theft, or Loss"
-    ) {
-      return Number(product.stockLevel.stock) - form.watch("quantity");
-    } else return Number(product.stockLevel.stock);
+    switch (logType?.adjustmentType) {
+      case InventoryAdjustmentType.INCREASE:
+        return Number(product.stockLevel.stock) + form.watch("quantityChange");
+      case InventoryAdjustmentType.DECREASE:
+        return Number(product.stockLevel.stock) - form.watch("quantityChange");
+      case InventoryAdjustmentType.SET:
+        return form.watch("quantityChange");
+      default:
+        return form.watch("quantityChange");
+    }
   }
 
   const toast = useToast();
@@ -82,13 +83,14 @@ export default function EditProductStockPopover(
         status: "success",
       });
       await utils.product.getAll.invalidate();
+      await utils.product.getHistory.invalidate();
       disclosure.onClose();
     },
   });
 
   function onSubmit(data: ProductUpdateStock) {
-    const updatedStock = getUpdatedStock();
-    query.mutate({ ...data, newStock: updatedStock });
+    const newQuantity = getUpdatedStock();
+    query.mutate({ ...data, newQuantity });
   }
 
   return {

@@ -39,7 +39,7 @@ export default function EditStockPopoverForm({
         <FormLabel>Type</FormLabel>
         <Controller
           control={form.control}
-          name='stockLogTypeId'
+          name='changeTypeId'
           render={({ field }) => (
             <Select
               {...field}
@@ -51,7 +51,7 @@ export default function EditStockPopoverForm({
               onChange={(data) => {
                 if (data) {
                   field.onChange(data.value);
-                  form.setValue('stockLogTypeId', data.value);
+                  form.setValue('changeTypeId', data.value);
                 }
               }}
               chakraStyles={selectStyles}
@@ -65,7 +65,7 @@ export default function EditStockPopoverForm({
         <InputGroup>
           <NumberInput>
             <NumberInputField roundedRight='none'
-              {...form.register('quantity', { valueAsNumber: true })}
+              {...form.register('quantityChange', { valueAsNumber: true })}
             />
           </NumberInput>
           <InputRightAddon fontSize='sm'>

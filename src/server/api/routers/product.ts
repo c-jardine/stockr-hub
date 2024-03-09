@@ -343,7 +343,14 @@ export const productRouter = createTRPCRouter({
     .input(productUpdateStockSchema)
     .mutation(async ({ input, ctx }) => {
       return await ctx.db.$transaction(async (tx) => {
-        const { productId, stockLogTypeId, prevStock, newStock, notes } = input;
+        const {
+          productId,
+          changeTypeId,
+          quantityChange,
+          previousQuantity,
+          newQuantity,
+          notes,
+        } = input;
 
         await tx.product.update({
           where: {
@@ -352,24 +359,25 @@ export const productRouter = createTRPCRouter({
           data: {
             stockLevel: {
               update: {
-                stock: newStock,
+                stock: newQuantity,
               },
             },
           },
         });
 
-        await tx.productStockLog.create({
+        await tx.productInventoryLog.create({
           data: {
-            stockRecord: {
+            inventoryLog: {
               create: {
-                prevStock,
-                stock: newStock,
+                quantityChange,
+                previousQuantity,
+                newQuantity,
                 notes,
               },
             },
-            stockRecordType: {
+            changeType: {
               connect: {
-                id: stockLogTypeId,
+                id: changeTypeId,
               },
             },
             product: {
@@ -382,24 +390,21 @@ export const productRouter = createTRPCRouter({
       });
     }),
 
-  getProductStockRecordTypes: publicProcedure.query(({ ctx }) => {
-    return ctx.db.productStockRecordType.findMany();
-  }),
   getHistory: publicProcedure
     .input(productGetHistorySchema)
     .query(({ input, ctx }) => {
-      return ctx.db.productStockLog.findMany({
+      return ctx.db.productInventoryLog.findMany({
         where: {
           productId: input.id,
         },
         orderBy: {
-          stockRecord: {
-            createdAt: "desc",
+          inventoryLog: {
+            timestamp: "desc",
           },
         },
         include: {
-          stockRecordType: true,
-          stockRecord: true,
+          changeType: true,
+          inventoryLog: true,
         },
       });
     }),

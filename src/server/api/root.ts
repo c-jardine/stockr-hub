@@ -1,13 +1,14 @@
-import { createTRPCRouter } from '@/server/api/trpc';
+import { createTRPCRouter } from "@/server/api/trpc";
 import {
   appStateRouter,
   auditRouter,
   categoriesRouter,
+  logChangeTypesRouter,
   materialRouter,
   productRouter,
   stockUnitRouter,
   vendorRouter,
-} from './routers';
+} from "./routers";
 
 /**
  * This is the primary router for your server.
@@ -22,6 +23,7 @@ export const appRouter = createTRPCRouter({
   vendor: vendorRouter,
   categories: categoriesRouter,
   audit: auditRouter,
+  logChangeTypes: logChangeTypesRouter,
 });
 
 // export type definition of API

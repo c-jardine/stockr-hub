@@ -11,22 +11,16 @@ import {
   materialUpdateStockSchema,
 } from "@/schemas";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import {
-  addDays,
-  differenceInCalendarDays,
-  endOfDay,
-  parseISO,
-  startOfYear,
-  subDays,
-  subMonths,
-  subYears,
-} from "date-fns";
+import { endOfDay, startOfYear, subDays, subMonths, subYears } from "date-fns";
 import slugify from "slugify";
-import { z } from "zod";
+import { type z } from "zod";
 
 export const materialRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.material.findMany({
+      orderBy: {
+        name: "asc",
+      },
       include: {
         stockLevel: {
           include: {
@@ -47,6 +41,7 @@ export const materialRouter = createTRPCRouter({
       },
     });
   }),
+
   getByCategorySlug: publicProcedure
     .input(materialGetByCategorySlugSchema)
     .query(({ input, ctx }) => {
@@ -59,6 +54,9 @@ export const materialRouter = createTRPCRouter({
               },
             },
           },
+        },
+        orderBy: {
+          name: "asc",
         },
         include: {
           stockLevel: {
@@ -111,88 +109,88 @@ export const materialRouter = createTRPCRouter({
       const startDate = getDateRangeStart(input.filter);
       const endDate = endOfDay(new Date());
 
-      return ctx.db.materialStockLog.findMany({
+      return ctx.db.materialInventoryLog.findMany({
         where: {
           materialId: input.id,
-          stockRecord: {
-            createdAt: {
+          inventoryLog: {
+            timestamp: {
               gte: startDate, // Greater than or equal to the start date
               lte: endDate, // Less than or equal to today
             },
           },
         },
         orderBy: {
-          stockRecord: {
-            createdAt: "asc",
+          inventoryLog: {
+            timestamp: "asc",
           },
         },
         include: {
-          stockRecord: true,
+          inventoryLog: true,
         },
       });
     }),
 
-  tempSeed: publicProcedure
-    .input(z.object({ materialId: z.string() }))
-    .mutation(async ({ input, ctx }) => {
-      const { materialId } = input;
-      const today = new Date();
-      const startOfYearDate = parseISO("2023-01-01");
-      const stockRecordTypeId = "204312ea-59aa-4bdb-9e9e-1d7226226b22";
+  // tempSeed: publicProcedure
+  //   .input(z.object({ materialId: z.string() }))
+  //   .mutation(async ({ input, ctx }) => {
+  //     const { materialId } = input;
+  //     const today = new Date();
+  //     const startOfYearDate = parseISO("2023-01-01");
+  //     const stockRecordTypeId = "204312ea-59aa-4bdb-9e9e-1d7226226b22";
 
-      const stockLogs = Array.from({ length: 100 }).map(() => {
-        const daysSinceStartOfYear = differenceInCalendarDays(
-          today,
-          startOfYearDate
-        );
-        return {
-          materialId,
-          stockRecord: {
-            create: {
-              prevStock: Math.floor(Math.random() * 101), // 0 to 100
-              stock: Math.floor(Math.random() * 101), // 0 to 100
-              notes: Math.random() > 0.5 ? "" : undefined,
-              createdAt: addDays(
-                startOfYearDate,
-                Math.floor(Math.random() * daysSinceStartOfYear)
-              ),
-              stockRecordType: {
-                connect: { id: stockRecordTypeId },
-              },
-            },
-          },
-        };
-      });
+  //     const stockLogs = Array.from({ length: 100 }).map(() => {
+  //       const daysSinceStartOfYear = differenceInCalendarDays(
+  //         today,
+  //         startOfYearDate
+  //       );
+  //       return {
+  //         materialId,
+  //         stockRecord: {
+  //           create: {
+  //             prevStock: Math.floor(Math.random() * 101), // 0 to 100
+  //             stock: Math.floor(Math.random() * 101), // 0 to 100
+  //             notes: Math.random() > 0.5 ? "" : undefined,
+  //             createdAt: addDays(
+  //               startOfYearDate,
+  //               Math.floor(Math.random() * daysSinceStartOfYear)
+  //             ),
+  //             stockRecordType: {
+  //               connect: { id: stockRecordTypeId },
+  //             },
+  //           },
+  //         },
+  //       };
+  //     });
 
-      for (const stockLog of stockLogs) {
-        await ctx.db.materialStockLog.create({
-          data: {
-            stockRecord: {
-              create: {
-                prevStock: stockLog.stockRecord.create.prevStock,
-                stock: stockLog.stockRecord.create.stock,
-                createdAt: stockLog.stockRecord.create.createdAt,
-              },
-            },
-            stockRecordType: {
-              connect: {
-                id: stockRecordTypeId,
-              },
-            },
-            material: {
-              connect: {
-                id: materialId,
-              },
-            },
-          },
-        });
-      }
+  //     for (const stockLog of stockLogs) {
+  //       await ctx.db.materialStockLog.create({
+  //         data: {
+  //           stockRecord: {
+  //             create: {
+  //               prevStock: stockLog.stockRecord.create.prevStock,
+  //               stock: stockLog.stockRecord.create.stock,
+  //               createdAt: stockLog.stockRecord.create.createdAt,
+  //             },
+  //           },
+  //           stockRecordType: {
+  //             connect: {
+  //               id: stockRecordTypeId,
+  //             },
+  //           },
+  //           material: {
+  //             connect: {
+  //               id: materialId,
+  //             },
+  //           },
+  //         },
+  //       });
+  //     }
 
-      return {
-        success: true,
-        message: "Material stock logs inserted successfully.",
-      };
-    }),
+  //     return {
+  //       success: true,
+  //       message: "Material stock logs inserted successfully.",
+  //     };
+  //   }),
 
   create: publicProcedure
     .input(materialCreateSchema)
@@ -388,15 +386,18 @@ export const materialRouter = createTRPCRouter({
       });
     }),
 
-  getMaterialStockRecordTypes: publicProcedure.query(({ ctx }) => {
-    return ctx.db.materialStockRecordType.findMany();
-  }),
   updateStock: publicProcedure
     .input(materialUpdateStockSchema)
     .mutation(async ({ input, ctx }) => {
       return await ctx.db.$transaction(async (tx) => {
-        const { materialId, stockLogTypeId, prevStock, newStock, notes } =
-          input;
+        const {
+          materialId,
+          changeTypeId,
+          quantityChange,
+          previousQuantity,
+          newQuantity,
+          notes,
+        } = input;
 
         await tx.material.update({
           where: {
@@ -405,24 +406,25 @@ export const materialRouter = createTRPCRouter({
           data: {
             stockLevel: {
               update: {
-                stock: newStock,
+                stock: newQuantity,
               },
             },
           },
         });
 
-        await tx.materialStockLog.create({
+        await tx.materialInventoryLog.create({
           data: {
-            stockRecord: {
+            inventoryLog: {
               create: {
-                prevStock,
-                stock: newStock,
+                quantityChange,
+                previousQuantity,
+                newQuantity,
                 notes,
               },
             },
-            stockRecordType: {
+            changeType: {
               connect: {
-                id: stockLogTypeId,
+                id: changeTypeId,
               },
             },
             material: {
@@ -438,18 +440,18 @@ export const materialRouter = createTRPCRouter({
   getHistory: publicProcedure
     .input(materialGetHistorySchema)
     .query(({ input, ctx }) => {
-      return ctx.db.materialStockLog.findMany({
+      return ctx.db.materialInventoryLog.findMany({
         where: {
           materialId: input.id,
         },
         orderBy: {
-          stockRecord: {
-            createdAt: "desc",
+          inventoryLog: {
+            timestamp: "desc",
           },
         },
         include: {
-          stockRecordType: true,
-          stockRecord: true,
+          changeType: true,
+          inventoryLog: true,
         },
       });
     }),

@@ -1,4 +1,7 @@
-import { type MaterialGetAllOutputSingle } from "@/types";
+import {
+  type MaterialGetAllOutputSingle,
+  type ProductGetAllOutputSingle,
+} from "@/types";
 import { getStockDifference, getStockUnitTextAbbrev } from "@/utils";
 import { Box, Flex, Icon, Stack, Text } from "@chakra-ui/react";
 import { format } from "date-fns";
@@ -17,9 +20,11 @@ import { TrendingDown, TrendingUp } from "tabler-icons-react";
 import { StockGraphInfo } from ".";
 import { useStockGraph } from "./hooks";
 
-export default function StockGraph(material: MaterialGetAllOutputSingle) {
+export default function StockGraph(
+  props: MaterialGetAllOutputSingle | ProductGetAllOutputSingle
+) {
   const { chartData, average, filter, setFilter, colors } = useStockGraph(
-    material.id
+    props.id
   );
 
   const { percentageDifference } = getStockDifference(
@@ -114,7 +119,7 @@ export default function StockGraph(material: MaterialGetAllOutputSingle) {
                                 {item.value}{" "}
                                 {getStockUnitTextAbbrev(
                                   Number(item.value),
-                                  material.stockLevel.stockUnit
+                                  props.stockLevel.stockUnit
                                 )}
                                 . in stock
                               </Text>
