@@ -1,3 +1,6 @@
+![StockrHub logo](public/images/stockr-hub-light-theme.png#gh-light-mode-only)
+![StockrHub logo](public/images/stockr-hub-logo-dark-theme.png#gh-dark-mode-only)
+
 > Note: StockrHub is still in active development. While I'll try my best to avoid breaking changes, I can't make any promises at this time!
 
 <!-- omit from toc -->
@@ -20,6 +23,8 @@ StockrHub is an inventory and production management app designed for crafters, a
 
 ### Raw Material Management
 Keep a detailed record of your raw materials, including quantities, purchase URLs, cost per unit, vendors, and categories. Set a minimum quantity to receive alerts when a material is running low and needs reordered.
+
+![StockrHub materials screen](public/images/stockr-hub-materials-screen.png)
 
 ### Product Management
 Build a catalog of all your products and the raw materials used in their creation. StockrHub will automatically calculate the quantity and price of materials used in each product. When you set retail and wholesale prices for your products, StockrHub will also calculate the profit margin for each.

@@ -81,10 +81,10 @@ export const productUpdateCategoriesSchema = z.object({
 
 export const productUpdateStockSchema = z.object({
   productId: z.string(),
-  stockLogTypeId: z.string(),
-  prevStock: z.number(),
-  quantity: z.number(),
-  newStock: z.number(),
+  changeTypeId: z.string(),
+  quantityChange: z.number(),
+  previousQuantity: z.number(),
+  newQuantity: z.number(),
   notes: z.string(),
 });
 

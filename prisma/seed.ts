@@ -1,4 +1,5 @@
 import { db } from "@/server/db";
+import { InventoryAdjustmentType } from "@prisma/client";
 
 async function main() {
   await db.$transaction(async () => {
@@ -172,22 +173,40 @@ async function main() {
       ],
     });
 
-    await db.materialStockRecordType.createMany({
+    await db.materialChangeType.createMany({
       data: [
-        { name: "Supply Order" },
-        { name: "Audit" },
-        { name: "Product Testing" },
-        { name: "Damage, Theft, or Loss" },
+        {
+          name: "Supply Order",
+          adjustmentType: InventoryAdjustmentType.INCREASE,
+        },
+        { name: "Audit", adjustmentType: InventoryAdjustmentType.SET },
+        {
+          name: "Product Testing",
+          adjustmentType: InventoryAdjustmentType.DECREASE,
+        },
+        {
+          name: "Damage, Theft, or Loss",
+          adjustmentType: InventoryAdjustmentType.DECREASE,
+        },
       ],
     });
 
-    await db.productStockRecordType.createMany({
+    await db.productChangeType.createMany({
       data: [
-        { name: "Production" },
-        { name: "Sale" },
-        { name: "Return/Restock" },
-        { name: "Audit" },
-        { name: "Damage, Theft, or Loss" },
+        {
+          name: "Production",
+          adjustmentType: InventoryAdjustmentType.INCREASE,
+        },
+        { name: "Sale", adjustmentType: InventoryAdjustmentType.DECREASE },
+        {
+          name: "Return/Restock",
+          adjustmentType: InventoryAdjustmentType.INCREASE,
+        },
+        { name: "Audit", adjustmentType: InventoryAdjustmentType.SET },
+        {
+          name: "Damage, Theft, or Loss",
+          adjustmentType: InventoryAdjustmentType.DECREASE,
+        },
       ],
     });
   });

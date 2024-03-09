@@ -7,6 +7,7 @@ import { getStockUnitTextAbbrev } from "@/utils";
 import { api } from "@/utils/api";
 import { Text, useDisclosure, useToast } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { InventoryAdjustmentType } from "@prisma/client";
 import { useForm } from "react-hook-form";
 
 export default function useEditMaterialStockPopover(
@@ -15,20 +16,24 @@ export default function useEditMaterialStockPopover(
   const form = useForm<MaterialUpdateStock>({
     defaultValues: {
       materialId: material.id,
-      prevStock: Number(material.stockLevel.stock),
-      newStock: Number(material.stockLevel.stock),
+      previousQuantity: Number(material.stockLevel.stock),
+      newQuantity: Number(material.stockLevel.stock),
     },
     resolver: zodResolver(materialUpdateStockSchema),
   });
 
   const disclosure = useDisclosure({
     onOpen: () => {
-      form.reset();
+      form.reset({
+        materialId: material.id,
+        previousQuantity: Number(material.stockLevel.stock),
+        newQuantity: Number(material.stockLevel.stock),
+      });
     },
   });
 
   const { data: logTypes } =
-    api.material.getMaterialStockRecordTypes.useQuery();
+    api.logChangeTypes.getMaterialChangeTypes.useQuery();
   const logTypeOptions =
     logTypes?.map((type) => ({
       label: type.name,
@@ -36,21 +41,19 @@ export default function useEditMaterialStockPopover(
     })) ?? [];
 
   function getUpdatedStock() {
-    const logTypeId = form.watch("stockLogTypeId");
-    const logType = logTypeOptions?.find(
-      (option) => option.value === logTypeId
-    )?.label;
+    const logTypeId = form.watch("changeTypeId");
+    const logType = logTypes?.find((type) => logTypeId === type.id);
 
-    if (logType === "Supply Order") {
-      return Number(material.stockLevel.stock) + form.watch("quantity");
-    } else if (logType === "Audit") {
-      return form.watch("quantity");
-    } else if (
-      logType === "Product Testing" ||
-      logType === "Damage, Theft, or Loss"
-    ) {
-      return Number(material.stockLevel.stock) - form.watch("quantity");
-    } else return Number(material.stockLevel.stock);
+    switch (logType?.adjustmentType) {
+      case InventoryAdjustmentType.INCREASE:
+        return Number(material.stockLevel.stock) + form.watch("quantityChange");
+      case InventoryAdjustmentType.DECREASE:
+        return Number(material.stockLevel.stock) - form.watch("quantityChange");
+      case InventoryAdjustmentType.SET:
+        return form.watch("quantityChange");
+      default:
+        return form.watch("quantityChange");
+    }
   }
 
   const toast = useToast();
@@ -80,13 +83,14 @@ export default function useEditMaterialStockPopover(
         status: "success",
       });
       await utils.material.getAll.invalidate();
+      await utils.material.getHistory.invalidate();
       disclosure.onClose();
     },
   });
 
   function onSubmit(data: MaterialUpdateStock) {
-    const updatedStock = getUpdatedStock();
-    query.mutate({ ...data, newStock: updatedStock });
+    const newQuantity = getUpdatedStock();
+    query.mutate({ ...data, newQuantity });
   }
 
   return {

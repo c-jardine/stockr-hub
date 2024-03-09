@@ -150,27 +150,28 @@ export const auditRouter = createTRPCRouter({
               },
             });
 
-            const stockRecord = await tx.stockRecord.create({
+            const inventoryLog = await tx.inventoryLog.create({
               data: {
-                prevStock: item.expectedStock,
-                stock: item.actualStock,
+                quantityChange: Math.abs(item.actualStock - item.expectedStock),
+                previousQuantity: item.expectedStock,
+                newQuantity: item.actualStock,
                 notes: item.notes,
               },
             });
 
-            await tx.materialStockLog.create({
+            await tx.materialInventoryLog.create({
               data: {
                 material: {
                   connect: {
                     id: item.materialId,
                   },
                 },
-                stockRecord: {
+                inventoryLog: {
                   connect: {
-                    id: stockRecord.id,
+                    id: inventoryLog.id,
                   },
                 },
-                stockRecordType: {
+                changeType: {
                   connect: {
                     name: "Audit",
                   },

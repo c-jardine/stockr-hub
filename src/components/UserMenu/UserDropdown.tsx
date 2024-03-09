@@ -30,7 +30,7 @@ export default function UserDropdown() {
           mb={4}
         >
           <Avatar bg='sky.300' boxSize={10}></Avatar>
-          <Text>Your Name</Text>
+          <Text fontSize={14} textAlign='left'>The Midnight Emporium</Text>
           <Icon as={ChevronDown} ml='auto' />
         </Flex>
       </PopoverTrigger>

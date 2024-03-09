@@ -28,7 +28,7 @@ export default function useStockGraph(id: string) {
     let lastRecordDate: Date | null = null;
 
     data.forEach((record, index) => {
-      const currentRecordDate = record.stockRecord.createdAt;
+      const currentRecordDate = record.inventoryLog.timestamp;
       const nextRecord = data[index + 1];
       const isLastItem = index === data.length - 1;
 
@@ -38,7 +38,7 @@ export default function useStockGraph(id: string) {
       }
 
       if (nextRecord) {
-        const nextRecordDate = nextRecord.stockRecord.createdAt;
+        const nextRecordDate = nextRecord.inventoryLog.timestamp;
         if (!isSameDay(currentRecordDate, nextRecordDate)) {
           filteredData.push(record);
         } else if (
@@ -58,10 +58,10 @@ export default function useStockGraph(id: string) {
     ? []
     : preprocessData(data).map((item) => ({
         createdAt: format(
-          item.stockRecord.createdAt,
+          item.inventoryLog.timestamp,
           "MMM. dd, yyyy 'at' h:mm a"
         ),
-        stock: Number(item.stockRecord.stock),
+        stock: Number(item.inventoryLog.newQuantity),
       }));
 
   const total = chartData.reduce((sum, item) => sum + item.stock, 0);
