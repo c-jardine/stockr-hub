@@ -92,31 +92,33 @@ function AdjustmentType({ name, changeType, description }: AdjustmentType) {
           {getChangeType()}
         </Text>
       </Box>
-      <Menu>
-        <MenuButton
-          as={IconButton}
-          variant="outline"
-          icon={<Icon as={Dots} />}
-          aria-label={`Delete ${name}`}
-        />
-        <MenuList>
-          <MenuItem icon={<Icon as={Edit} boxSize={4} />}>Edit</MenuItem>
-          <MenuDivider />
-          <MenuItem
-            icon={<Icon as={Trash} boxSize={4} />}
-            _hover={{
-              bg: "red.500",
-              color: "whiteAlpha.900",
-            }}
-            _focus={{
-              bg: "red.500",
-              color: "whiteAlpha.900",
-            }}
-          >
-            Delete
-          </MenuItem>
-        </MenuList>
-      </Menu>
+      {name !== "Audit" && (
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            variant="outline"
+            icon={<Icon as={Dots} />}
+            aria-label={`Delete ${name}`}
+          />
+          <MenuList>
+            <MenuItem icon={<Icon as={Edit} boxSize={4} />}>Edit</MenuItem>
+            <MenuDivider />
+            <MenuItem
+              icon={<Icon as={Trash} boxSize={4} />}
+              _hover={{
+                bg: "red.500",
+                color: "whiteAlpha.900",
+              }}
+              _focus={{
+                bg: "red.500",
+                color: "whiteAlpha.900",
+              }}
+            >
+              Delete
+            </MenuItem>
+          </MenuList>
+        </Menu>
+      )}
     </Flex>
   );
 }

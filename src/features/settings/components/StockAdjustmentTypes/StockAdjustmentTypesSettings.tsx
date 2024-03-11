@@ -51,6 +51,16 @@ export default function StockAdjustmentTypesHeader() {
 
       onClose();
     },
+    onError: async (error) => {
+      toast({
+        title: "Stock adjustment type",
+        description: `${
+          error.message.includes("Unique constraint failed") &&
+          "A stock adjustment type with that name already exists."
+        }`,
+        status: "error",
+      });
+    },
   });
 
   function onSubmit(data: NewStockAdjustmentTypeInput) {
