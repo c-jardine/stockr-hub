@@ -1,4 +1,5 @@
 import { Input } from "@/components/Input";
+import { api } from "@/utils/api";
 import {
   Button,
   Flex,
@@ -17,26 +18,44 @@ import {
   Text,
   Textarea,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { InventoryAdjustmentType } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { Plus } from "tabler-icons-react";
-import { z } from "zod";
+import {
+  newStockAdjustmentTypeSchema,
+  type NewStockAdjustmentTypeInput,
+} from "../../types";
 import StockAdjustmentTypesTabs from "./StockAdjustmentTypesTabs";
 
 export default function StockAdjustmentTypesHeader() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const newAdjustmentTypeSchema = z.object({
-    inventoryType: z.string(),
-    name: z.string(),
-    description: z.string(),
-    adjustmentType: z.string(),
+  const form = useForm<NewStockAdjustmentTypeInput>({
+    resolver: zodResolver(newStockAdjustmentTypeSchema),
   });
 
-  const form = useForm<z.infer<typeof newAdjustmentTypeSchema>>({
-    resolver: zodResolver(newAdjustmentTypeSchema),
+  const toast = useToast();
+  const utils = api.useUtils();
+  const query = api.logChangeTypes.create.useMutation({
+    onSuccess: async (data) => {
+      toast({
+        title: "Created stock adjustment type",
+        description: `Successfully created ${data.name}`,
+        status: "success",
+      });
+      await utils.logChangeTypes.getMaterialChangeTypes.invalidate();
+      await utils.logChangeTypes.getProductChangeTypes.invalidate();
+
+      onClose();
+    },
   });
+
+  function onSubmit(data: NewStockAdjustmentTypeInput) {
+    query.mutate(data);
+  }
 
   return (
     <>
@@ -63,7 +82,14 @@ export default function StockAdjustmentTypesHeader() {
         <ModalContent>
           <ModalHeader>New stock adjustment type</ModalHeader>
           <ModalBody>
-            <Stack spacing={4}>
+            <Stack
+              as="form"
+              id="new-stock-adjustment-type-form"
+              spacing={4}
+              onSubmit={form.handleSubmit(onSubmit, (error) =>
+                console.log(error)
+              )}
+            >
               <FormControl>
                 <FormLabel>Inventory item</FormLabel>
                 <RadioGroup defaultValue="material">
@@ -89,23 +115,26 @@ export default function StockAdjustmentTypesHeader() {
               </FormControl>
               <FormControl>
                 <FormLabel>Adjustment type</FormLabel>
-                <RadioGroup defaultValue="increase">
+                <RadioGroup defaultValue={InventoryAdjustmentType.INCREASE}>
                   <Stack spacing={2}>
                     <Radio
-                      value="increase"
+                      value={InventoryAdjustmentType.INCREASE}
                       {...form.register("adjustmentType")}
                     >
                       <Text fontSize="sm">Increase - Add to inventory</Text>
                     </Radio>
                     <Radio
-                      value="decrease"
+                      value={InventoryAdjustmentType.DECREASE}
                       {...form.register("adjustmentType")}
                     >
                       <Text fontSize="sm">
                         Decrease - Remove from inventory
                       </Text>
                     </Radio>
-                    <Radio value="set" {...form.register("adjustmentType")}>
+                    <Radio
+                      value={InventoryAdjustmentType.SET}
+                      {...form.register("adjustmentType")}
+                    >
                       <Text fontSize="sm">Set - Set custom inventory</Text>
                     </Radio>
                   </Stack>
@@ -117,7 +146,13 @@ export default function StockAdjustmentTypesHeader() {
             <Button variant="outline" colorScheme="black" onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="emerald">Save</Button>
+            <Button
+              type="submit"
+              form="new-stock-adjustment-type-form"
+              colorScheme="emerald"
+            >
+              Save
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
