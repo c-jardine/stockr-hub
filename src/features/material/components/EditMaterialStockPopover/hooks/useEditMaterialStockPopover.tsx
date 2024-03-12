@@ -1,8 +1,6 @@
+import { useMaterial } from "@/features/material/hooks";
 import { materialUpdateStockSchema } from "@/schemas";
-import {
-  type MaterialGetAllOutputSingle,
-  type MaterialUpdateStock,
-} from "@/types";
+import { type MaterialUpdateStock } from "@/types";
 import { getStockUnitTextAbbrev } from "@/utils";
 import { api } from "@/utils/api";
 import { Text, useDisclosure, useToast } from "@chakra-ui/react";
@@ -10,9 +8,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { InventoryAdjustmentType } from "@prisma/client";
 import { useForm } from "react-hook-form";
 
-export default function useEditMaterialStockPopover(
-  material: MaterialGetAllOutputSingle
-) {
+export default function useEditMaterialStockPopover() {
+  const material = useMaterial();
+
   const form = useForm<MaterialUpdateStock>({
     defaultValues: {
       materialId: material.id,

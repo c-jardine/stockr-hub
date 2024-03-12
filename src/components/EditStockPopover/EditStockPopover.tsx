@@ -1,4 +1,5 @@
 import { useAppStateContext } from "@/contexts/AppStateContext/AppStateContext";
+import { useMaterial } from "@/features/material/hooks";
 import { getStockUnitTextAbbrev } from "@/utils";
 import {
   Button,
@@ -15,7 +16,6 @@ import {
   Tooltip,
   type UseDisclosureProps,
 } from "@chakra-ui/react";
-import { type StockLevel, type StockUnit } from "@prisma/client";
 import {
   useFormContext,
   type FieldValues,
@@ -27,8 +27,6 @@ import EditStockPopoverForm from "./EditStockPopoverForm";
 
 interface EditStockPopoverProps<T extends FieldValues> {
   disclosure: UseDisclosureProps;
-  name: string;
-  stockLevel: StockLevel & { stockUnit: StockUnit };
   logTypeOptions: Option[];
   getUpdatedStock: () => number;
   onSubmit: SubmitHandler<T>;
@@ -38,16 +36,17 @@ export default function EditStockPopover<T extends FieldValues>(
   props: EditStockPopoverProps<T>
 ) {
   const appState = useAppStateContext();
+  const material = useMaterial();
 
   const disclosure = props.disclosure;
 
   const form = useFormContext<T>();
 
   const renderLabel = `${Number(
-    props.stockLevel.stock
+    material.stockLevel.stock
   )} ${getStockUnitTextAbbrev(
-    Number(props.stockLevel.stock),
-    props.stockLevel.stockUnit
+    Number(material.stockLevel.stock),
+    material.stockLevel.stockUnit
   )}`;
 
   return (
@@ -89,7 +88,7 @@ export default function EditStockPopover<T extends FieldValues>(
             Update stock
           </Text>
           <Text color="slate.600" fontSize="xs">
-            {props.name}
+            {material.name}
           </Text>
         </PopoverHeader>
         <PopoverBody>

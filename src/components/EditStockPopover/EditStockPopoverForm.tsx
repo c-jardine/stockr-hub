@@ -1,5 +1,6 @@
-import { selectStyles } from '@/styles';
-import { getStockUnitTextAbbrev } from '@/utils';
+import { useMaterial } from "@/features/material/hooks";
+import { selectStyles } from "@/styles";
+import { getStockUnitTextAbbrev } from "@/utils";
 import {
   Flex,
   FormControl,
@@ -12,16 +13,14 @@ import {
   Stack,
   Text,
   Textarea,
-} from '@chakra-ui/react';
-import { type StockLevel, type StockUnit } from '@prisma/client';
-import { Select } from 'chakra-react-select';
-import { Controller, useFormContext } from 'react-hook-form';
-import { ArrowRight } from 'tabler-icons-react';
-import { type Option } from '../Select';
-import { selectComponents } from '../Select/components';
+} from "@chakra-ui/react";
+import { Select } from "chakra-react-select";
+import { Controller, useFormContext } from "react-hook-form";
+import { ArrowRight } from "tabler-icons-react";
+import { type Option } from "../Select";
+import { selectComponents } from "../Select/components";
 
 interface EditStockPopoverFormProps {
-  stockLevel: StockLevel & { stockUnit: StockUnit };
   logTypeOptions: Option[];
   getUpdatedStock: () => number;
 }
@@ -29,8 +28,9 @@ interface EditStockPopoverFormProps {
 export default function EditStockPopoverForm({
   logTypeOptions,
   getUpdatedStock,
-  ...item
 }: EditStockPopoverFormProps) {
+  const material = useMaterial();
+
   const form = useFormContext();
 
   return (
@@ -39,11 +39,11 @@ export default function EditStockPopoverForm({
         <FormLabel>Type</FormLabel>
         <Controller
           control={form.control}
-          name='changeTypeId'
+          name="changeTypeId"
           render={({ field }) => (
             <Select
               {...field}
-              menuPlacement='auto'
+              menuPlacement="auto"
               options={logTypeOptions}
               value={logTypeOptions?.find(
                 (option) => option.value === field.value
@@ -51,7 +51,7 @@ export default function EditStockPopoverForm({
               onChange={(data) => {
                 if (data) {
                   field.onChange(data.value);
-                  form.setValue('changeTypeId', data.value);
+                  form.setValue("changeTypeId", data.value);
                 }
               }}
               chakraStyles={selectStyles}
@@ -64,41 +64,42 @@ export default function EditStockPopoverForm({
         <FormLabel>Quantity</FormLabel>
         <InputGroup>
           <NumberInput>
-            <NumberInputField roundedRight='none'
-              {...form.register('quantityChange', { valueAsNumber: true })}
+            <NumberInputField
+              roundedRight="none"
+              {...form.register("quantityChange", { valueAsNumber: true })}
             />
           </NumberInput>
-          <InputRightAddon fontSize='sm'>
+          <InputRightAddon fontSize="sm">
             {getStockUnitTextAbbrev(
-              Number(item.stockLevel.stock),
-              item.stockLevel.stockUnit
+              Number(material.stockLevel.stock),
+              material.stockLevel.stockUnit
             )}
             .
           </InputRightAddon>
         </InputGroup>
       </FormControl>
-      <Flex alignItems='center' gap={2}>
+      <Flex alignItems="center" gap={2}>
         <Text>
-          {Number(item.stockLevel.stock)}{' '}
+          {Number(material.stockLevel.stock)}{" "}
           {getStockUnitTextAbbrev(
-            Number(item.stockLevel.stock),
-            item.stockLevel.stockUnit
+            Number(material.stockLevel.stock),
+            material.stockLevel.stockUnit
           )}
           .
         </Text>
-        <Icon as={ArrowRight} strokeWidth={3} color='slate.500' />
-        <Text fontWeight='semibold'>
-          {getUpdatedStock()}{' '}
+        <Icon as={ArrowRight} strokeWidth={3} color="slate.500" />
+        <Text fontWeight="semibold">
+          {getUpdatedStock()}{" "}
           {getStockUnitTextAbbrev(
-            Number(item.stockLevel.stock),
-            item.stockLevel.stockUnit
+            Number(material.stockLevel.stock),
+            material.stockLevel.stockUnit
           )}
           .
         </Text>
       </Flex>
       <FormControl>
         <FormLabel>Notes</FormLabel>
-        <Textarea {...form.register('notes')} />
+        <Textarea {...form.register("notes")} />
       </FormControl>
     </Stack>
   );

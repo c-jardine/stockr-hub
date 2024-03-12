@@ -1,5 +1,4 @@
 import { StockGraph } from "@/components/StockGraph";
-import { type MaterialGetAllOutputSingle } from "@/types";
 import {
   Stack,
   Tab,
@@ -8,11 +7,14 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
-import MaterialHistoryItem from "./HistoryItem";
+import { useMaterial } from "../../hooks";
+import MaterialHistoryItem from "./MaterialHistoryItem";
 import { useMaterialHistory } from "./hooks";
 
-export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
-  const { query } = useMaterialHistory(props.id);
+export default function MaterialHistory() {
+  const material = useMaterial();
+
+  const { query } = useMaterialHistory();
 
   return (
     <Stack>
@@ -25,12 +27,12 @@ export default function MaterialHistory(props: MaterialGetAllOutputSingle) {
           <TabPanel>
             <MaterialHistoryItem
               history={query.data!}
-              stockUnit={props.stockLevel.stockUnit}
-              createdAt={props.createdAt}
+              stockUnit={material.stockLevel.stockUnit}
+              createdAt={material.createdAt}
             />
           </TabPanel>
           <TabPanel>
-            <StockGraph {...props} />
+            <StockGraph {...material} />
           </TabPanel>
         </TabPanels>
       </Tabs>
