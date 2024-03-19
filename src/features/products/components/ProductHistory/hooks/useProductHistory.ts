@@ -1,7 +1,10 @@
-import { api } from '@/utils/api';
+import { useProduct } from "@/features/products/hooks";
+import { api } from "@/utils/api";
 
-export default function useProductHistory(id: string) {
-  const query = api.product.getHistory.useQuery({ id });
+export default function useProductHistory() {
+  const product = useProduct();
+
+  const query = api.product.getHistory.useQuery({ id: product.id });
 
   return { query };
 }

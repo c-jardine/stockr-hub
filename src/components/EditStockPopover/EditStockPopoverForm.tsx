@@ -1,4 +1,3 @@
-import { useMaterial } from "@/features/material/hooks";
 import { selectStyles } from "@/styles";
 import { getStockUnitTextAbbrev } from "@/utils";
 import {
@@ -14,6 +13,7 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
+import { type StockLevel, type StockUnit } from "@prisma/client";
 import { Select } from "chakra-react-select";
 import { Controller, useFormContext } from "react-hook-form";
 import { ArrowRight } from "tabler-icons-react";
@@ -21,6 +21,7 @@ import { type Option } from "../Select";
 import { selectComponents } from "../Select/components";
 
 interface EditStockPopoverFormProps {
+  stockLevel: StockLevel & { stockUnit: StockUnit };
   logTypeOptions: Option[];
   getUpdatedStock: () => number;
 }
@@ -28,9 +29,8 @@ interface EditStockPopoverFormProps {
 export default function EditStockPopoverForm({
   logTypeOptions,
   getUpdatedStock,
+  ...item
 }: EditStockPopoverFormProps) {
-  const material = useMaterial();
-
   const form = useFormContext();
 
   return (
@@ -71,8 +71,8 @@ export default function EditStockPopoverForm({
           </NumberInput>
           <InputRightAddon fontSize="sm">
             {getStockUnitTextAbbrev(
-              Number(material.stockLevel.stock),
-              material.stockLevel.stockUnit
+              Number(item.stockLevel.stock),
+              item.stockLevel.stockUnit
             )}
             .
           </InputRightAddon>
@@ -80,10 +80,10 @@ export default function EditStockPopoverForm({
       </FormControl>
       <Flex alignItems="center" gap={2}>
         <Text>
-          {Number(material.stockLevel.stock)}{" "}
+          {Number(item.stockLevel.stock)}{" "}
           {getStockUnitTextAbbrev(
-            Number(material.stockLevel.stock),
-            material.stockLevel.stockUnit
+            Number(item.stockLevel.stock),
+            item.stockLevel.stockUnit
           )}
           .
         </Text>
@@ -91,8 +91,8 @@ export default function EditStockPopoverForm({
         <Text fontWeight="semibold">
           {getUpdatedStock()}{" "}
           {getStockUnitTextAbbrev(
-            Number(material.stockLevel.stock),
-            material.stockLevel.stockUnit
+            Number(item.stockLevel.stock),
+            item.stockLevel.stockUnit
           )}
           .
         </Text>

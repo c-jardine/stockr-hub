@@ -1,8 +1,6 @@
+import { useProduct } from "@/features/products/hooks";
 import { productUpdateStockSchema } from "@/schemas";
-import {
-  type ProductGetAllOutputSingle,
-  type ProductUpdateStock,
-} from "@/types";
+import { type ProductUpdateStock } from "@/types";
 import { getStockUnitTextAbbrev } from "@/utils";
 import { api } from "@/utils/api";
 import { Text, useDisclosure, useToast } from "@chakra-ui/react";
@@ -10,9 +8,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { InventoryAdjustmentType } from "@prisma/client";
 import { useForm } from "react-hook-form";
 
-export default function EditProductStockPopover(
-  product: ProductGetAllOutputSingle
-) {
+export default function EditProductStockPopover() {
+  const product = useProduct();
+
   const form = useForm<ProductUpdateStock>({
     defaultValues: {
       productId: product.id,

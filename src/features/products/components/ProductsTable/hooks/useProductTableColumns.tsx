@@ -1,17 +1,18 @@
-import { CategoryTags } from '@/components/CategoryTags';
-import { IndeterminateCheckbox } from '@/components/IndeterminateCheckbox';
-import { type ProductGetAllOutputSingle } from '@/types';
-import { getCostPerUnit, getStockUnitTextAbbrev } from '@/utils';
-import { Text } from '@chakra-ui/react';
-import { type ColumnDef } from '@tanstack/react-table';
-import React from 'react';
-import { EditProductStockPopover, ProductViewerDrawer } from '../../..';
+import { CategoryTags } from "@/components/CategoryTags";
+import { IndeterminateCheckbox } from "@/components/IndeterminateCheckbox";
+import { ProductContext } from "@/features/products/contexts";
+import { type ProductGetAllOutputSingle } from "@/types";
+import { getCostPerUnit, getStockUnitTextAbbrev } from "@/utils";
+import { Text } from "@chakra-ui/react";
+import { type ColumnDef } from "@tanstack/react-table";
+import React from "react";
+import { EditProductStockPopover, ProductViewerDrawer } from "../../..";
 
 export default function useProductTableColumns() {
   return React.useMemo<ColumnDef<ProductGetAllOutputSingle>[]>(
     () => [
       {
-        id: 'select',
+        id: "select",
         enableResizing: false,
         enableSorting: false,
         size: 0,
@@ -37,25 +38,33 @@ export default function useProductTableColumns() {
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
-        header: 'Name',
-        sortingFn: 'alphanumeric',
-        cell: (info) => <ProductViewerDrawer {...info.cell.row.original} />,
+        id: "name",
+        header: "Name",
+        sortingFn: "alphanumeric",
+        cell: (info) => (
+          <ProductContext.Provider value={info.cell.row.original}>
+            <ProductViewerDrawer />
+          </ProductContext.Provider>
+        ),
         footer: (props) => props.column.id,
       },
       {
         accessorFn: (row) => row.stockLevel.stock,
-        id: 'stock',
-        header: 'Stock',
-        sortingFn: 'alphanumeric',
-        cell: (info) => <EditProductStockPopover {...info.cell.row.original} />,
+        id: "stock",
+        header: "Stock",
+        sortingFn: "alphanumeric",
+        cell: (info) => (
+          <ProductContext.Provider value={info.cell.row.original}>
+            <EditProductStockPopover />
+          </ProductContext.Provider>
+        ),
         footer: (props) => props.column.id,
       },
       {
         accessorFn: (row) => row.stockLevel.minStock,
-        id: 'minStock',
-        header: 'Min. Stock',
-        sortingFn: 'alphanumeric',
+        id: "minStock",
+        header: "Min. Stock",
+        sortingFn: "alphanumeric",
         cell: (info) => (
           <Text>
             {info.getValue()
@@ -63,24 +72,24 @@ export default function useProductTableColumns() {
                   Number(info.getValue()),
                   info.cell.row.original.stockLevel.stockUnit
                 )}`
-              : '-'}
+              : "-"}
           </Text>
         ),
         footer: (props) => props.column.id,
       },
       {
         accessorFn: (row) => row.batchSize,
-        id: 'batchSize',
-        header: 'Batch size',
-        sortingFn: 'alphanumeric',
+        id: "batchSize",
+        header: "Batch size",
+        sortingFn: "alphanumeric",
         cell: (info) => <Text>{Number(info.getValue())}</Text>,
         footer: (props) => props.column.id,
       },
       {
         accessorFn: (row) => row.batchSize,
-        id: 'costPerUnit',
-        header: 'Cost per unit',
-        sortingFn: 'alphanumeric',
+        id: "costPerUnit",
+        header: "Cost per unit",
+        sortingFn: "alphanumeric",
         cell: (info) => (
           <Text>{`$${getCostPerUnit(info.cell.row.original)}`}</Text>
         ),
@@ -88,13 +97,13 @@ export default function useProductTableColumns() {
       },
       {
         accessorFn: (row) => row.categories,
-        id: 'categories',
-        header: 'Categories',
+        id: "categories",
+        header: "Categories",
         enableSorting: false,
         cell: (info) => (
           <CategoryTags
             categories={info.cell.row.original.categories}
-            routePrefix='/products'
+            routePrefix="/products"
           />
         ),
         footer: (props) => props.column.id,

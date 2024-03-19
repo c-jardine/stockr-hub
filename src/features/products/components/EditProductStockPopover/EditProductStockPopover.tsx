@@ -1,16 +1,14 @@
-import { EditStockPopover } from '@/components/EditStockPopover';
-import {
-  type ProductGetAllOutputSingle,
-  type ProductUpdateStock,
-} from '@/types';
-import { FormProvider } from 'react-hook-form';
-import { useEditProductStockPopover } from './hooks';
+import { EditStockPopover } from "@/components/EditStockPopover";
+import { type ProductUpdateStock } from "@/types";
+import { FormProvider } from "react-hook-form";
+import { useProduct } from "../../hooks";
+import { useEditProductStockPopover } from "./hooks";
 
-export default function EditProductStockPopover(
-  product: ProductGetAllOutputSingle
-) {
+export default function EditProductStockPopover() {
+  const product = useProduct();
+
   const { disclosure, form, options, onSubmit, getUpdatedStock } =
-    useEditProductStockPopover(product);
+    useEditProductStockPopover();
 
   return (
     <FormProvider {...form}>
