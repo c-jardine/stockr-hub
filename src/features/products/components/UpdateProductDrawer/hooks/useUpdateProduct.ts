@@ -1,11 +1,14 @@
-import { productUpdateSchema } from '@/schemas';
-import { type ProductGetAllOutputSingle, type ProductUpdate } from '@/types';
-import { api } from '@/utils/api';
-import { useDisclosure, useToast } from '@chakra-ui/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useProduct } from "@/features/products/hooks";
+import { productUpdateSchema } from "@/schemas";
+import { type ProductUpdate } from "@/types";
+import { api } from "@/utils/api";
+import { useDisclosure, useToast } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-export default function useUpdateProduct(product: ProductGetAllOutputSingle) {
+export default function useUpdateProduct() {
+  const product = useProduct();
+
   const input: ProductUpdate | undefined = {
     id: product.id,
     name: product.name,
@@ -37,9 +40,9 @@ export default function useUpdateProduct(product: ProductGetAllOutputSingle) {
   const updateQuery = api.product.update.useMutation({
     onSuccess: async () => {
       toast({
-        title: 'Product updated',
-        description: 'Successfully updated product',
-        status: 'success',
+        title: "Product updated",
+        description: "Successfully updated product",
+        status: "success",
       });
       await utils.product.getAll.invalidate();
       disclosure.onClose();

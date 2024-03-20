@@ -1,39 +1,24 @@
+import { InventoryHistoryTabs } from "@/components/InventoryHistoryTabs";
 import { StockGraph } from "@/components/StockGraph";
-import { type ProductGetAllOutputSingle } from "@/types";
-import {
-  Stack,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-} from "@chakra-ui/react";
+import useProduct from "../../hooks/useProduct";
 import ProductHistoryItem from "./HistoryItem";
 import { useProductHistory } from "./hooks";
 
-export default function ProductHistory(props: ProductGetAllOutputSingle) {
-  const { query } = useProductHistory(props.id);
+export default function ProductHistory() {
+  const product = useProduct();
+
+  const { query } = useProductHistory();
 
   return (
-    <Stack>
-      <Tabs>
-        <TabList>
-          <Tab fontSize={{ base: "xs", sm: "md" }}>History</Tab>
-          <Tab fontSize={{ base: "xs", sm: "md" }}>Visualization</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <ProductHistoryItem
-              history={query.data!}
-              stockUnit={props.stockLevel.stockUnit}
-              createdAt={props.createdAt}
-            />
-          </TabPanel>
-          <TabPanel>
-            <StockGraph {...props} />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </Stack>
+    <InventoryHistoryTabs
+      historyTab={
+        <ProductHistoryItem
+          history={query.data!}
+          stockUnit={product.stockLevel.stockUnit}
+          createdAt={product.createdAt}
+        />
+      }
+      visualizationTab={<StockGraph {...product} />}
+    />
   );
 }

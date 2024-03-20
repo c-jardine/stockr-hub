@@ -1,15 +1,8 @@
-import { ConfirmDeleteModal } from '@/components/ConfirmDeleteModal';
-import { type ProductGetAllOutputSingle } from '@/types';
-import useDeleteProduct from './hooks/useDeleteProduct';
+import { ConfirmDeleteModal } from "@/components/ConfirmDeleteModal";
+import useDeleteProduct from "./hooks/useDeleteProduct";
 
-export default function DeleteProduct(props: ProductGetAllOutputSingle) {
-  const { onDelete, disclosure } = useDeleteProduct(props);
+export default function DeleteProduct() {
+  const { onDelete, disclosure } = useDeleteProduct();
 
-  return (
-    <ConfirmDeleteModal
-      name={props.name}
-      onDelete={onDelete}
-      disclosure={disclosure}
-    />
-  );
+  return <ConfirmDeleteModal onDelete={onDelete} disclosure={disclosure} />;
 }

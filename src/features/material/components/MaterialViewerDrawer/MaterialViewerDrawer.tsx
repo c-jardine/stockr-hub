@@ -1,7 +1,6 @@
 import { CategoryTags } from "@/components/CategoryTags";
 import { DataDisplay } from "@/components/DataDisplay";
 import { DrawerHeader } from "@/components/DrawerHeader";
-import { type MaterialGetAllOutputSingle } from "@/types";
 import { getIsLowStock, getStockUnitTextAbbrev } from "@/utils";
 import {
   Drawer,
@@ -16,19 +15,20 @@ import {
 } from "@chakra-ui/react";
 import { ChevronLeft } from "tabler-icons-react";
 import { DeleteMaterial, UpdateMaterialDrawer } from "..";
+import { useMaterial } from "../../hooks";
 import { MaterialHistory } from "../MaterialHistory";
 import { useViewMaterial } from "./hooks";
 
-export default function MaterialViewerDrawer(
-  props: MaterialGetAllOutputSingle
-) {
+export default function MaterialViewerDrawer() {
+  const material = useMaterial();
+
   const {
     disclosure: { isOpen, onOpen, onClose },
   } = useViewMaterial();
 
   const isLowStock = getIsLowStock(
-    Number(props.stockLevel.stock),
-    Number(props.stockLevel.minStock)
+    Number(material.stockLevel.stock),
+    Number(material.stockLevel.minStock)
   );
 
   function renderDrawerTrigger() {
@@ -38,7 +38,7 @@ export default function MaterialViewerDrawer(
         color={isLowStock ? "red.500" : "unset"}
         fontWeight="semibold"
       >
-        {props.name}
+        {material.name}
       </Link>
     );
   }
@@ -48,10 +48,10 @@ export default function MaterialViewerDrawer(
       <DrawerHeader.Base>
         <DrawerHeader.CloseButton icon={ChevronLeft} />
         <DrawerHeader.Content>
-          <DrawerHeader.Title>{props.name}</DrawerHeader.Title>
+          <DrawerHeader.Title>{material.name}</DrawerHeader.Title>
           <DrawerHeader.Details>
             <CategoryTags
-              categories={props.categories}
+              categories={material.categories}
               routePrefix="/materials"
             />
           </DrawerHeader.Details>
@@ -62,25 +62,25 @@ export default function MaterialViewerDrawer(
 
   // Data for the stock level text.
   const stockLevelText = `${Number(
-    props.stockLevel.stock
+    material.stockLevel.stock
   )} ${getStockUnitTextAbbrev(
-    Number(props.stockLevel.stock),
-    props.stockLevel.stockUnit
+    Number(material.stockLevel.stock),
+    material.stockLevel.stockUnit
   )}`;
 
   // Data for the unit cost text.
-  const unitCostText = `$${Number(props.costPerUnit)} /
-  ${props.stockLevel.stockUnit.abbreviationSingular}`;
+  const unitCostText = `$${Number(material.costPerUnit)} /
+  ${material.stockLevel.stockUnit.abbreviationSingular}`;
 
   // Data for the vendor text.
-  const vendorText = props.vendor.name;
+  const vendorText = material.vendor.name;
 
   // Data for the min stock text.
   const minStockText = `${
-    props.stockLevel.minStock
-      ? `${Number(props.stockLevel.minStock)} ${getStockUnitTextAbbrev(
-          Number(props.stockLevel.minStock),
-          props.stockLevel.stockUnit
+    material.stockLevel.minStock
+      ? `${Number(material.stockLevel.minStock)} ${getStockUnitTextAbbrev(
+          Number(material.stockLevel.minStock),
+          material.stockLevel.stockUnit
         )}`
       : "-"
   }`;
@@ -105,7 +105,7 @@ export default function MaterialViewerDrawer(
             </SimpleGrid>
           </Stack>
 
-          <MaterialHistory {...props} />
+          <MaterialHistory />
         </Stack>
       </DrawerBody>
     );
@@ -114,8 +114,8 @@ export default function MaterialViewerDrawer(
   function renderDrawerFooter() {
     return (
       <DrawerFooter gap={4}>
-        <DeleteMaterial {...props} />
-        <UpdateMaterialDrawer {...props} buttonLabel="Edit details" />
+        <DeleteMaterial />
+        <UpdateMaterialDrawer buttonLabel="Edit details" />
       </DrawerFooter>
     );
   }

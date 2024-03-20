@@ -1,7 +1,6 @@
-import { DrawerHeader } from '@/components/DrawerHeader';
-import { useAppStateContext } from '@/contexts/AppStateContext/AppStateContext';
-import { type ProductGetAllOutputSingle } from '@/types';
-import { getIsLowStock } from '@/utils';
+import { DrawerHeader } from "@/components/DrawerHeader";
+import { useAppStateContext } from "@/contexts/AppStateContext/AppStateContext";
+import { getIsLowStock } from "@/utils";
 import {
   Button,
   Drawer,
@@ -10,37 +9,38 @@ import {
   DrawerFooter,
   Link,
   Tooltip,
-} from '@chakra-ui/react';
-import { FormProvider } from 'react-hook-form';
-import { UpdateProductForm } from '../UpdateProductForm';
-import { useUpdateProduct } from './hooks';
+} from "@chakra-ui/react";
+import { FormProvider } from "react-hook-form";
+import { useProduct } from "../../hooks";
+import { UpdateProductForm } from "../UpdateProductForm";
+import { useUpdateProduct } from "./hooks";
 
-export default function UpdateProductDrawer(
-  props: ProductGetAllOutputSingle & { buttonLabel?: string }
-) {
+export default function UpdateProductDrawer(props: { buttonLabel?: string }) {
   const appState = useAppStateContext();
+
+  const product = useProduct();
 
   const {
     form,
     onSubmit,
     disclosure: { isOpen, onOpen, onClose },
-  } = useUpdateProduct(props);
+  } = useUpdateProduct();
 
   const isLowStock = getIsLowStock(
-    Number(props.stockLevel.stock),
-    Number(props.stockLevel.minStock)
+    Number(product.stockLevel.stock),
+    Number(product.stockLevel.minStock)
   );
 
   return (
     <>
       {props.buttonLabel ? (
         appState?.auditState.inProgress ? (
-          <Tooltip label='Audit in progress'>
+          <Tooltip label="Audit in progress">
             <Button
               isDisabled
-              variant='outline'
-              colorScheme='black'
-              width='fit-content'
+              variant="outline"
+              colorScheme="black"
+              width="fit-content"
               onClick={onOpen}
             >
               {props.buttonLabel}
@@ -48,9 +48,9 @@ export default function UpdateProductDrawer(
           </Tooltip>
         ) : (
           <Button
-            variant='outline'
-            colorScheme='black'
-            width='fit-content'
+            variant="outline"
+            colorScheme="black"
+            width="fit-content"
             onClick={onOpen}
           >
             {props.buttonLabel}
@@ -59,32 +59,32 @@ export default function UpdateProductDrawer(
       ) : (
         <Link
           onClick={onOpen}
-          color={isLowStock ? 'red.500' : 'unset'}
-          fontWeight='semibold'
+          color={isLowStock ? "red.500" : "unset"}
+          fontWeight="semibold"
         >
-          {props.name}
+          {product.name}
         </Link>
       )}
-      <Drawer isOpen={isOpen} onClose={onClose} size='md'>
+      <Drawer isOpen={isOpen} onClose={onClose} size="md">
         <DrawerContent>
           <DrawerHeader.Base>
             <DrawerHeader.CloseButton />
             <DrawerHeader.Content>
-              <DrawerHeader.Title>Edit {props.name}</DrawerHeader.Title>
+              <DrawerHeader.Title>Edit {product.name}</DrawerHeader.Title>
             </DrawerHeader.Content>
           </DrawerHeader.Base>
           <DrawerBody>
             <FormProvider {...form}>
               <form
-                id='update-product-form'
+                id="update-product-form"
                 onSubmit={form.handleSubmit(onSubmit)}
               >
-                <UpdateProductForm {...props} />
+                <UpdateProductForm />
               </form>
             </FormProvider>
           </DrawerBody>
           <DrawerFooter>
-            <Button type='submit' form='update-product-form'>
+            <Button type="submit" form="update-product-form">
               Save
             </Button>
           </DrawerFooter>

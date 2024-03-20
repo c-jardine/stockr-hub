@@ -1,3 +1,4 @@
+import { useMaterial } from "@/features/material/hooks";
 import {
   Button,
   Icon,
@@ -13,27 +14,27 @@ import {
   ModalOverlay,
   Text,
   type UseDisclosureProps,
-} from '@chakra-ui/react';
-import React from 'react';
-import { Dots } from 'tabler-icons-react';
-import { DeleteMenuItem } from '../DeleteMenuItem';
+} from "@chakra-ui/react";
+import React from "react";
+import { Dots } from "tabler-icons-react";
+import { DeleteMenuItem } from "../DeleteMenuItem";
 
 export default function ConfirmDeleteModal({
-  name,
   onDelete,
   disclosure: { isOpen, onOpen, onClose },
 }: {
-  name: string;
   onDelete: React.MouseEventHandler<HTMLButtonElement>;
   disclosure: UseDisclosureProps;
 }) {
+  const material = useMaterial();
+
   return (
     <>
       <Menu>
         <MenuButton
           as={IconButton}
-          variant='outline'
-          colorScheme='black'
+          variant="outline"
+          colorScheme="black"
           pt={1}
         >
           <Icon as={Dots} />
@@ -48,16 +49,16 @@ export default function ConfirmDeleteModal({
         <ModalContent>
           <ModalHeader>Delete product</ModalHeader>
           <ModalBody>
-            Are you sure you want to delete{' '}
-            <Text as='span' fontWeight='semibold'>
-              {name}
+            Are you sure you want to delete{" "}
+            <Text as="span" fontWeight="semibold">
+              {material.name}
             </Text>
           </ModalBody>
           <ModalFooter gap={4}>
-            <Button colorScheme='red' onClick={onDelete}>
+            <Button colorScheme="red" onClick={onDelete}>
               Delete
             </Button>
-            <Button variant='outline' colorScheme='black' onClick={onClose}>
+            <Button variant="outline" colorScheme="black" onClick={onClose}>
               Cancel
             </Button>
           </ModalFooter>

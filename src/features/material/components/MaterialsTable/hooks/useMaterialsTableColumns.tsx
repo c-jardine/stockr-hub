@@ -1,18 +1,19 @@
-import { CategoryTags } from '@/components/CategoryTags';
-import { IndeterminateCheckbox } from '@/components/IndeterminateCheckbox';
-import { type MaterialGetAllOutputSingle } from '@/types';
-import { getStockUnitTextAbbrev } from '@/utils';
-import { Text } from '@chakra-ui/react';
-import { type ColumnDef } from '@tanstack/react-table';
-import React from 'react';
-import { MaterialViewerDrawer } from '../../..';
-import { EditMaterialStockPopover } from '../../EditMaterialStockPopover';
+import { CategoryTags } from "@/components/CategoryTags";
+import { IndeterminateCheckbox } from "@/components/IndeterminateCheckbox";
+import { MaterialContext } from "@/features/material/contexts";
+import { type MaterialGetAllOutputSingle } from "@/types";
+import { getStockUnitTextAbbrev } from "@/utils";
+import { Text } from "@chakra-ui/react";
+import { type ColumnDef } from "@tanstack/react-table";
+import React from "react";
+import { MaterialViewerDrawer } from "../../..";
+import { EditMaterialStockPopover } from "../../EditMaterialStockPopover";
 
 export default function useMaterialsTableColumns() {
   return React.useMemo<ColumnDef<MaterialGetAllOutputSingle>[]>(
     () => [
       {
-        id: 'select',
+        id: "select",
         enableResizing: false,
         enableSorting: false,
         size: 0,
@@ -38,27 +39,33 @@ export default function useMaterialsTableColumns() {
       },
       {
         accessorFn: (row) => row.name,
-        id: 'name',
-        header: 'Name',
-        sortingFn: 'alphanumeric',
-        cell: (info) => <MaterialViewerDrawer {...info.cell.row.original} />,
+        id: "name",
+        header: "Name",
+        sortingFn: "alphanumeric",
+        cell: (info) => (
+          <MaterialContext.Provider value={info.cell.row.original}>
+            <MaterialViewerDrawer />
+          </MaterialContext.Provider>
+        ),
         footer: (props) => props.column.id,
       },
       {
         accessorFn: (row) => row.stockLevel.stock,
-        id: 'stock',
-        header: 'Stock',
-        sortingFn: 'alphanumeric',
+        id: "stock",
+        header: "Stock",
+        sortingFn: "alphanumeric",
         cell: (info) => (
-          <EditMaterialStockPopover {...info.cell.row.original} />
+          <MaterialContext.Provider value={info.cell.row.original}>
+            <EditMaterialStockPopover />
+          </MaterialContext.Provider>
         ),
         footer: (props) => props.column.id,
       },
       {
         accessorFn: (row) => row.stockLevel.minStock,
-        id: 'minStock',
-        header: 'Min. Stock',
-        sortingFn: 'alphanumeric',
+        id: "minStock",
+        header: "Min. Stock",
+        sortingFn: "alphanumeric",
         cell: (info) => (
           <Text>
             {info.getValue()
@@ -66,16 +73,16 @@ export default function useMaterialsTableColumns() {
                   Number(info.getValue()),
                   info.cell.row.original.stockLevel.stockUnit
                 )}`
-              : '-'}
+              : "-"}
           </Text>
         ),
         footer: (props) => props.column.id,
       },
       {
         accessorFn: (row) => row.costPerUnit,
-        id: 'costPerUnit',
-        header: 'Cost per unit',
-        sortingFn: 'alphanumeric',
+        id: "costPerUnit",
+        header: "Cost per unit",
+        sortingFn: "alphanumeric",
         cell: (info) => (
           <Text>
             ${Number(info.getValue())} /
@@ -86,21 +93,21 @@ export default function useMaterialsTableColumns() {
       },
       {
         accessorFn: (row) => row.vendor.name,
-        id: 'vendor',
-        header: 'Vendor',
-        sortingFn: 'alphanumeric',
+        id: "vendor",
+        header: "Vendor",
+        sortingFn: "alphanumeric",
         cell: (info) => info.getValue(),
         footer: (props) => props.column.id,
       },
       {
         accessorFn: (row) => row.categories,
-        id: 'categories',
-        header: 'Categories',
+        id: "categories",
+        header: "Categories",
         enableSorting: false,
         cell: (info) => (
           <CategoryTags
             categories={info.cell.row.original.categories}
-            routePrefix='/materials'
+            routePrefix="/materials"
           />
         ),
         footer: (props) => props.column.id,

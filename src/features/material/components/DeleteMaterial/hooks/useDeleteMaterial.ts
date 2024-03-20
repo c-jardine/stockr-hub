@@ -1,10 +1,10 @@
-import { type MaterialGetAllOutputSingle } from '@/types';
-import { api } from '@/utils/api';
-import { useDisclosure, useToast } from '@chakra-ui/react';
+import { useMaterial } from "@/features/material/hooks";
+import { api } from "@/utils/api";
+import { useDisclosure, useToast } from "@chakra-ui/react";
 
-export default function useDeleteMaterial(
-  material: MaterialGetAllOutputSingle
-) {
+export default function useDeleteMaterial() {
+  const material = useMaterial();
+
   const toast = useToast();
 
   const disclosure = useDisclosure();
@@ -13,9 +13,9 @@ export default function useDeleteMaterial(
   const deleteQuery = api.material.delete.useMutation({
     onSuccess: async () => {
       toast({
-        title: 'Material deleted',
-        description: 'Successfully deleted material',
-        status: 'success',
+        title: "Material deleted",
+        description: "Successfully deleted material",
+        status: "success",
       });
       await utils.material.getAll.invalidate();
       disclosure.onClose();
