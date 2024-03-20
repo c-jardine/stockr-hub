@@ -1,7 +1,12 @@
 import { CategoryTags } from "@/components/CategoryTags";
 import { DataDisplay } from "@/components/DataDisplay";
 import { DrawerHeader } from "@/components/DrawerHeader";
-import { getCostPerUnit, getIsLowStock, getStockUnitTextAbbrev } from "@/utils";
+import {
+  formatCurrency,
+  getCostPerUnit,
+  getIsLowStock,
+  getStockUnitTextAbbrev,
+} from "@/utils";
 import {
   Drawer,
   DrawerBody,
@@ -30,11 +35,13 @@ export default function ProductViewerDrawer() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // Helper function to clean up conditional styling.
-  const isLowStock = getIsLowStock(
-    Number(product.stockLevel.stock),
-    Number(product.stockLevel.minStock)
-  );
+  const { stockLevel } = product;
+  const stock = Number(stockLevel.stock);
+  const minStock = Number(stockLevel.minStock);
+  const costPerUnit = getCostPerUnit(product);
+  const batchSize = Number(product.batchSize);
+
+  const isLowStock = getIsLowStock(stock, minStock);
 
   // Render the drawer trigger.
   function renderDrawerTrigger() {
@@ -68,30 +75,27 @@ export default function ProductViewerDrawer() {
   }
 
   // Data for the stock level text.
-  const stockLevelText = `${Number(
-    product.stockLevel.stock
-  )} ${getStockUnitTextAbbrev(
-    Number(product.stockLevel.stock),
-    product.stockLevel.stockUnit
-  )}`;
+  const stockLevelText = `${stock} ${getStockUnitTextAbbrev(
+    stock,
+    stockLevel.stockUnit
+  )}.`;
 
   // Data for the batch size text.
-  const batchSizeText = `${product.batchSize} ${getStockUnitTextAbbrev(
-    Number(product.batchSize),
-    product.stockLevel.stockUnit
-  )}`;
+  const batchSizeText = `${batchSize} ${getStockUnitTextAbbrev(
+    batchSize,
+    stockLevel.stockUnit
+  )}.`;
 
   // Data for the unit cost text.
-  const unitCostText = `$${getCostPerUnit(product)}`;
+  const unitCostText = `${formatCurrency(costPerUnit)} /${
+    stockLevel.stockUnit.abbreviationSingular
+  }.`;
 
   // Data for the min stock text.
   const minStockText = `${
-    product.stockLevel.minStock
-      ? `${Number(product.stockLevel.minStock)} ${getStockUnitTextAbbrev(
-          Number(product.stockLevel.minStock),
-          product.stockLevel.stockUnit
-        )}`
-      : "-"
+    minStock
+      ? `${minStock} ${getStockUnitTextAbbrev(minStock, stockLevel.stockUnit)}`
+      : "—"
   }`;
 
   // Render the drawer body.

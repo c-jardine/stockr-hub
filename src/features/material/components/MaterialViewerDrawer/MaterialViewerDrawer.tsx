@@ -1,7 +1,7 @@
 import { CategoryTags } from "@/components/CategoryTags";
 import { DataDisplay } from "@/components/DataDisplay";
 import { DrawerHeader } from "@/components/DrawerHeader";
-import { getIsLowStock, getStockUnitTextAbbrev } from "@/utils";
+import { formatCurrency, getIsLowStock, getStockUnitTextAbbrev } from "@/utils";
 import {
   Drawer,
   DrawerBody,
@@ -24,10 +24,12 @@ export default function MaterialViewerDrawer() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const isLowStock = getIsLowStock(
-    Number(material.stockLevel.stock),
-    Number(material.stockLevel.minStock)
-  );
+  const { stockLevel } = material;
+  const stock = Number(stockLevel.stock);
+  const minStock = Number(stockLevel.minStock);
+  const costPerUnit = Number(material.costPerUnit);
+
+  const isLowStock = getIsLowStock(stock, minStock);
 
   function renderDrawerTrigger() {
     return (
@@ -59,28 +61,24 @@ export default function MaterialViewerDrawer() {
   }
 
   // Data for the stock level text.
-  const stockLevelText = `${Number(
-    material.stockLevel.stock
-  )} ${getStockUnitTextAbbrev(
-    Number(material.stockLevel.stock),
-    material.stockLevel.stockUnit
-  )}`;
+  const stockLevelText = `${stock} ${getStockUnitTextAbbrev(
+    stock,
+    stockLevel.stockUnit
+  )}.`;
 
   // Data for the unit cost text.
-  const unitCostText = `$${Number(material.costPerUnit)} /
-  ${material.stockLevel.stockUnit.abbreviationSingular}`;
+  const unitCostText = `${formatCurrency(costPerUnit)} /${
+    stockLevel.stockUnit.abbreviationSingular
+  }.`;
 
   // Data for the vendor text.
   const vendorText = material.vendor.name;
 
   // Data for the min stock text.
   const minStockText = `${
-    material.stockLevel.minStock
-      ? `${Number(material.stockLevel.minStock)} ${getStockUnitTextAbbrev(
-          Number(material.stockLevel.minStock),
-          material.stockLevel.stockUnit
-        )}`
-      : "-"
+    minStock
+      ? `${minStock} ${getStockUnitTextAbbrev(minStock, stockLevel.stockUnit)}`
+      : "—"
   }`;
 
   function renderDrawerBody() {

@@ -1,4 +1,4 @@
-import { getNetProfit, getProfitMargin, roundTwoDecimals } from "@/utils";
+import { formatCurrency, getNetProfit, getProfitMargin } from "@/utils";
 import {
   Stack,
   Table,
@@ -12,15 +12,22 @@ import {
 } from "@chakra-ui/react";
 import useProduct from "../../hooks/useProduct";
 
+const percent = new Intl.NumberFormat("en-US", {
+  style: "percent",
+  maximumFractionDigits: 2,
+});
+
 export default function ProfitTable() {
   const product = useProduct();
+  const { retailPrice, wholesalePrice } = product;
 
   const { retailProfit, wholesaleProfit } = getNetProfit(product);
-  const retailProfitText = `$${retailProfit}`;
-  const wholesaleProfitText = `$${wholesaleProfit}`;
+  const retailProfitText = formatCurrency(retailProfit);
+  const wholesaleProfitText = formatCurrency(wholesaleProfit);
+
   const { retailMargin, wholesaleMargin } = getProfitMargin(product);
-  const retailMarginText = `${retailMargin}%`;
-  const wholesaleMarginText = `${wholesaleMargin}%`;
+  const retailMarginText = percent.format(retailMargin);
+  const wholesaleMarginText = percent.format(wholesaleMargin);
 
   return (
     <Stack>
@@ -49,7 +56,7 @@ export default function ProfitTable() {
               >
                 Retail
               </Td>
-              <Td>${roundTwoDecimals(Number(product.retailPrice))}</Td>
+              <Td>{formatCurrency(Number(retailPrice))}</Td>
               <Td>{retailProfitText}</Td>
               <Td>{retailMarginText}</Td>
             </Tr>
@@ -64,7 +71,7 @@ export default function ProfitTable() {
               >
                 Wholesale
               </Td>
-              <Td>${roundTwoDecimals(Number(product.wholesalePrice))}</Td>
+              <Td>{formatCurrency(Number(wholesalePrice))}</Td>
               <Td>{wholesaleProfitText}</Td>
               <Td>{wholesaleMarginText}</Td>
             </Tr>

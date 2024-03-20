@@ -1,6 +1,7 @@
 import { UpdateMaterialDrawer } from "@/features/material";
+import { MaterialContext } from "@/features/material/contexts";
 import { type ProductGetAllOutputSingle } from "@/types";
-import { getStockUnitTextAbbrev, roundTwoDecimals } from "@/utils";
+import { formatCurrency, getStockUnitTextAbbrev } from "@/utils";
 import {
   Box,
   HStack,
@@ -17,63 +18,69 @@ import useProduct from "../../hooks/useProduct";
  * product.
  */
 export default function MaterialsUsed() {
-  const {
-    materials,
-    batchSize,
-    stockLevel: { stockUnit },
-  } = useProduct();
+  const { materials, batchSize } = useProduct();
 
   // Render helper function for the component.
   function renderMaterialInfo({
     material,
     quantity,
   }: ProductGetAllOutputSingle["materials"][0]) {
+    const { stockLevel, costPerUnit } = material;
+
     // Data for the amount of stock used.
-    const stockUsed = roundTwoDecimals(Number(quantity) / batchSize);
+    const decimal = new Intl.NumberFormat("en-US", {
+      style: "decimal",
+      maximumFractionDigits: 2,
+    });
+    const stockUsed = Number(quantity) / batchSize;
     const stockUsedUnit = getStockUnitTextAbbrev(
       stockUsed,
-      material.stockLevel.stockUnit
+      stockLevel.stockUnit
     );
 
     // Data for how many of this product can be created with the material's
     // stock.
     const enoughFor = Math.floor(
-      Number(material.stockLevel.stock) / (Number(quantity) / batchSize)
+      Number(stockLevel.stock) / (Number(quantity) / batchSize)
     );
-    const enoughForUnit = getStockUnitTextAbbrev(enoughFor, stockUnit);
+    const enoughForUnit = getStockUnitTextAbbrev(
+      enoughFor,
+      stockLevel.stockUnit
+    );
 
     // Data for the material's stock level.
-    const stockLevel = Number(material.stockLevel.stock);
-    const stockLevelUnit = getStockUnitTextAbbrev(
-      stockLevel,
-      material.stockLevel.stockUnit
+    const currentStock = Number(stockLevel.stock);
+    const currentStockUnit = getStockUnitTextAbbrev(
+      currentStock,
+      stockLevel.stockUnit
     );
 
     // Data for the material's cost per individual unit.
-    const costPerUnit = roundTwoDecimals(
-      (Number(material.costPerUnit) * Number(quantity)) / batchSize
-    );
+    const unitCost = (Number(costPerUnit) * Number(quantity)) / batchSize;
+    const unitCostText = formatCurrency(unitCost);
 
     return (
-      <Box key={material.id} fontSize="sm">
-        <UpdateMaterialDrawer />
-        <HStack
-          divider={<StackDivider border="none">&bull;</StackDivider>}
-          alignItems="flex-start"
-        >
-          <Text color="slate.500" letterSpacing="wide">
-            {stockUsed} {stockUsedUnit} used
-          </Text>
-          <Tooltip label={`Enough for ${enoughFor} ${enoughForUnit}`}>
-            <EnoughForTooltip>
-              {stockLevel} {stockLevelUnit} available
-            </EnoughForTooltip>
-          </Tooltip>
-          <Text color="slate.500" letterSpacing="wide">
-            ${costPerUnit} per unit
-          </Text>
-        </HStack>
-      </Box>
+      <MaterialContext.Provider value={material}>
+        <Box key={material.id} fontSize="sm">
+          <UpdateMaterialDrawer />
+          <HStack
+            divider={<StackDivider border="none">&bull;</StackDivider>}
+            alignItems="flex-start"
+          >
+            <Text color="slate.500" letterSpacing="wide">
+              {decimal.format(stockUsed)} {stockUsedUnit}. used
+            </Text>
+            <Tooltip label={`Enough for ${enoughFor} ${enoughForUnit}`}>
+              <EnoughForTooltip>
+                {currentStock} {currentStockUnit}. available
+              </EnoughForTooltip>
+            </Tooltip>
+            <Text color="slate.500" letterSpacing="wide">
+              {unitCostText} /unit
+            </Text>
+          </HStack>
+        </Box>
+      </MaterialContext.Provider>
     );
   }
 
