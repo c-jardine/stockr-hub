@@ -65,6 +65,8 @@ Inside, you'll find an environment variable called ```DATABASE_URL```. Enter you
 DATABASE_URL="postgres://postgres@localhost:5432/stockr-hub"
 ```
 
+You'll also need to fill in the environment variables for ```AWS_REGION```, ```AWS_ACCESS_KEY_ID```, ```AWS_SECRET_ACCESS_KEY```, and ```AWS_S3_BUCKET```. [🔗 Learn how to set up an AWS S3 Bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
+
 <!-- omit from toc -->
 ### Push the database schema and seed the database
 Once your ```DATABASE_URL``` is set, you can push the database schema:
