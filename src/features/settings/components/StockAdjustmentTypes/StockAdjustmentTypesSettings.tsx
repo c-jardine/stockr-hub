@@ -96,9 +96,7 @@ export default function StockAdjustmentTypesHeader() {
               as="form"
               id="new-stock-adjustment-type-form"
               spacing={4}
-              onSubmit={form.handleSubmit(onSubmit, (error) =>
-                console.log(error)
-              )}
+              onSubmit={form.handleSubmit(onSubmit)}
             >
               <FormControl>
                 <FormLabel>Inventory item</FormLabel>
