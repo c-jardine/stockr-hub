@@ -26,5 +26,5 @@ export default function useDeleteMaterial() {
     deleteQuery.mutate({ id: material.id });
   }
 
-  return { onDelete, disclosure };
+  return { name: material.name, onDelete, disclosure };
 }

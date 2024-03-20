@@ -12,6 +12,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { ChevronLeft } from "tabler-icons-react";
 import { MaterialsUsed } from "..";
@@ -20,7 +21,6 @@ import { DeleteProduct } from "../DeleteProduct";
 import { ProductHistory } from "../ProductHistory";
 import { ProfitTable } from "../ProfitTable";
 import { UpdateProductDrawer } from "../UpdateProductDrawer";
-import { useViewProduct } from "./hooks";
 
 /**
  * A component that renders a drawer that provides information about a product.
@@ -28,9 +28,7 @@ import { useViewProduct } from "./hooks";
 export default function ProductViewerDrawer() {
   const product = useProduct();
 
-  const {
-    disclosure: { isOpen, onOpen, onClose },
-  } = useViewProduct();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Helper function to clean up conditional styling.
   const isLowStock = getIsLowStock(

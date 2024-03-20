@@ -1,4 +1,3 @@
-import { useMaterial } from "@/features/material/hooks";
 import {
   Button,
   Icon,
@@ -20,14 +19,14 @@ import { Dots } from "tabler-icons-react";
 import { DeleteMenuItem } from "../DeleteMenuItem";
 
 export default function ConfirmDeleteModal({
+  name,
   onDelete,
   disclosure: { isOpen, onOpen, onClose },
 }: {
+  name: string;
   onDelete: React.MouseEventHandler<HTMLButtonElement>;
   disclosure: UseDisclosureProps;
 }) {
-  const material = useMaterial();
-
   return (
     <>
       <Menu>
@@ -51,7 +50,7 @@ export default function ConfirmDeleteModal({
           <ModalBody>
             Are you sure you want to delete{" "}
             <Text as="span" fontWeight="semibold">
-              {material.name}
+              {name}
             </Text>
           </ModalBody>
           <ModalFooter gap={4}>

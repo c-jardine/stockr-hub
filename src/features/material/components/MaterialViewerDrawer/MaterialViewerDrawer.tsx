@@ -12,19 +12,17 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { ChevronLeft } from "tabler-icons-react";
 import { DeleteMaterial, UpdateMaterialDrawer } from "..";
 import { useMaterial } from "../../hooks";
 import { MaterialHistory } from "../MaterialHistory";
-import { useViewMaterial } from "./hooks";
 
 export default function MaterialViewerDrawer() {
   const material = useMaterial();
 
-  const {
-    disclosure: { isOpen, onOpen, onClose },
-  } = useViewMaterial();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const isLowStock = getIsLowStock(
     Number(material.stockLevel.stock),
