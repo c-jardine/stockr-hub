@@ -1,15 +1,9 @@
-import { StockAdjustmentTypesSettings } from "@/features/settings";
-import { RootLayout } from "@/layouts/RootLayout";
 import {
-  Avatar,
-  Button,
-  FormControl,
-  FormLabel,
-  HStack,
-  Input,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+  SettingsImageUpload,
+  StockAdjustmentTypesSettings,
+} from "@/features/settings";
+import { RootLayout } from "@/layouts/RootLayout";
+import { FormControl, FormLabel, Input, Stack, Text } from "@chakra-ui/react";
 
 export default function Settings() {
   return (
@@ -25,10 +19,7 @@ export default function Settings() {
           </FormControl>
           <FormControl>
             <FormLabel>Logo</FormLabel>
-            <HStack>
-              <Avatar bg="sky.300" boxSize={16} />
-              <Button variant="outline">Choose file</Button>
-            </HStack>
+            <SettingsImageUpload />
           </FormControl>
           <FormControl>
             <FormLabel>Website</FormLabel>
