@@ -5,7 +5,6 @@ export * from "./DeleteProductRows";
 export * from "./EditProductCategories";
 export * from "./EditProductStockPopover";
 export * from "./ProductCategoriesInput";
-export * from "./ProductHistory";
 export * from "./ProductMaterialsFieldArray";
 export * from "./ProductMenu";
 export * from "./ProductViewerDrawer";

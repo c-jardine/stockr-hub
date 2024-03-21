@@ -1,6 +1,6 @@
 import { Stack } from "@chakra-ui/react";
-import { MaterialHistory } from "../MaterialHistory";
 import MaterialDetails from "./MaterialDetails";
+import MaterialHistory from "./MaterialHistory";
 
 export default function MaterialViewerDrawerBody() {
   return (

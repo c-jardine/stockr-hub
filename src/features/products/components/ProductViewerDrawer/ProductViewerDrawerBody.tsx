@@ -1,7 +1,7 @@
 import { Stack } from "@chakra-ui/react";
-import { ProductHistory } from "../ProductHistory";
 import MaterialsUsed from "./MaterialsUsed";
 import ProductDetails from "./ProductDetails";
+import ProductHistory from "./ProductHistory";
 import ProfitTable from "./ProfitTable";
 
 export default function ProductViewerDrawerBody() {
