@@ -6,5 +6,5 @@ export default function useProductHistory() {
 
   const query = api.product.getHistory.useQuery({ id: product.id });
 
-  return { query };
+  return { product, query };
 }

@@ -6,5 +6,5 @@ export default function useMaterialHistory() {
 
   const query = api.material.getHistory.useQuery({ id: material.id });
 
-  return { query };
+  return { material, query };
 }

@@ -8,7 +8,7 @@ import {
   subYears,
 } from "date-fns";
 
-export default function useStockGraphInfo(filter: MaterialStockFilterType) {
+export default function useInventoryGraphInfo(filter: MaterialStockFilterType) {
   const options: MaterialStockFilterType[] = [
     "1D",
     "5D",

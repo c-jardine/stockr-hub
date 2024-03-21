@@ -10,9 +10,9 @@ import {
   type UseRadioProps,
 } from "@chakra-ui/react";
 import React from "react";
-import { useStockGraphInfo } from "./hooks";
+import { useInventoryGraphInfo } from "./hooks";
 
-export default function StockGraphInfo({
+export default function InventoryGraphInfo({
   filter,
   setFilter,
   trend,
@@ -30,7 +30,7 @@ export default function StockGraphInfo({
 
   const group = getRootProps();
 
-  const { options, dateRangeText } = useStockGraphInfo(filter);
+  const { options, dateRangeText } = useInventoryGraphInfo(filter);
 
   return (
     <Stack>

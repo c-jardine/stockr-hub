@@ -7,7 +7,7 @@ import { useToken } from "@chakra-ui/react";
 import { format, isSameDay } from "date-fns";
 import React from "react";
 
-export default function useStockGraph(id: string) {
+export default function useInventoryGraph(id: string) {
   const [filter, setFilter] = React.useState<MaterialStockFilterType>("1M");
 
   const [lineColor, fillColor, referenceLineColor] = useToken("colors", [

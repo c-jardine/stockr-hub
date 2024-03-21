@@ -1,10 +1,13 @@
-import { HistoryDecoration } from "@/components/HistoryDecoration";
-import { type ProductGetHistoryOutput } from "@/types";
+import {
+  type MaterialGetHistoryOutput,
+  type ProductGetHistoryOutput,
+} from "@/types";
 import { getStockUnitTextAbbrev } from "@/utils";
 import { Box, Flex, Icon, Stack, Tag, Text } from "@chakra-ui/react";
 import { InventoryAdjustmentType, type StockUnit } from "@prisma/client";
 import { formatDistanceToNowStrict } from "date-fns";
 import { ArrowRight } from "tabler-icons-react";
+import HistoryDecoration from "./HistoryDecoration";
 
 // Define eventMappings outside the component
 const eventMappings = {
@@ -20,7 +23,10 @@ const eventMappings = {
 };
 
 // Render title function
-function renderTitle(event: ProductGetHistoryOutput[0], stockUnit: StockUnit) {
+function renderTitle(
+  event: MaterialGetHistoryOutput[0] | ProductGetHistoryOutput[0],
+  stockUnit: StockUnit
+) {
   const { adjustmentType } = event.changeType;
   const { colorScheme, adjustmentSign } = eventMappings[adjustmentType] || {
     colorScheme: "sky",
@@ -43,12 +49,12 @@ function renderTitle(event: ProductGetHistoryOutput[0], stockUnit: StockUnit) {
   );
 }
 
-export default function ProductHistoryItem({
+export default function InventoryHistoryItem({
   history,
   stockUnit,
   createdAt,
 }: {
-  history: ProductGetHistoryOutput;
+  history: MaterialGetHistoryOutput | ProductGetHistoryOutput;
   stockUnit: StockUnit;
   createdAt: Date;
 }) {

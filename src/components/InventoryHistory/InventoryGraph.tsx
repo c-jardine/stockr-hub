@@ -17,13 +17,13 @@ import {
   YAxis,
 } from "recharts";
 import { TrendingDown, TrendingUp } from "tabler-icons-react";
-import { StockGraphInfo } from ".";
-import { useStockGraph } from "./hooks";
+import InventoryGraphInfo from "./InventoryGraphInfo";
+import { useInventoryGraph } from "./hooks";
 
-export default function StockGraph(
+export default function InventoryGraph(
   props: MaterialGetAllOutputSingle | ProductGetAllOutputSingle
 ) {
-  const { chartData, average, filter, setFilter, colors } = useStockGraph(
+  const { chartData, average, filter, setFilter, colors } = useInventoryGraph(
     props.id
   );
 
@@ -66,7 +66,7 @@ export default function StockGraph(
 
   return (
     <Stack>
-      <StockGraphInfo
+      <InventoryGraphInfo
         filter={filter}
         setFilter={setFilter}
         trend={chartData.length > 0 && <RenderTrend />}

@@ -1,24 +1,23 @@
-import { InventoryHistoryTabs } from "@/components/InventoryHistoryTabs";
-import { StockGraph } from "@/components/StockGraph";
-import { useMaterial } from "../../hooks";
-import MaterialHistoryItem from "./MaterialHistoryItem";
+import {
+  InventoryGraph,
+  InventoryHistoryItem,
+  InventoryHistoryTabs,
+} from "@/components/InventoryHistory";
 import { useMaterialHistory } from "./hooks";
 
 export default function MaterialHistory() {
-  const material = useMaterial();
-
-  const { query } = useMaterialHistory();
+  const { material, query } = useMaterialHistory();
 
   return (
     <InventoryHistoryTabs
       historyTab={
-        <MaterialHistoryItem
+        <InventoryHistoryItem
           history={query.data!}
           stockUnit={material.stockLevel.stockUnit}
           createdAt={material.createdAt}
         />
       }
-      visualizationTab={<StockGraph {...material} />}
+      visualizationTab={<InventoryGraph {...material} />}
     />
   );
 }
