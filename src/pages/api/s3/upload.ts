@@ -42,6 +42,8 @@ export default async function handler(req: RequestBody, res: NextApiResponse) {
 
       return res.status(200).json({ url, fields });
     }
+
+    return res.status(405);
   } catch (error) {
     if (error instanceof Error) {
       return res
