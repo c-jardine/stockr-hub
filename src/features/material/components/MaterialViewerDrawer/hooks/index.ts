@@ -1,1 +1,1 @@
-export { default as useViewMaterial } from './useViewMaterial';
+export { default as useMaterialHistory } from './useMaterialHistory';

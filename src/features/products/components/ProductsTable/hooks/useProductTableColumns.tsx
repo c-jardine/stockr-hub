@@ -2,7 +2,11 @@ import { CategoryTags } from "@/components/CategoryTags";
 import { IndeterminateCheckbox } from "@/components/IndeterminateCheckbox";
 import { ProductContext } from "@/features/products/contexts";
 import { type ProductGetAllOutputSingle } from "@/types";
-import { getCostPerUnit, getStockUnitTextAbbrev } from "@/utils";
+import {
+  formatCurrency,
+  getCostPerUnit,
+  getStockUnitTextAbbrev,
+} from "@/utils";
 import { Text } from "@chakra-ui/react";
 import { type ColumnDef } from "@tanstack/react-table";
 import React from "react";
@@ -65,16 +69,14 @@ export default function useProductTableColumns() {
         id: "minStock",
         header: "Min. Stock",
         sortingFn: "alphanumeric",
-        cell: (info) => (
-          <Text>
-            {info.getValue()
-              ? `${Number(info.getValue())} ${getStockUnitTextAbbrev(
-                  Number(info.getValue()),
-                  info.cell.row.original.stockLevel.stockUnit
-                )}`
-              : "-"}
-          </Text>
-        ),
+        cell: (info) => {
+          const { stockUnit } = info.cell.row.original.stockLevel;
+
+          const value = Number(info.getValue());
+          const unit = getStockUnitTextAbbrev(value, stockUnit);
+
+          return <Text>{value ? `${value} ${unit}.` : "—"}</Text>;
+        },
         footer: (props) => props.column.id,
       },
       {
@@ -82,7 +84,14 @@ export default function useProductTableColumns() {
         id: "batchSize",
         header: "Batch size",
         sortingFn: "alphanumeric",
-        cell: (info) => <Text>{Number(info.getValue())}</Text>,
+        cell: (info) => {
+          const { stockUnit } = info.cell.row.original.stockLevel;
+
+          const value = Number(info.getValue());
+          const unit = getStockUnitTextAbbrev(value, stockUnit);
+
+          return <Text>{value ? `${value} ${unit}.` : "—"}</Text>;
+        },
         footer: (props) => props.column.id,
       },
       {
@@ -90,9 +99,18 @@ export default function useProductTableColumns() {
         id: "costPerUnit",
         header: "Cost per unit",
         sortingFn: "alphanumeric",
-        cell: (info) => (
-          <Text>{`$${getCostPerUnit(info.cell.row.original)}`}</Text>
-        ),
+        cell: (info) => {
+          const { stockUnit } = info.cell.row.original.stockLevel;
+
+          const value = formatCurrency(getCostPerUnit(info.cell.row.original));
+          const unit = getStockUnitTextAbbrev(1, stockUnit);
+
+          return (
+            <Text>
+              {value} /{unit}.
+            </Text>
+          );
+        },
         footer: (props) => props.column.id,
       },
       {

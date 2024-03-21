@@ -25,6 +25,14 @@ model AuditAppState {
     materialAudit MaterialAudit?
 }
 
+model User {
+    id           Int  @id @default(1)
+    businessName String?
+    logoUrl      String?
+    websiteUrl   String?
+    industry     String?
+}
+
 model StockLevel {
     id          String   @id @default(uuid())
     stock       Decimal

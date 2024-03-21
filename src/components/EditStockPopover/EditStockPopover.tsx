@@ -43,12 +43,10 @@ export default function EditStockPopover<T extends FieldValues>(
 
   const form = useFormContext<T>();
 
-  const renderLabel = `${Number(
-    props.stockLevel.stock
-  )} ${getStockUnitTextAbbrev(
-    Number(props.stockLevel.stock),
-    props.stockLevel.stockUnit
-  )}`;
+  const value = Number(props.stockLevel.stock);
+  const unit = getStockUnitTextAbbrev(value, props.stockLevel.stockUnit);
+
+  const label = `${value} ${unit}.`;
 
   return (
     <Popover
@@ -67,7 +65,7 @@ export default function EditStockPopover<T extends FieldValues>(
               leftIcon={<Icon as={Edit} />}
               onClick={() => disclosure.onOpen!()}
             >
-              {renderLabel}
+              {label}
             </Button>
           </Tooltip>
         ) : (
@@ -77,7 +75,7 @@ export default function EditStockPopover<T extends FieldValues>(
             leftIcon={<Icon as={Edit} />}
             onClick={() => disclosure.onOpen!()}
           >
-            {renderLabel}
+            {label}
           </Button>
         )}
       </PopoverTrigger>

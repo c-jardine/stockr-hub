@@ -1,1 +1,1 @@
-export { default as useViewProduct } from './useViewProduct';
+export { default as useProductHistory } from './useProductHistory';

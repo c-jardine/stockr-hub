@@ -26,5 +26,5 @@ export default function useDeleteProduct() {
     deleteQuery.mutate({ id: product.id });
   }
 
-  return { onDelete, disclosure };
+  return { name: product.name, onDelete, disclosure };
 }

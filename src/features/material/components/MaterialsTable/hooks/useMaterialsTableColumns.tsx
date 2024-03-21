@@ -2,7 +2,7 @@ import { CategoryTags } from "@/components/CategoryTags";
 import { IndeterminateCheckbox } from "@/components/IndeterminateCheckbox";
 import { MaterialContext } from "@/features/material/contexts";
 import { type MaterialGetAllOutputSingle } from "@/types";
-import { getStockUnitTextAbbrev } from "@/utils";
+import { formatCurrency, getStockUnitTextAbbrev } from "@/utils";
 import { Text } from "@chakra-ui/react";
 import { type ColumnDef } from "@tanstack/react-table";
 import React from "react";
@@ -66,16 +66,14 @@ export default function useMaterialsTableColumns() {
         id: "minStock",
         header: "Min. Stock",
         sortingFn: "alphanumeric",
-        cell: (info) => (
-          <Text>
-            {info.getValue()
-              ? `${Number(info.getValue())} ${getStockUnitTextAbbrev(
-                  Number(info.getValue()),
-                  info.cell.row.original.stockLevel.stockUnit
-                )}`
-              : "-"}
-          </Text>
-        ),
+        cell: (info) => {
+          const { stockUnit } = info.cell.row.original.stockLevel;
+
+          const value = Number(info.getValue());
+          const unit = getStockUnitTextAbbrev(value, stockUnit);
+
+          return <Text>{value ? `${value} ${unit}.` : "—"}</Text>;
+        },
         footer: (props) => props.column.id,
       },
       {
@@ -83,12 +81,18 @@ export default function useMaterialsTableColumns() {
         id: "costPerUnit",
         header: "Cost per unit",
         sortingFn: "alphanumeric",
-        cell: (info) => (
-          <Text>
-            ${Number(info.getValue())} /
-            {info.cell.row.original.stockLevel.stockUnit.abbreviationSingular}
-          </Text>
-        ),
+        cell: (info) => {
+          const { stockUnit } = info.cell.row.original.stockLevel;
+
+          const value = formatCurrency(Number(info.getValue()));
+          const unit = stockUnit.abbreviationSingular;
+
+          return (
+            <Text>
+              {value} /{unit}.
+            </Text>
+          );
+        },
         footer: (props) => props.column.id,
       },
       {
