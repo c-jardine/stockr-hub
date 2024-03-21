@@ -7,6 +7,7 @@ import {
   materialRouter,
   productRouter,
   stockUnitRouter,
+  userRouter,
   vendorRouter,
 } from "./routers";
 
@@ -17,6 +18,7 @@ import {
  */
 export const appRouter = createTRPCRouter({
   appState: appStateRouter,
+  user: userRouter,
   material: materialRouter,
   product: productRouter,
   stockUnit: stockUnitRouter,

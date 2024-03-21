@@ -5,4 +5,5 @@ export * from "./logChangeTypes";
 export * from "./material";
 export * from "./product";
 export * from "./stockUnit";
+export * from "./user";
 export * from "./vendor";
