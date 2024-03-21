@@ -10,7 +10,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import useProduct from "../../hooks/useProduct";
+import { useProduct } from "../../hooks";
 
 const percent = new Intl.NumberFormat("en-US", {
   style: "percent",

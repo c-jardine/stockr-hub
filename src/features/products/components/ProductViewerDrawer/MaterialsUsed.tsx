@@ -12,7 +12,7 @@ import {
   type TextProps,
 } from "@chakra-ui/react";
 import React from "react";
-import useProduct from "../../hooks/useProduct";
+import { useProduct } from "../../hooks";
 
 /**
  * A component that shows information about the materials used for the given

@@ -11,7 +11,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { ChevronLeft } from "tabler-icons-react";
-import useProduct from "../../hooks/useProduct";
+import { useProduct } from "../../hooks";
 import { DeleteProduct } from "../DeleteProduct";
 import { UpdateProductDrawer } from "../UpdateProductDrawer";
 import ProductViewerDrawerBody from "./ProductViewerDrawerBody";
