@@ -5,6 +5,7 @@ import { formatCurrency, getStockUnitTextAbbrev } from "@/utils";
 import {
   Box,
   HStack,
+  Stack,
   StackDivider,
   Text,
   Tooltip,
@@ -85,7 +86,19 @@ export default function MaterialsUsed() {
   }
 
   // The rendered component.
-  return <>{materials.map(renderMaterialInfo)}</>;
+  return (
+    <Stack>
+      <Text fontSize="lg" fontWeight="bold">
+        Materials Used (per Unit)
+      </Text>
+      {materials.length === 0 && (
+        <Text mt={-2} fontSize="sm" fontStyle="italic">
+          This product doesn't use any materials.
+        </Text>
+      )}
+      {materials.map(renderMaterialInfo)}
+    </Stack>
+  );
 }
 
 // A custom tooltip.

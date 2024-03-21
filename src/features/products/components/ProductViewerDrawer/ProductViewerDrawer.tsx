@@ -43,6 +43,30 @@ export default function ProductViewerDrawer() {
 
   const isLowStock = getIsLowStock(stock, minStock);
 
+  // Data for the stock level text.
+  const stockLevelText = `${stock} ${getStockUnitTextAbbrev(
+    stock,
+    stockLevel.stockUnit
+  )}.`;
+
+  // Data for the batch size text.
+  const batchSizeText = `${batchSize} ${getStockUnitTextAbbrev(
+    batchSize,
+    stockLevel.stockUnit
+  )}.`;
+
+  // Data for the unit cost text.
+  const unitCostText = `${formatCurrency(costPerUnit)} /${
+    stockLevel.stockUnit.abbreviationSingular
+  }.`;
+
+  // Data for the min stock text.
+  const minStockText = `${
+    minStock
+      ? `${minStock} ${getStockUnitTextAbbrev(minStock, stockLevel.stockUnit)}`
+      : "—"
+  }`;
+
   // Render the drawer trigger.
   function renderDrawerTrigger() {
     return (
@@ -74,30 +98,6 @@ export default function ProductViewerDrawer() {
     );
   }
 
-  // Data for the stock level text.
-  const stockLevelText = `${stock} ${getStockUnitTextAbbrev(
-    stock,
-    stockLevel.stockUnit
-  )}.`;
-
-  // Data for the batch size text.
-  const batchSizeText = `${batchSize} ${getStockUnitTextAbbrev(
-    batchSize,
-    stockLevel.stockUnit
-  )}.`;
-
-  // Data for the unit cost text.
-  const unitCostText = `${formatCurrency(costPerUnit)} /${
-    stockLevel.stockUnit.abbreviationSingular
-  }.`;
-
-  // Data for the min stock text.
-  const minStockText = `${
-    minStock
-      ? `${minStock} ${getStockUnitTextAbbrev(minStock, stockLevel.stockUnit)}`
-      : "—"
-  }`;
-
   // Render the drawer body.
   function renderDrawerBody() {
     return (
@@ -119,17 +119,7 @@ export default function ProductViewerDrawer() {
             </SimpleGrid>
           </Stack>
           <ProfitTable />
-          <Stack>
-            <Text fontSize="lg" fontWeight="bold">
-              Materials Used (per Unit)
-            </Text>
-            {product.materials.length === 0 && (
-              <Text mt={-2} fontSize="sm" fontStyle="italic">
-                This product doesn't use any materials.
-              </Text>
-            )}
-            <MaterialsUsed />
-          </Stack>
+          <MaterialsUsed />
           <ProductHistory />
         </Stack>
       </DrawerBody>
